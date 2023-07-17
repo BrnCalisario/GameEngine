@@ -11,7 +11,8 @@ namespace Engine
         public GameForm()
         {
             InitializeComponent();
-
+            WindowState = FormWindowState.Maximized;
+            FormBorderStyle = FormBorderStyle.None;
         }
 
         private void GameForm_KeyUp(object sender, KeyEventArgs e)
