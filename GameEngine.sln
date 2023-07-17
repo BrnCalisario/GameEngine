@@ -5,7 +5,13 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpriteExercise", "SpriteExercise\SpriteExercise.csproj", "{933537B4-F3AB-450F-959A-4E5F2B3D08C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{A04F06ED-CE6A-4B93-98B6-4EBC80B8767C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine", "Engine\Engine.csproj", "{A04F06ED-CE6A-4B93-98B6-4EBC80B8767C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{A7171B00-942D-4297-B84F-7E3B8C65E024}"
+	ProjectSection(SolutionItems) = preProject
+		assets\dimensões.txt = assets\dimensões.txt
+		assets\player.png = assets\player.png
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
