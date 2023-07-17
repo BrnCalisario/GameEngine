@@ -32,6 +32,19 @@ namespace Engine
         {
             engine = new BasicEngine(this);
             engine.Interval = 25;
+
+            CollidableBody w = new Wall(new Rectangle(0, 0, 30, GameEngine.Height));
+            engine.AddBody(w);
+
+            CollidableBody w2 = new Wall(new Rectangle(0, GameEngine.Height - 30, GameEngine.Width, 30));
+            engine.AddBody(w2);
+
+            CollidableBody w3 = new Wall(new Rectangle(400, 300, 60, GameEngine.Height));
+            engine.AddBody(w3);
+
+            CollidableBody w4 = new Wall(new Rectangle(0, 0, GameEngine.Width, 30));
+            engine.AddBody(w4);
+
             engine.Start();
         }
 

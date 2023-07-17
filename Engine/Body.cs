@@ -37,6 +37,11 @@ public abstract class Body : IBody
     public int Width => Box.Width;
     public int Height => Box.Height;
 
+    public int Top => Box.Top;
+    public int Bottom => Box.Bottom;        
+    public int Left => Box.Left;
+    public int Right => Box.Right;
+
     public bool Filled { get; set; } = false;
 
     public virtual Pen Pen { get; set; } = new Pen(Color.Black, 1);
@@ -64,11 +69,23 @@ public abstract class CollidableBody : Body, ICollidableBody
     public bool IsColling(CollidableBody body)
         => IsColling(body.Box);
 
-
     public List<CollidableBody> IsCollidingList(List<CollidableBody> list)
     {
         var query = list.Where(c => c.IsColling(this)).ToList();
-        return query;    
+        return query;
     }
 
+    public EventHandler<CollideEventArgs> OnCollide;
+}
+
+public class CollideEventArgs : EventArgs
+{
+    public CollideEventArgs(CollidableBody collider, Type bodyType)
+    {
+        Collider = collider;
+        BodyType = bodyType;
+    }
+
+    public CollidableBody Collider { get; set; }
+    public Type BodyType { get; set;  }
 }

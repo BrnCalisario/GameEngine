@@ -18,7 +18,7 @@ public abstract class GameEngine : IGameEngine
 {
     protected Graphics graphics { get; set; }
     protected PictureBox pb { get; set; }
-    protected Bitmap bmp { get; set; }
+    protected Bitmap bmp { get; set; }   
 
     public static int Width { get; set; }
     public static int Height { get; set; }
@@ -117,23 +117,43 @@ public abstract class GameEngine : IGameEngine
         if (KeyMap.ContainsKey(e.KeyCode))
             KeyMap[e.KeyCode] = isDown;
     }
+
+    public abstract void AddBody(IBody body);
 }
 
 public class BasicEngine : GameEngine
 {
     public BasicEngine(Form form) : base(form)
     {
+        RenderStack.Add(player);
     }
 
-    public CollidableBody player = new Player(new Rectangle(40, 40, 50, 50), new Pen(Color.Red, 1));
+    readonly List<IBody> RenderStack = new();
+    public readonly List<Wall> walls = new List<Wall>();
+
+    public Player player = new Player(new Rectangle(40, 40, 50, 50), new Pen(Color.Red, 1));
+
+    public override void AddBody(IBody body)
+    {
+        if (body is Wall)
+            walls.Add(body as Wall);
+
+        RenderStack.Add(body);
+    }
 
     public override void Draw()
     {
-        player.Draw(this.graphics);
+        foreach(IBody body in RenderStack)
+        {
+            body.Draw(this.graphics);
+        }
     }
 
     public override void Update()
-    {
-        player.Update();
+    {       
+        foreach(IBody body in RenderStack)
+        {
+            body.Update();
+        }
     }
 }
