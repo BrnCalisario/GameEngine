@@ -9,27 +9,14 @@ public class SonicSpriteController : ISpriteController
     {
         SpriteLoader = new SonicSpriteLoader();
         animationArgsFactory = new SonicAnimationArgsFactory(SpriteLoader);
-
-        //CurrentAnimation = SpriteLoader.GetAnimation(AnimationType.Jumping);
-        //CurrentSprite = CurrentAnimation.Next();
-
-
-
+        
+        //TODO Remove Timer
         AnimationTimer.Tick += delegate
         {
             CurrentSprite = CurrentAnimation.Next();
         };
 
         this.ChangeAnimation(AnimationType.Idle);       
-        //this.ChangeAnimation(AnimationType.Jumping);
-
-        //EventHandler func = delegate
-        //{
-        //    AnimationTimer.Stop();
-        //    MessageBox.Show("Teste");
-        //};
-
-        //this.SetOnStreamEnd(AnimationType.Jumping, func);
 
         AnimationTimer.Start();
     }

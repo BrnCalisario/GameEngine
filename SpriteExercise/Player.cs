@@ -1,16 +1,13 @@
-﻿using SpriteExercise;
-using SpriteExercise.SpriteController;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
+using SpriteExercise;
+using SpriteExercise.SpriteController;
 
 public class Player
 {
-    Image spriteImg = Image.FromFile("C:\\Users\\bruno\\Desktop\\Winforms\\Studies\\GameEngine\\SpriteExercise\\assets\\images\\sonic_sprite.png");
+    Image spriteImg = Image.FromFile("..\\..\\..\\assets\\images\\sonic_sprite.png");
 
     int speed = 20;
 
