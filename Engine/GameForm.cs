@@ -29,7 +29,8 @@ namespace Engine
 
         private void GameForm_Load(object sender, EventArgs e)
         {
-            engine = new MyEngine(this);
+            engine = new BasicEngine(this);
+            engine.Interval = 25;
             engine.Start();
         }
 
