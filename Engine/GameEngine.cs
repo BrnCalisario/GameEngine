@@ -20,7 +20,10 @@ public abstract class GameEngine : IGameEngine
     protected PictureBox pb { get; set; }
     protected Bitmap bmp { get; set; }
 
-    protected Dictionary<Keys, bool> KeyMap = new Dictionary<Keys, bool>()
+    public static int Width { get; set; }
+    public static int Height { get; set; }
+
+    public readonly static Dictionary<Keys, bool> KeyMap = new Dictionary<Keys, bool>()
     {
         { Keys.W, false},
         { Keys.S, false},
@@ -51,6 +54,9 @@ public abstract class GameEngine : IGameEngine
             Dock = DockStyle.Fill
         };
         form.Controls.Add(pb);
+
+        GameEngine.Width = pb.Width;
+        GameEngine.Height = pb.Height;
     }
 
     private void update()
@@ -63,7 +69,7 @@ public abstract class GameEngine : IGameEngine
     }
 
     public abstract void Update();
-    
+
     private void draw()
     {
         graphics.Clear(Color.White);
@@ -101,7 +107,7 @@ public abstract class GameEngine : IGameEngine
         {
             this.update();
         };
-        
+
 
         this.loaded = true;
     }
@@ -110,5 +116,24 @@ public abstract class GameEngine : IGameEngine
     {
         if (KeyMap.ContainsKey(e.KeyCode))
             KeyMap[e.KeyCode] = isDown;
+    }
+}
+
+public class BasicEngine : GameEngine
+{
+    public BasicEngine(Form form) : base(form)
+    {
+    }
+
+    public CollidableBody player = new Player(new Rectangle(40, 40, 50, 50), new Pen(Color.Red, 1));
+
+    public override void Draw()
+    {
+        player.Draw(this.graphics);
+    }
+
+    public override void Update()
+    {
+        player.Update();
     }
 }

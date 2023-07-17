@@ -28,7 +28,7 @@ public abstract class Body : IBody
         if (pen is not null)
             this.Pen = pen;
 
-        this.Box = box;
+        Box = box;
     }
 
     public Rectangle Box { get; set; }
@@ -37,9 +37,18 @@ public abstract class Body : IBody
     public int Width => Box.Width;
     public int Height => Box.Height;
 
+    public bool Filled { get; set; } = false;
+
     public virtual Pen Pen { get; set; } = new Pen(Color.Black, 1);
 
-    public abstract void Draw(Graphics g);
+    public virtual void Draw(Graphics g)
+    {
+        if(Filled)       
+            g.FillRectangle(Pen.Brush, Box);
+        else
+            g.DrawRectangle(Pen, Box);
+    }
+
     public abstract void Update();
 }
 
