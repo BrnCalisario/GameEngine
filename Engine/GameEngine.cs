@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Transactions;
 using System.Windows.Forms;
 
 namespace Engine;
@@ -16,14 +17,15 @@ public interface IGameEngine
 
 public abstract class GameEngine : IGameEngine
 {
+    protected Form ParentForm { get; set; } = null;
     protected Graphics graphics { get; set; }
     protected PictureBox pb { get; set; }
-    protected Bitmap bmp { get; set; }   
+    protected Bitmap bmp { get; set; }
 
-    public static int Width { get; set; }
-    public static int Height { get; set; }
+    public int Width { get; set; }
+    public int Height { get; set; }
 
-    public readonly static Dictionary<Keys, bool> KeyMap = new Dictionary<Keys, bool>()
+    public readonly Dictionary<Keys, bool> KeyMap = new()
     {
         { Keys.W, false},
         { Keys.S, false},
@@ -47,17 +49,35 @@ public abstract class GameEngine : IGameEngine
     private bool loaded = false;
     private bool running = false;
 
+    public GameEngine() { }
     public GameEngine(Form form)
     {
+        this.ParentForm = form;
+        pb = new PictureBox
+        {
+            Dock = DockStyle.Fill
+        };
+        ParentForm.Controls.Add(pb);
+
+        Width = pb.Width;
+        Height = pb.Height;
+    }
+
+    public void SetParentForm(Form form)
+    {
+        this.ParentForm = form;
         pb = new PictureBox
         {
             Dock = DockStyle.Fill
         };
         form.Controls.Add(pb);
 
-        GameEngine.Width = pb.Width;
-        GameEngine.Height = pb.Height;
+        Width = pb.Width;
+        Height = pb.Height;
     }
+
+    public bool IsParentSet()
+        => ParentForm is not null;
 
     private void update()
     {
@@ -83,6 +103,8 @@ public abstract class GameEngine : IGameEngine
 
     public virtual void Start()
     {
+        if (!IsParentSet())
+            throw new Exception("Parente form not set");
 
         if (!loaded)
             this.Load();
@@ -119,41 +141,4 @@ public abstract class GameEngine : IGameEngine
     }
 
     public abstract void AddBody(IBody body);
-}
-
-public class BasicEngine : GameEngine
-{
-    public BasicEngine(Form form) : base(form)
-    {
-        RenderStack.Add(player);
-    }
-
-    readonly List<IBody> RenderStack = new();
-    public readonly List<Wall> walls = new List<Wall>();
-
-    public Player player = new Player(new Rectangle(40, 40, 50, 50), new Pen(Color.Red, 1));
-
-    public override void AddBody(IBody body)
-    {
-        if (body is Wall)
-            walls.Add(body as Wall);
-
-        RenderStack.Add(body);
-    }
-
-    public override void Draw()
-    {
-        foreach(IBody body in RenderStack)
-        {
-            body.Draw(this.graphics);
-        }
-    }
-
-    public override void Update()
-    {       
-        foreach(IBody body in RenderStack)
-        {
-            body.Update();
-        }
-    }
 }

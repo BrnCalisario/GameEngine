@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace Engine;
 
-
 public class Wall : CollidableBody
 {
     public Wall(Rectangle box) : base(box, new Pen(Color.SteelBlue))

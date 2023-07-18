@@ -12,7 +12,8 @@ public class Player : CollidableBody
 
     public Image ChefSprite = Image.FromFile("../../../../assets/player.png");
 
-    public SpriteController<ChefSpriteLoader, ChefAnimationType> SpriteController = new ChefSpriteController();
+    public SpriteController<ChefSpriteLoader, ChefAnimationType> SpriteController 
+        = new ChefSpriteController();
 
     public Player(Rectangle box, Pen pen = null) : base(box, pen)
     {
@@ -32,6 +33,9 @@ public class Player : CollidableBody
             c.Height,
             GraphicsUnit.Pixel            
             );
+
+        if(CollisionMask is not null)
+            g.DrawRectangle(Pen, this.CollisionMask.Mask);
     }
 
     public override void Update()
@@ -41,11 +45,10 @@ public class Player : CollidableBody
 
     private void Move()
     {
-        var keyMap = GameEngine.KeyMap;
+        var keyMap = BasicEngine.Current.KeyMap;
 
         float velX = keyMap[Keys.A] ? Speed * -1 : keyMap[Keys.D] ? Speed : 0;
         float velY = keyMap[Keys.W] ? Speed * -1 : keyMap[Keys.S] ? Speed : 0;
-
 
         if(velX != 0 && velY != 0)
         { 
@@ -56,6 +59,7 @@ public class Player : CollidableBody
         var newPos = this.IncrementPoint(velX, velY);
 
         this.Box = new Rectangle(newPos, this.Box.Size);
+        CollisionMask?.UpdatePoint(newPos);
     }
 
     private Point IncrementPoint(float velx, float vely)
@@ -65,10 +69,10 @@ public class Player : CollidableBody
         float incX = velx;
         float incY = vely;
 
-        if ((X + Width >= GameEngine.Width - gap && velx > 0) || (X <= 0 + gap && velx < 0))
+        if ((X + Width >= BasicEngine.Current.Width - gap && velx > 0) || (X <= 0 + gap && velx < 0))
             incX = 0;
 
-        if ((Y + Height >= GameEngine.Height - gap && vely > 0) || (Y <= 0 + gap && vely < 0))
+        if ((Y + Height >= BasicEngine.Current.Height - gap && vely > 0) || (Y <= 0 + gap && vely < 0))
             incY = 0;
 
 

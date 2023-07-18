@@ -12,6 +12,7 @@ public interface IBody
 {
     void Draw(Graphics g);
     void Update();
+    void SetColllisionMask(Rectangle mask);
 }
 
 public interface ICollidableBody : IBody
@@ -32,6 +33,8 @@ public abstract class Body : IBody
     }
 
     public Rectangle Box { get; set; }
+    public CollisionMask CollisionMask { get; set; }
+
     public int X => Box.X;
     public int Y => Box.Y;
     public int Width => Box.Width;
@@ -45,6 +48,11 @@ public abstract class Body : IBody
     public bool Filled { get; set; } = false;
 
     public virtual Pen Pen { get; set; } = new Pen(Color.Black, 1);
+
+    public void SetColllisionMask(Rectangle mask)
+    {
+        this.CollisionMask = new CollisionMask(this, mask);
+    }
 
     public virtual void Draw(Graphics g)
     {
