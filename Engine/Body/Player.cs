@@ -76,48 +76,18 @@ public class Player : CollidableBody
     {
         var keyMap = BasicEngine.Current.KeyMap;
 
-        ChefAnimationType side;
+        if (keyMap[Keys.D] || keyMap[Keys.A])
+            this.invert = !keyMap[Keys.D] || keyMap[Keys.A];
 
-        switch (this.CurrentDirection)
+        ChefAnimationType result = CurrentDirection switch
         {
-            case Direction.Top:
-                var up = walking ? ChefAnimationType.WalkUp : ChefAnimationType.IdleUp;
-                SpriteController.StartAnimation(up);
-                break;
-            case Direction.Right:
-                side = walking ? ChefAnimationType.WalkSide : ChefAnimationType.IdleSide;
-                SpriteController.StartAnimation(side);
-                this.invert = false;
-                break;
-            case Direction.Left:
-                side = walking ? ChefAnimationType.WalkSide : ChefAnimationType.IdleSide;
-                SpriteController.StartAnimation(side);
-                this.invert = true;
-                break;
-            case Direction.Bottom:
-                side = walking ? ChefAnimationType.WalkFront : ChefAnimationType.IdleFront;
-                SpriteController.StartAnimation(side);
-                break;
-            default:
-                break;
-        }
+            Direction.Top => walking ? ChefAnimationType.WalkUp : ChefAnimationType.IdleUp,
+            Direction.Right or Direction.Left => walking ? ChefAnimationType.WalkSide : ChefAnimationType.IdleSide,
+            Direction.Bottom => walking ? ChefAnimationType.WalkFront : ChefAnimationType.IdleFront,
+            _ => ChefAnimationType.IdleFront
+        };
 
-        //if (keyMap[Keys.W])
-        //{
-        //    var up = walking ? ChefAnimationType.WalkUp : ChefAnimationType.IdleUp;
-        //    SpriteController.StartAnimation(up);
-        //}
-        //else if (keyMap[Keys.D] || keyMap[Keys.A])
-        //{
-        //    var side = walking ? ChefAnimationType.WalkSide : ChefAnimationType.IdleSide;
-        //    SpriteController.StartAnimation(side);
-        //    this.invert = keyMap[Keys.A] || !keyMap[Keys.D];
-        //}
-        //else if (keyMap[Keys.S])
-        //{
-        //    var front = walking ? ChefAnimationType.WalkFront : ChefAnimationType.IdleFront;
-        //    SpriteController.StartAnimation(front);
-        //}
+        SpriteController.StartAnimation(result);
     }
 
     private void Move()
