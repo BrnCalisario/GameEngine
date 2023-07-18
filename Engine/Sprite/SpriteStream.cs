@@ -11,7 +11,7 @@ public class SpriteStream
     public SpriteStream() { }
 
     private int pointer { get; set; } = -1;
-    private List<Sprite> sprites { get; set; }
+    private List<Sprite> sprites { get; set; } = new List<Sprite>();
 
     public IEnumerable<Sprite> Sprites => sprites;
 

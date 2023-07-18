@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using Engine.Sprite;
 
 namespace Engine;
 
@@ -9,8 +10,28 @@ public class Player : CollidableBody
 {
     private readonly int Speed = 10;
 
+    public Image ChefSprite = Image.FromFile("../../../../assets/player.png");
+
+    public SpriteController<ChefSpriteLoader, ChefAnimationType> SpriteController = new ChefSpriteController();
+
     public Player(Rectangle box, Pen pen = null) : base(box, pen)
     {
+        this.Box = new Rectangle(box.X, box.Y, 59, 93);
+    }
+
+    public override void Draw(Graphics g)
+    {
+        var c = SpriteController.CurrentAnimation.Next();
+
+        g.DrawImage(
+            ChefSprite,
+            this.Box,
+            c.X,
+            c.Y,
+            c.Width,
+            c.Height,
+            GraphicsUnit.Pixel            
+            );
     }
 
     public override void Update()

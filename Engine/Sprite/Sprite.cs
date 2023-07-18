@@ -9,6 +9,12 @@ namespace Engine.Sprite;
 
 public struct Sprite
 {
+    public Sprite(Point location, Size size)
+    {
+        this.Location = location;
+        this.Size = size;
+    }
+
     public Point Location { get; set; }
     public Size Size { get; set; }
 

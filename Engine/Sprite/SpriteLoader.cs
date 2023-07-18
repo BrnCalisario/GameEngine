@@ -1,41 +1,70 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
 
 namespace Engine.Sprite;
 
-public abstract class SpriteLoader<T> where T : struct
+
+public interface ISpriteLoader<T>
+    where T : Enum
+{
+    SpriteStream GetAnimation(T animationType);
+    bool Contains(T animationType);
+}
+
+
+public abstract class SpriteLoader<T> : ISpriteLoader<T>
+    where T : Enum
 {
     public SpriteLoader()
     {
-        if (!typeof(T).IsEnum)
-            throw new ArgumentException("Sprite Loader must be from enum");
-
         this.Load();
     }
 
     protected abstract void Load();
 
-    protected Dictionary<T, SpriteStream> Animations { get; set; } = new Dictionary<T, SpriteStream>();
+    public Dictionary<T, SpriteStream> Animations { get; private set; } = new Dictionary<T, SpriteStream>();
 
     public SpriteStream GetAnimation(T animationType)
         => Animations[animationType];
+
+    public bool Contains(T animationType)
+        => Animations.ContainsKey(animationType);
 }
 
-//public class ChefSpriteLoader<ChefAnimationType>
-//{
-//    protected override void Load()
-//    {
-
-//    }
-//}
-
-
-public enum ChefAnimationType
+public interface ISpriteController<T, S>
+        where T : SpriteLoader<S>
+        where S : Enum
 {
-    LookingDown,
-    LookingUp,
-    LookingSides,
+    void StartAnimation(S type);
+    void SetOnStreamEnd(S type, EventHandler action);
+}
+
+
+public abstract class SpriteController<T, S> : 
+    ISpriteController<T, S>
+    where T : SpriteLoader<S>
+    where S : Enum
+    
+{
+    public SpriteController()
+    {
+        if (!typeof(S).IsEnum)
+            throw new ArgumentException("Sprite Loader must be from enum");
+    }
+
+    protected T SpriteLoader { get; set; }
+    public SpriteStream CurrentAnimation { get; set; }
+
+    public virtual void SetOnStreamEnd(S type, EventHandler action)
+    {
+        if (SpriteLoader.Animations.TryGetValue(type, out SpriteStream value))
+            value.OnEndStream += action;
+    }
+
+    public virtual void StartAnimation(S type)
+    {
+        if(SpriteLoader.Contains(type))
+            this.CurrentAnimation = SpriteLoader.GetAnimation(type);
+    }
 }
