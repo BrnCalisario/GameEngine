@@ -3,12 +3,14 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using Engine.Sprite;
+using System.Linq;
 
 namespace Engine;
 
 public class Player : CollidableBody
 {
     private readonly int Speed = 10;
+    private bool invert = false;
 
     public Image ChefSprite = Image.FromFile("../../../../assets/player.png");
 
@@ -17,12 +19,19 @@ public class Player : CollidableBody
 
     public Player(Rectangle box, Pen pen = null) : base(box, pen)
     {
-        this.Box = new Rectangle(box.X, box.Y, 59, 93);
+        this.Box = new Rectangle(box.X, box.Y, 63, 96);
     }
+
+    public Direction CurrentDirection = Direction.Bottom;
+
+    private bool walking = true;
 
     public override void Draw(Graphics g)
     {
-        var c = SpriteController.CurrentAnimation.Next();
+        var c = SpriteController.CurrentSprite;
+
+        if (invert)
+            this.InvertDraw(g);
 
         g.DrawImage(
             ChefSprite,
@@ -34,13 +43,81 @@ public class Player : CollidableBody
             GraphicsUnit.Pixel            
             );
 
-        if(CollisionMask is not null)
+        if(invert)
+            this.InvertDraw(g);
+
+
+        g.DrawRectangle(Pen, this.Box);
+        g.DrawString($"{CurrentDirection.ToString()}", SystemFonts.DefaultFont, Pen.Brush, new Point(500, 60));
+
+        if (CollisionMask is not null)
             g.DrawRectangle(Pen, this.CollisionMask.Mask);
     }
 
     public override void Update()
     {
+        var keyMap = BasicEngine.Current.KeyMap;
+        var f = keyMap.FirstOrDefault(c => c.Value).Key;
+        CurrentDirection =
+            f switch
+            {
+                Keys.W => Direction.Top,
+                Keys.D => Direction.Right,
+                Keys.A => Direction.Left,
+                Keys.S => Direction.Bottom,
+                _ => Direction.Bottom,
+            };
+
         this.Move();
+        this.ChangeSprite();
+    }
+
+    private void ChangeSprite()
+    {
+        var keyMap = BasicEngine.Current.KeyMap;
+
+        ChefAnimationType side;
+
+        switch (this.CurrentDirection)
+        {
+            case Direction.Top:
+                var up = walking ? ChefAnimationType.WalkUp : ChefAnimationType.IdleUp;
+                SpriteController.StartAnimation(up);
+                break;
+            case Direction.Right:
+                side = walking ? ChefAnimationType.WalkSide : ChefAnimationType.IdleSide;
+                SpriteController.StartAnimation(side);
+                this.invert = false;
+                break;
+            case Direction.Left:
+                side = walking ? ChefAnimationType.WalkSide : ChefAnimationType.IdleSide;
+                SpriteController.StartAnimation(side);
+                this.invert = true;
+                break;
+            case Direction.Bottom:
+                side = walking ? ChefAnimationType.WalkFront : ChefAnimationType.IdleFront;
+                SpriteController.StartAnimation(side);
+                break;
+            default:
+                break;
+        }
+
+        //if (keyMap[Keys.W])
+        //{
+        //    var up = walking ? ChefAnimationType.WalkUp : ChefAnimationType.IdleUp;
+        //    SpriteController.StartAnimation(up);
+        //}
+        //else if (keyMap[Keys.D] || keyMap[Keys.A])
+        //{
+        //    var side = walking ? ChefAnimationType.WalkSide : ChefAnimationType.IdleSide;
+        //    SpriteController.StartAnimation(side);
+        //    this.invert = keyMap[Keys.A] || !keyMap[Keys.D];
+        //}
+        //else if (keyMap[Keys.S])
+        //{
+        //    var front = walking ? ChefAnimationType.WalkFront : ChefAnimationType.IdleFront;
+        //    SpriteController.StartAnimation(front);
+        //}
     }
 
     private void Move()
@@ -55,11 +132,13 @@ public class Player : CollidableBody
             velX *= 0.707f;
             velY *= 0.707f;
         }
-        
+
         var newPos = this.IncrementPoint(velX, velY);
 
         this.Box = new Rectangle(newPos, this.Box.Size);
         CollisionMask?.UpdatePoint(newPos);
+
+        walking = (keyMap[Keys.A] || keyMap[Keys.D] || keyMap[Keys.W] || keyMap[Keys.S]);
     }
 
     private Point IncrementPoint(float velx, float vely)
@@ -78,4 +157,24 @@ public class Player : CollidableBody
 
         return new Point((int)(X + incX), (int)(Y + incY));   
     }
+
+    private bool AnyPlaceMeeting(Point p, Size size, List<CollidableBody> collList)
+    {
+        var r = new Rectangle(p, size);
+
+        foreach(var coll in collList) 
+        {
+            if (coll.IsColling(r))
+                return true;
+        }
+        return false;  
+    }
+}
+
+public enum Direction
+{
+    Top,
+    Bottom,
+    Left,
+    Right
 }

@@ -22,6 +22,10 @@ public abstract class GameEngine : IGameEngine
     protected PictureBox pb { get; set; }
     protected Bitmap bmp { get; set; }
 
+    private Queue<DateTime> queue = new();
+
+    public int Fps { get; private set; } 
+
     public int Width { get; set; }
     public int Height { get; set; }
 
@@ -61,6 +65,8 @@ public abstract class GameEngine : IGameEngine
 
         Width = pb.Width;
         Height = pb.Height;
+
+        this.Interval = 20;
     }
 
     public void SetParentForm(Form form)
@@ -127,7 +133,18 @@ public abstract class GameEngine : IGameEngine
 
         tm.Tick += delegate
         {
-            this.update();
+            var now = DateTime.Now;
+            queue.Enqueue(now);
+
+            if (queue.Count > 19)
+            {
+                DateTime old = queue.Dequeue();
+                var time = now - old;
+                this.Fps = (int)(19 / time.TotalSeconds);
+            }
+
+            
+            this.update();           
         };
 
 

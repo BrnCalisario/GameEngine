@@ -30,22 +30,25 @@ public class BasicEngine : GameEngine
 
     readonly List<IBody> RenderStack = new();
 
-    public readonly List<Wall> walls = new List<Wall>();
+    public readonly List<CollidableBody> Walls = new List<CollidableBody>();
 
     public override void AddBody(IBody body)
     {
         if (body is Wall)
-            walls.Add(body as Wall);
+            Walls.Add(body as Wall);
 
         RenderStack.Add(body);
     }
 
     public override void Draw()
     {
+
         foreach (IBody body in RenderStack)
         {
             body.Draw(this.graphics);
         }
+
+        this.graphics.DrawString($"FPS:{this.Fps}", SystemFonts.MenuFont, Brushes.Black, new Point(0, 0));
     }
 
     public override void Update()

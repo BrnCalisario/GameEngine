@@ -34,8 +34,6 @@ namespace Engine
 
             this.engine = BasicEngine.Current;
 
-            this.engine.Interval = 25;
-
             var player = new Player(new Rectangle(40, 40, 50, 50));
             player.SetColllisionMask(new Rectangle(0, player.Height / 2, player.Width, player.Height / 2));
             engine.AddBody(player);
@@ -51,6 +49,10 @@ namespace Engine
 
             CollidableBody w4 = new Wall(new Rectangle(0, 0, engine.Width, 30));
             engine.AddBody(w4);
+
+            Fogao f = new Fogao(new Rectangle(500, 500, 50, 50));
+            engine.AddBody(f);
+
 
             engine.Start();
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Engine.Sprite;
 
@@ -10,10 +11,15 @@ public class SpriteStream
 {
     public SpriteStream() { }
 
+
+    private int Interval = 250;
     private int pointer { get; set; } = -1;
     private List<Sprite> sprites { get; set; } = new List<Sprite>();
 
+    public DateTime StartStream { get; set; } = default;
+
     public IEnumerable<Sprite> Sprites => sprites;
+
 
     public void Add(Sprite sprite)
         => sprites.Add(sprite);
@@ -23,16 +29,21 @@ public class SpriteStream
 
     public Sprite Next()
     {
-        pointer++;
-        if (pointer >= sprites.Count)
+        if(StartStream == default)
+            StartStream = DateTime.Now;
+        
+        var diff = (DateTime.Now - StartStream).TotalMilliseconds;
+
+        int actualSprite = (int)diff / Interval;
+
+        if(actualSprite >= sprites.Count)
         {
-            var lastPoint = sprites.Count() - 1;
+            StartStream = DateTime.Now;
+            actualSprite = sprites.Count - 1;
             OnEndStream?.Invoke(this, EventArgs.Empty);
-            Reset();
-            return sprites[lastPoint];
         }
 
-        return sprites[pointer];
+        return sprites[actualSprite];
     }
 
     public void Reset()
