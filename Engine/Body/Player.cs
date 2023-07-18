@@ -65,7 +65,7 @@ public class Player : CollidableBody
                 Keys.D => Direction.Right,
                 Keys.A => Direction.Left,
                 Keys.S => Direction.Bottom,
-                _ => Direction.Bottom,
+                _ => CurrentDirection,
             };
 
         this.Move();

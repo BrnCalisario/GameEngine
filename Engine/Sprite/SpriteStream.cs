@@ -34,7 +34,7 @@ public class SpriteStream
         
         var diff = (DateTime.Now - StartStream).TotalMilliseconds;
 
-        int actualSprite = (int)diff / Interval;
+        int actualSprite = (int) (diff / Interval);
 
         if(actualSprite >= sprites.Count)
         {
