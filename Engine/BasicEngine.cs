@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Engine.Tiles;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -32,6 +33,8 @@ public class BasicEngine : GameEngine
 
     public readonly List<CollidableBody> Walls = new List<CollidableBody>();
 
+    public TileSet tileSet;
+
     public override void AddBody(IBody body)
     {
         if (body is Wall)
@@ -42,6 +45,7 @@ public class BasicEngine : GameEngine
 
     public override void Draw()
     {
+        tileSet?.Draw(this.graphics);
 
         foreach (IBody body in RenderStack)
         {

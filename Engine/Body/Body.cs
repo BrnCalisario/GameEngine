@@ -33,7 +33,6 @@ public abstract class Body : IBody
     }
 
     public Rectangle Box { get; set; }
-    public CollisionMask CollisionMask { get; set; }
 
     public int X => Box.X;
     public int Y => Box.Y;
@@ -48,11 +47,6 @@ public abstract class Body : IBody
     public bool Filled { get; set; } = false;
 
     public virtual Pen Pen { get; set; } = new Pen(Color.Black, 1);
-
-    public void SetColllisionMask(Rectangle mask)
-    {
-        this.CollisionMask = new CollisionMask(this, mask);
-    }
 
     protected void InvertDraw(Graphics g)
     {
@@ -82,6 +76,8 @@ public abstract class CollidableBody : Body, ICollidableBody
     {
     }
 
+    public CollisionMask CollisionMask { get; set; }
+
     public bool IsColling(Rectangle box)
         => box.IntersectsWith(this.Box);
 
@@ -90,9 +86,12 @@ public abstract class CollidableBody : Body, ICollidableBody
         if (body.CollisionMask is null)
             return IsColling(body.Box);
 
-        return IsColling(body.CollisionMask.Mask);
+        return IsColling(body.CollisionMask.Box);
     }
-     
+    public void SetColllisionMask(Rectangle mask)
+    {
+        this.CollisionMask = new CollisionMask(this, mask);
+    }
 
     public List<CollidableBody> IsCollidingList(List<CollidableBody> list)
     {

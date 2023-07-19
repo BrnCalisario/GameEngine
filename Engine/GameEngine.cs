@@ -37,16 +37,13 @@ public abstract class GameEngine : IGameEngine
         { Keys.D, false}
     };
 
-    Timer tm = new();
-
+    readonly Timer tm = new();
     public int Interval
     {
         get => tm.Interval;
         set
         {
-            tm.Stop();
             tm.Interval = value;
-            tm.Start();
         }
     }
 

@@ -12,7 +12,7 @@ public class SpriteStream
     public SpriteStream() { }
 
 
-    private int Interval = 250;
+    private TimeSpan Interval = TimeSpan.FromSeconds(0.25);
     private int pointer { get; set; } = -1;
     private List<Sprite> sprites { get; set; } = new List<Sprite>();
 
@@ -32,9 +32,9 @@ public class SpriteStream
         if(StartStream == default)
             StartStream = DateTime.Now;
         
-        var diff = (DateTime.Now - StartStream).TotalMilliseconds;
+        var diff = DateTime.Now - StartStream;
 
-        int actualSprite = (int) (diff / Interval);
+        int actualSprite = (int)(diff / Interval);
 
         if(actualSprite >= sprites.Count)
         {

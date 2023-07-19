@@ -9,8 +9,11 @@ namespace Engine;
 
 public class Player : CollidableBody
 {
-    private readonly int Speed = 10;
+    private readonly int speed = 10;
+    
     private bool invert = false;
+    
+    private bool walking = true;
 
     public Image ChefSprite = Image.FromFile("../../../../assets/player.png");
 
@@ -26,7 +29,6 @@ public class Player : CollidableBody
 
     public Direction CurrentDirection = Direction.Bottom;
 
-    private bool walking = true;
 
     public override void Draw(Graphics g)
     {
@@ -50,10 +52,10 @@ public class Player : CollidableBody
 
 
         g.DrawRectangle(Pen, this.Box);
-        g.DrawString($"{CurrentDirection.ToString()}", SystemFonts.DefaultFont, Pen.Brush, new Point(500, 60));
+        g.DrawString($"{CurrentDirection}", SystemFonts.DefaultFont, Pen.Brush, new Point(1, 30));
 
         if (CollisionMask is not null)
-            g.DrawRectangle(Pen, this.CollisionMask.Mask);
+            g.DrawRectangle(Pen, this.CollisionMask.Box);
     }
 
     public override void Update()
@@ -96,8 +98,8 @@ public class Player : CollidableBody
     {
         var keyMap = BasicEngine.Current.KeyMap;
 
-        float velX = keyMap[Keys.A] ? Speed * -1 : keyMap[Keys.D] ? Speed : 0;
-        float velY = keyMap[Keys.W] ? Speed * -1 : keyMap[Keys.S] ? Speed : 0;
+        float velX = keyMap[Keys.A] ? speed * -1 : keyMap[Keys.D] ? speed : 0;
+        float velY = keyMap[Keys.W] ? speed * -1 : keyMap[Keys.S] ? speed : 0;
 
         if (velX != 0 && velY != 0)
         {
@@ -113,25 +115,9 @@ public class Player : CollidableBody
         walking = (keyMap[Keys.A] || keyMap[Keys.D] || keyMap[Keys.W] || keyMap[Keys.S]);
     }
 
-    //private Point IncrementPoint(float velx, float vely)
-    //{
-    //    int gap = 15;
-
-    //    float incX = velx;
-    //    float incY = vely;
-
-    //    if ((X + Width >= BasicEngine.Current.Width - gap && velx > 0) || (X <= 0 + gap && velx < 0))
-    //        incX = 0;
-
-    //    if ((Y + Height >= BasicEngine.Current.Height - gap && vely > 0) || (Y <= 0 + gap && vely < 0))
-    //        incY = 0;
-
-    //    return new Point((int)(X + incX), (int)(Y + incY));
-    //}
-
     private Point WallCollide(float velX, float velY)
     {
-        var maskRect = this.CollisionMask.Mask;
+        var maskRect = this.CollisionMask.Box;
 
         var newVelX = 0;
 
@@ -149,7 +135,7 @@ public class Player : CollidableBody
             velX = 0;
         }
 
-        var previewRectY = this.CollisionMask.Mask;
+        var previewRectY = this.CollisionMask.Box;
         previewRectY.Y += (int)velY;
 
         var newVelY = 0;

@@ -1,3 +1,4 @@
+using Engine.Tiles;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -34,26 +35,15 @@ namespace Engine
 
             this.engine = BasicEngine.Current;
 
-            CollidableBody w = new Wall(new Rectangle(0, 0, 30, engine.Height));
-            engine.AddBody(w);
 
-            CollidableBody w2 = new Wall(new Rectangle(0, engine.Height - 30, engine.Width, 30));
-            engine.AddBody(w2);
+            var tileSet = new TileSet(16, 8, new Point(200, 20));
+            BasicEngine.Current.tileSet = tileSet;
 
-            CollidableBody w3 = new Wall(new Rectangle(400, 300, 60, engine.Height));
-            engine.AddBody(w3);
-
-            CollidableBody w4 = new Wall(new Rectangle(0, 0, engine.Width, 60));
-            engine.AddBody(w4);
 
             var player = new Player(new Rectangle(50, 50, 50, 50));
-            //player.SetColllisionMask(new Rectangle(0, player.Height / 2, player.Width / 2, player.Height / 2));
             engine.AddBody(player);
-
 
             engine.Start();
         }
-
-
     }
 }
