@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Engine;
+
+using Tiles;
 
 public class BasicEngine : GameEngine
 {
@@ -30,22 +28,28 @@ public class BasicEngine : GameEngine
 
     readonly List<IBody> RenderStack = new();
 
-    public readonly List<Wall> walls = new List<Wall>();
+    public readonly List<CollidableBody> Walls = new();
+
+    public TileSet tileSet;
 
     public override void AddBody(IBody body)
     {
         if (body is Wall)
-            walls.Add(body as Wall);
+            Walls.Add(body as Wall);
 
         RenderStack.Add(body);
     }
 
     public override void Draw()
     {
+        tileSet?.Draw(this.graphics);
+
         foreach (IBody body in RenderStack)
         {
             body.Draw(this.graphics);
         }
+
+        this.graphics.DrawString($"FPS:{this.Fps}", SystemFonts.MenuFont, Brushes.Black, new Point(0, 0));
     }
 
     public override void Update()

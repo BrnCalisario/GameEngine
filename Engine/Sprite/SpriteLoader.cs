@@ -4,7 +4,6 @@ using System.Drawing;
 
 namespace Engine.Sprite;
 
-
 public interface ISpriteLoader<T>
     where T : Enum
 {
@@ -16,14 +15,16 @@ public interface ISpriteLoader<T>
 public abstract class SpriteLoader<T> : ISpriteLoader<T>
     where T : Enum
 {
-    public SpriteLoader()
+    public SpriteLoader(int scale = 1)
     {
+        this.Scale = scale;
         this.Load();
     }
 
     protected abstract void Load();
 
     public Dictionary<T, SpriteStream> Animations { get; private set; } = new Dictionary<T, SpriteStream>();
+    public int Scale { get; set; }
 
     public SpriteStream GetAnimation(T animationType)
         => Animations[animationType];
@@ -49,12 +50,11 @@ public abstract class SpriteController<T, S> :
 {
     public SpriteController()
     {
-        if (!typeof(S).IsEnum)
-            throw new ArgumentException("Sprite Loader must be from enum");
     }
 
     protected T SpriteLoader { get; set; }
     public SpriteStream CurrentAnimation { get; set; }
+    public Sprite CurrentSprite => CurrentAnimation.Next();
 
     public virtual void SetOnStreamEnd(S type, EventHandler action)
     {

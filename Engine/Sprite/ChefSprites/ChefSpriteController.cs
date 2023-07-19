@@ -1,42 +1,105 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Engine.Sprite;
+
+using Extensions;
+
 public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
 {
-    public ChefSpriteLoader() { }
+    public ChefSpriteLoader() : base(scale: 3)
+    {
+    }
 
-    Size SpriteSize = new Size(59, 93);
+    Size SpriteSize = new(21, 32);
 
     protected override void Load()
     {
-        var startPoint = new Point(3, 3);
+        var scaled = SpriteSize.Scale(this.Scale);
+        int startRunning = scaled.Width;
 
-        var idleFront = new SpriteStream();
-        idleFront.Add(new Sprite(startPoint, SpriteSize));
+        LoadAnimationArgs idleFrontArgs = new()
+        {
+            AnimationType = ChefAnimationType.IdleFront,
+            StartingPoint = new Point(0, 0),
+            Size = scaled
+        };
+        this.AddAnimation(idleFrontArgs);
 
-        Animations.Add(ChefAnimationType.IdleFront, idleFront);
+        LoadAnimationArgs walkFrontArgs = new()
+        {
+            AnimationType = ChefAnimationType.WalkFront,
+            StartingPoint = new Point(startRunning, 1),
+            Quantity = 2,
+            Gap = 1,
+            Size = scaled
+        };
+        this.AddAnimation(walkFrontArgs);
 
-        startPoint = new Point(startPoint.X, SpriteSize.Height + 6);
+        LoadAnimationArgs idleSideArgs = new()
+        {
+            AnimationType = ChefAnimationType.IdleSide,
+            StartingPoint = new Point(0, scaled.Height + 1),
+            Size = scaled
+        };
+        this.AddAnimation(idleSideArgs);
 
-        var idleSide = new SpriteStream();
-        idleSide.Add(new Sprite(startPoint, SpriteSize));
+        LoadAnimationArgs walkSideArgs = new()
+        {
+            AnimationType = ChefAnimationType.WalkSide,
+            StartingPoint = new Point(startRunning, scaled.Height + 1),
+            Quantity = 2,
+            Gap = 1,
+            Size = scaled
+        };
+        this.AddAnimation(walkSideArgs);
 
-        Animations.Add(ChefAnimationType.IdleSide, idleSide);
+        LoadAnimationArgs idleUpArgs = new()
+        {
+            AnimationType = ChefAnimationType.IdleUp,
+            StartingPoint = new Point(0, scaled.Height * 2 + 1),
+            Size = scaled
+        };
+        this.AddAnimation(idleUpArgs);
 
-        startPoint = new Point(startPoint.X, startPoint.Y + SpriteSize.Height + 3);
+        LoadAnimationArgs walkUpArgs = new()
+        {
+            AnimationType = ChefAnimationType.WalkUp,
+            StartingPoint = new Point(startRunning, scaled.Height * 2 + 1),
+            Size = scaled,
+            Quantity = 2,
+            Gap = 1
+        };
+        this.AddAnimation(walkUpArgs);
+    }
 
-        var idleUp = new SpriteStream();
-        idleUp.Add(new Sprite(startPoint, SpriteSize));
+    private void AddAnimation(LoadAnimationArgs args)
+    {
+        var animationStream = new SpriteStream();
+        for(int i = args.StartingPoint.X; i < args.Size.Width * args.Quantity + args.Gap; i += args.StartingPoint.X)
+        {
+            var spr = new Sprite(new Point(i, args.StartingPoint.Y), args.Size);
+            animationStream.Add(spr);
 
-        Animations.Add(ChefAnimationType.IdleUp, idleUp);
+            if (animationStream.Sprites.Count() == args.Quantity)
+                break;
+        }
 
+        this.Animations.Add(args.AnimationType, animationStream);
     }
 }
+
+public class LoadAnimationArgs
+{
+    public ChefAnimationType AnimationType;
+    public Point StartingPoint { get; set; }
+    public int Quantity { get; set; } = 1;
+    public Size Size { get; set; }
+    public int Gap { get; set; } = 0;
+}
+
+
 
 public class ChefSpriteController
     : SpriteController<ChefSpriteLoader, ChefAnimationType>
@@ -46,6 +109,10 @@ public class ChefSpriteController
         this.SpriteLoader = new ChefSpriteLoader();
         StartAnimation(ChefAnimationType.IdleFront);
     }
+
+
+
+
 }
 
 public enum ChefAnimationType
@@ -57,3 +124,4 @@ public enum ChefAnimationType
     WalkSide,
     WalkUp
 }
+
