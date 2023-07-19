@@ -14,12 +14,14 @@ public class Player : CollidableBody
 
     public Image ChefSprite = Image.FromFile("../../../../assets/player.png");
 
-    public SpriteController<ChefSpriteLoader, ChefAnimationType> SpriteController 
+    public SpriteController<ChefSpriteLoader, ChefAnimationType> SpriteController
         = new ChefSpriteController();
 
     public Player(Rectangle box, Pen pen = null) : base(box, pen)
     {
         this.Box = new Rectangle(box.X, box.Y, 63, 96);
+
+        this.SetColllisionMask(new Rectangle(13, this.Height / 2, 40, this.Height / 2));
     }
 
     public Direction CurrentDirection = Direction.Bottom;
@@ -40,10 +42,10 @@ public class Player : CollidableBody
             c.Y,
             c.Width,
             c.Height,
-            GraphicsUnit.Pixel            
+            GraphicsUnit.Pixel
             );
 
-        if(invert)
+        if (invert)
             this.InvertDraw(g);
 
 
@@ -97,13 +99,13 @@ public class Player : CollidableBody
         float velX = keyMap[Keys.A] ? Speed * -1 : keyMap[Keys.D] ? Speed : 0;
         float velY = keyMap[Keys.W] ? Speed * -1 : keyMap[Keys.S] ? Speed : 0;
 
-        if(velX != 0 && velY != 0)
-        { 
+        if (velX != 0 && velY != 0)
+        {
             velX *= 0.707f;
             velY *= 0.707f;
         }
 
-        var newPos = this.IncrementPoint(velX, velY);
+        var newPos = WallCollide(velX, velY);
 
         this.Box = new Rectangle(newPos, this.Box.Size);
         CollisionMask?.UpdatePoint(newPos);
@@ -111,33 +113,59 @@ public class Player : CollidableBody
         walking = (keyMap[Keys.A] || keyMap[Keys.D] || keyMap[Keys.W] || keyMap[Keys.S]);
     }
 
-    private Point IncrementPoint(float velx, float vely)
+    //private Point IncrementPoint(float velx, float vely)
+    //{
+    //    int gap = 15;
+
+    //    float incX = velx;
+    //    float incY = vely;
+
+    //    if ((X + Width >= BasicEngine.Current.Width - gap && velx > 0) || (X <= 0 + gap && velx < 0))
+    //        incX = 0;
+
+    //    if ((Y + Height >= BasicEngine.Current.Height - gap && vely > 0) || (Y <= 0 + gap && vely < 0))
+    //        incY = 0;
+
+    //    return new Point((int)(X + incX), (int)(Y + incY));
+    //}
+
+    private Point WallCollide(float velX, float velY)
     {
-        int gap = 15;
+        var maskRect = this.CollisionMask.Mask;
 
-        float incX = velx;
-        float incY = vely;
+        var newVelX = 0;
 
-        if ((X + Width >= BasicEngine.Current.Width - gap && velx > 0) || (X <= 0 + gap && velx < 0))
-            incX = 0;
+        var previewRectX = maskRect;
+        previewRectX.X += (int)velX;
 
-        if ((Y + Height >= BasicEngine.Current.Height - gap && vely > 0) || (Y <= 0 + gap && vely < 0))
-            incY = 0;
-
-
-        return new Point((int)(X + incX), (int)(Y + incY));   
-    }
-
-    private bool AnyPlaceMeeting(Point p, Size size, List<CollidableBody> collList)
-    {
-        var r = new Rectangle(p, size);
-
-        foreach(var coll in collList) 
+        if (previewRectX.AnyPlaceMeeting(BasicEngine.Current.Walls))
         {
-            if (coll.IsColling(r))
-                return true;
+            maskRect.X += MathF.Sign(velX);
+            while (!maskRect.AnyPlaceMeeting(BasicEngine.Current.Walls))
+            {
+                maskRect.X += MathF.Sign(velX);
+                newVelX += MathF.Sign(velX);
+            }
+            velX = 0;
         }
-        return false;  
+
+        var previewRectY = this.CollisionMask.Mask;
+        previewRectY.Y += (int)velY;
+
+        var newVelY = 0;
+
+        if (previewRectY.AnyPlaceMeeting(BasicEngine.Current.Walls))
+        {
+            maskRect.Y += MathF.Sign(velY);
+            while (!maskRect.AnyPlaceMeeting(BasicEngine.Current.Walls))
+            {
+                maskRect.Y += MathF.Sign(velY);
+                newVelY += MathF.Sign(velY);
+            }
+            velY = 0;
+        }
+
+        return new Point(this.Box.X + (int)velX + newVelX, this.Box.Y + (int)velY + newVelY);
     }
 }
 
@@ -147,4 +175,17 @@ public enum Direction
     Bottom,
     Left,
     Right
+}
+
+public static class RectangleExtensions
+{
+    public static bool AnyPlaceMeeting(this Rectangle rec, List<CollidableBody> collList)
+    {
+        foreach (var coll in collList)
+        {
+            if (coll.IsColling(rec))
+                return true;
+        }
+        return false;
+    }
 }

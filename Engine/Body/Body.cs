@@ -114,15 +114,3 @@ public class CollideEventArgs : EventArgs
     public CollidableBody Collider { get; set; }
     public Type BodyType { get; set;  }
 }
-
-public class Fogao : Body
-{
-    public Fogao(Rectangle box, Pen pen = null) : base(box, new Pen(Color.Pink))
-    {
-        this.Filled = true;
-    }
-
-    public override void Update()
-    {
-    }
-}

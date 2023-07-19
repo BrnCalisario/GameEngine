@@ -17,9 +17,19 @@ public class CollisionMask
     }
 
     public Point RelativePosition;
-
     public Body Parent { get; set; }
     public Rectangle Mask { get; set; }
+
+    public int X => Mask.X;
+    public int Y => Mask.Y;
+    public int Width => Mask.Width;
+    public int Height => Mask.Height;
+
+    public int Top => Mask.Top;
+    public int Bottom => Mask.Bottom;
+    public int Left => Mask.Left;
+    public int Right => Mask.Right;
+
     public void UpdatePoint(Point position)
     {
         var newPos = new Point(RelativePosition.X + position.X, RelativePosition.Y +  position.Y);
