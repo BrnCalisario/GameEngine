@@ -36,11 +36,15 @@ namespace Engine
             this.engine = BasicEngine.Current;
 
 
-            var tileSet = new TileSet(16, 8, new Point(200, 20));
+            var tileSet = new TileSet(16, 8, new Point(0, 0));
+            tileSet.Box = tileSet.Box.AlignCenter(engine.Box);
+
             BasicEngine.Current.tileSet = tileSet;
 
 
             var player = new Player(new Rectangle(50, 50, 50, 50));
+            player.Box = player.Box.AlignCenter(engine.Box);
+
             engine.AddBody(player);
 
             engine.Start();

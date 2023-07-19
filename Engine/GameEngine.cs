@@ -24,6 +24,8 @@ public abstract class GameEngine : IGameEngine
 
     private Queue<DateTime> queue = new();
 
+    public Rectangle Box => new Rectangle(0, 0, pb.Width, pb.Height); 
+
     public int Fps { get; private set; } 
 
     public int Width { get; set; }

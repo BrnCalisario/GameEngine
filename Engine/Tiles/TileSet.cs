@@ -9,9 +9,21 @@ namespace Engine.Tiles;
 
 public class TileSet
 {
-    public Tile[,] Set {  get; set; }
+    public Tile[,] Set { get; set; }
 
-    public Point Location { get; set; }
+
+    private Point location { get; set; }
+    public Point Location
+    {
+        get => this.location;        
+        set
+        {            
+            this.location = value;
+            UpdateLocation();
+        }
+    }
+    
+
 
     public TileSet(Tile[,] set)
     {
@@ -25,17 +37,19 @@ public class TileSet
     public int BoxWidth => TileSize * Width;
     public int BoxHeight => TileSize * Height;
 
-
-    public TileSet(int width, int height, Point location)
+    public Rectangle Box 
     {
-        this.Location = location;
-        Set = new Tile[width, height];
+        set => this.Location = new Point(value.X, value.Y);
+        get => new(location, new(BoxWidth, BoxHeight));
+    }
 
-        for(int i = 0; i < width; i++)
+    private void UpdateLocation()
+    {
+        for (int i = 0; i < Width; i++)
         {
-            for(int j = 0; j < height; j++)
+            for (int j = 0; j < Height; j++)
             {
-                var loc = new Point(Location.X + i * TileSize, Location.Y + j * TileSize);
+                var loc = new Point(location.X + i * TileSize, location.Y + j * TileSize);
                 var rectTile = new Rectangle(loc, new(TileSize, TileSize));
                 var t = new GridTile(rectTile);
                 Set[i, j] = t;
@@ -43,17 +57,25 @@ public class TileSet
         }
     }
 
+    public TileSet(int width, int height, Point location)
+    {
+        Set = new Tile[width, height];        
+        this.location = location;
+
+        UpdateLocation();
+    }
+
     public void Draw(Graphics g)
     {
 
-        for(int i = 0; i < this.Width; i++)
+        for (int i = 0; i < this.Width; i++)
         {
-            for(int j = 0; j < this.Height; j++)
+            for (int j = 0; j < this.Height; j++)
             {
                 Set[i, j].Draw(g);
             }
         }
-        g.DrawRectangle(new Pen(Color.Black), new Rectangle(Location, new(BoxWidth, BoxHeight)));
+        g.DrawRectangle(new Pen(Color.Black), new Rectangle(location, new(BoxWidth, BoxHeight)));
     }
 }
 
