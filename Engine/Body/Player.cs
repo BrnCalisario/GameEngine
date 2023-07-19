@@ -19,6 +19,17 @@ public class Player : CollidableBody
 
     public Item holdingItem = null;
 
+    private DateTime LastInteraction = DateTime.Now;
+    
+    private TimeSpan InteractionDelay = TimeSpan.FromSeconds(0.25);
+
+    private bool CanInteract()
+    {
+        var diff = DateTime.Now - LastInteraction;
+
+        return diff >= InteractionDelay;
+    }
+
     public Image ChefSprite = Image.FromFile("../../../../assets/player_3x.png");
 
     public SpriteController<ChefSpriteLoader, ChefAnimationType> SpriteController
@@ -68,8 +79,9 @@ public class Player : CollidableBody
         if (items is null || items.Count < 1) return;
 
         var item = items.FirstOrDefault();
-
         item.GetHold(this);
+
+        this.LastInteraction = DateTime.Now;
     }
 
     private void ReleaseItem()
@@ -79,7 +91,8 @@ public class Player : CollidableBody
 
         this.holdingItem.GetReleased();
         this.holdingItem = null;
-        
+
+        this.LastInteraction = DateTime.Now;
     }
 
     public override void Update()
@@ -97,14 +110,12 @@ public class Player : CollidableBody
                 _ => CurrentDirection,
             };
 
-        bool canInteract = holdingItem?.Interactable ?? true;
-
-        if (keyMap[Keys.E] && canInteract)
+        if (keyMap[Keys.E] && CanInteract())
         {
             if (this.holdingItem is null)
                 TakeItem();
             else
-                ReleaseItem();
+                ReleaseItem();        
         }
 
         this.Move();

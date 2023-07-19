@@ -24,6 +24,13 @@ public abstract class Item : CollidableBody
     private DateTime LastInteraction = DateTime.Now;
     private TimeSpan InteractionDelay = TimeSpan.FromSeconds(0.25);
 
+    private bool CanInteract()
+    {
+        var diff = DateTime.Now - LastInteraction;
+
+        return diff >= InteractionDelay;
+    }
+
     public bool Interactable => CanInteract();
 
     public Player Player { get; private set; } = null;
@@ -32,7 +39,7 @@ public abstract class Item : CollidableBody
 
     public override void Draw(Graphics g)
     {
-        g.DrawRectangle(Pen, Box);
+        g.FillEllipse(Pen.Brush, Box);
 
         if (CollisionMask is not null)
             g.DrawRectangle(new Pen(Color.Black), this.CollisionMask.Box);
@@ -48,7 +55,7 @@ public abstract class Item : CollidableBody
 
     public void GetHold(Player p)
     {
-        if (this.Player is not null || !CanInteract())
+        if (this.Player is not null)
             return;
 
         this.Player = p;
@@ -58,22 +65,9 @@ public abstract class Item : CollidableBody
 
     public void GetReleased()
     {
-        if (!CanInteract())
-            return;
-
-
         this.Box = new Rectangle(this.Box.Left, Player.Bottom, this.Box.Width, this.Box.Height );
-
         this.Player = null;
         LastInteraction = DateTime.Now;
-
-    }
-
-    private bool CanInteract()
-    {
-        var diff = DateTime.Now - LastInteraction;
-
-        return diff >= InteractionDelay;
     }
 }
 
@@ -84,5 +78,6 @@ public class Tomato : Item
     public Tomato(Point p) : base(new Rectangle(p, new(20, 20)))
     {
         this.Pen = new Pen(Color.Red);
+        this.Filled = true;
     }
 }

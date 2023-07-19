@@ -67,6 +67,8 @@ public partial class GameForm : Form
         Tomato t = new Tomato(new Point(500, 500));
         engine.AddBody(t);
 
+        Tomato t2 = new Tomato(new Point(300, 500));
+        engine.AddBody(t2);
 
         engine.Start();
     }
