@@ -17,14 +17,14 @@ public class Player : CollidableBody
     
     private bool walking = true;
 
-    public Image ChefSprite = Image.FromFile("../../../../assets/player.png");
+    public Image ChefSprite = Image.FromFile("../../../../assets/player_3x.png");
 
     public SpriteController<ChefSpriteLoader, ChefAnimationType> SpriteController
         = new ChefSpriteController();
 
     public Player(Rectangle box, Pen pen = null) : base(box, pen)
     {
-        this.Box = new Rectangle(box.X, box.Y, 63, 96);
+        this.Box = new Rectangle(box.X, box.Y, 60, 80);
 
         this.SetColllisionMask(new Rectangle(13, this.Height / 2, 40, this.Height / 2));
     }

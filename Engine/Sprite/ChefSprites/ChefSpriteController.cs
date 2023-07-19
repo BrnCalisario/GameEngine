@@ -12,7 +12,7 @@ public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
     {
     }
 
-    Size SpriteSize = new(21, 32);
+    Size SpriteSize = new(30, 40);
 
     protected override void Load()
     {
@@ -31,7 +31,7 @@ public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
         {
             AnimationType = ChefAnimationType.WalkFront,
             StartingPoint = new Point(startRunning, 1),
-            Quantity = 2,
+            Quantity = 3,
             Gap = 1,
             Size = scaled
         };
@@ -49,7 +49,7 @@ public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
         {
             AnimationType = ChefAnimationType.WalkSide,
             StartingPoint = new Point(startRunning, scaled.Height + 1),
-            Quantity = 2,
+            Quantity = 3,
             Gap = 1,
             Size = scaled
         };
@@ -68,7 +68,7 @@ public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
             AnimationType = ChefAnimationType.WalkUp,
             StartingPoint = new Point(startRunning, scaled.Height * 2 + 1),
             Size = scaled,
-            Quantity = 2,
+            Quantity = 3,
             Gap = 1
         };
         this.AddAnimation(walkUpArgs);
@@ -77,7 +77,7 @@ public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
     private void AddAnimation(LoadAnimationArgs args)
     {
         var animationStream = new SpriteStream();
-        for(int i = args.StartingPoint.X; i < args.Size.Width * args.Quantity + args.Gap; i += args.StartingPoint.X)
+        for(int i = args.StartingPoint.X; i < args.Size.Width * args.Quantity + args.Gap; i += args.Size.Width)
         {
             var spr = new Sprite(new Point(i, args.StartingPoint.Y), args.Size);
             animationStream.Add(spr);
