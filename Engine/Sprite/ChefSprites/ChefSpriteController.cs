@@ -86,6 +86,9 @@ public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
                 break;
         }
 
+        if (animationStream.Sprites.Count() > 1)
+            animationStream.Add(animationStream.Sprites.Skip(1).Take(1).First());
+
         this.Animations.Add(args.AnimationType, animationStream);
     }
 }

@@ -12,10 +12,12 @@ using Extensions;
 public class Player : CollidableBody
 {
     private readonly int speed = 10;
-    
+
     private bool invert = false;
-    
+
     private bool walking = true;
+
+    public Item holdingItem = null;
 
     public Image ChefSprite = Image.FromFile("../../../../assets/player_3x.png");
 
@@ -24,13 +26,12 @@ public class Player : CollidableBody
 
     public Player(Rectangle box, Pen pen = null) : base(box, pen)
     {
-        this.Box = new Rectangle(box.X, box.Y, 60, 80);
+        this.Box = new Rectangle(box.X, box.Y, 90, 120);
 
-        this.SetColllisionMask(new Rectangle(13, this.Height / 2, 40, this.Height / 2));
+        this.SetColllisionMask(new Rectangle(this.Box.Width / 2 - 18, this.Height / 2 + 16, 36, this.Height / 3));
     }
 
     public Direction CurrentDirection = Direction.Bottom;
-
 
     public override void Draw(Graphics g)
     {
@@ -60,9 +61,31 @@ public class Player : CollidableBody
             g.DrawRectangle(Pen, this.CollisionMask.Box);
     }
 
+    private void TakeItem()
+    {
+        var items = IsCollidingMaskList(BasicEngine.Current.Items);
+
+        if (items is null || items.Count < 1) return;
+
+        var item = items.FirstOrDefault();
+
+        item.GetHold(this);
+    }
+
+    private void ReleaseItem()
+    {
+        if (this.holdingItem is null)
+            return;
+
+        this.holdingItem.GetReleased();
+        this.holdingItem = null;
+        
+    }
+
     public override void Update()
     {
         var keyMap = BasicEngine.Current.KeyMap;
+
         var f = keyMap.FirstOrDefault(c => c.Value).Key;
         CurrentDirection =
             f switch
@@ -73,6 +96,16 @@ public class Player : CollidableBody
                 Keys.S => Direction.Bottom,
                 _ => CurrentDirection,
             };
+
+        bool canInteract = holdingItem?.Interactable ?? true;
+
+        if (keyMap[Keys.E] && canInteract)
+        {
+            if (this.holdingItem is null)
+                TakeItem();
+            else
+                ReleaseItem();
+        }
 
         this.Move();
         this.ChangeSprite();
@@ -85,7 +118,7 @@ public class Player : CollidableBody
         if (keyMap[Keys.D] || keyMap[Keys.A])
             this.invert = !keyMap[Keys.D] || keyMap[Keys.A];
 
-        ChefAnimationType result = CurrentDirection switch
+        ChefAnimationType animation = CurrentDirection switch
         {
             Direction.Top => walking ? ChefAnimationType.WalkUp : ChefAnimationType.IdleUp,
             Direction.Right or Direction.Left => walking ? ChefAnimationType.WalkSide : ChefAnimationType.IdleSide,
@@ -93,7 +126,7 @@ public class Player : CollidableBody
             _ => ChefAnimationType.IdleFront
         };
 
-        SpriteController.StartAnimation(result);
+        SpriteController.StartAnimation(animation);
     }
 
     private void Move()
@@ -126,10 +159,10 @@ public class Player : CollidableBody
         var previewRectX = maskRect;
         previewRectX.X += (int)velX;
 
-        if (previewRectX.AnyPlaceMeeting(BasicEngine.Current.Walls))
+        if (previewRectX.AnyPlaceMeeting(BasicEngine.Current.Walls, out _))
         {
             maskRect.X += MathF.Sign(velX);
-            while (!maskRect.AnyPlaceMeeting(BasicEngine.Current.Walls))
+            while (!maskRect.AnyPlaceMeeting(BasicEngine.Current.Walls, out _))
             {
                 maskRect.X += MathF.Sign(velX);
                 newVelX += MathF.Sign(velX);
@@ -142,10 +175,10 @@ public class Player : CollidableBody
 
         var newVelY = 0;
 
-        if (previewRectY.AnyPlaceMeeting(BasicEngine.Current.Walls))
+        if (previewRectY.AnyPlaceMeeting(BasicEngine.Current.Walls, out _))
         {
             maskRect.Y += MathF.Sign(velY);
-            while (!maskRect.AnyPlaceMeeting(BasicEngine.Current.Walls))
+            while (!maskRect.AnyPlaceMeeting(BasicEngine.Current.Walls, out _))
             {
                 maskRect.Y += MathF.Sign(velY);
                 newVelY += MathF.Sign(velY);

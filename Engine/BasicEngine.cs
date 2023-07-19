@@ -28,7 +28,8 @@ public class BasicEngine : GameEngine
 
     readonly List<IBody> RenderStack = new();
 
-    public readonly List<CollidableBody> Walls = new();
+    public readonly List<Wall> Walls = new();
+    public readonly List<Item> Items = new();
 
     public TileSet tileSet;
 
@@ -36,6 +37,9 @@ public class BasicEngine : GameEngine
     {
         if (body is Wall)
             Walls.Add(body as Wall);
+
+        if(body is Item)
+            Items.Add(body as Item);
 
         RenderStack.Add(body);
     }

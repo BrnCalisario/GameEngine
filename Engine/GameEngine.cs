@@ -36,7 +36,9 @@ public abstract class GameEngine : IGameEngine
         { Keys.W, false},
         { Keys.S, false},
         { Keys.A, false},
-        { Keys.D, false}
+        { Keys.D, false},
+        { Keys.E, false},
+        { Keys.F, false},
     };
 
     readonly Timer tm = new();

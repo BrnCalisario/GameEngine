@@ -55,18 +55,18 @@ public partial class GameForm : Form
         var rct4 = new Rectangle(new Point(tileSet.Location.X + tileSet.BoxWidth + 1, tileSet.Location.Y - 20), new Size(20, tileSet.BoxHeight + 40));
         var w4 = new Wall(rct4);
 
-
         engine.AddBody(w1);
         engine.AddBody(w2);
         engine.AddBody(w3);
         engine.AddBody(w4);
 
-
-
         var player = new Player(new Rectangle(50, 50, 50, 50));
         player.Box = player.Box.AlignCenter(engine.Box);
-
         engine.AddBody(player);
+
+        Tomato t = new Tomato(new Point(500, 500));
+        engine.AddBody(t);
+
 
         engine.Start();
     }

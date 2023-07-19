@@ -1,20 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Engine.Extensions;
 public static class RectangleExtension
 {
-    public static bool AnyPlaceMeeting(this Rectangle rec, List<CollidableBody> collList)
+    public static bool AnyPlaceMeeting<T>(this Rectangle rec, List<T> collList, out T collider)
+        where T : CollidableBody
     {
         foreach (var coll in collList)
         {
             if (coll.IsColling(rec))
+            {
+                collider = coll;
                 return true;
+            }
         }
+
+        collider = null;
         return false;
     }
 
