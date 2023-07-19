@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Engine.Sprite;
+
+using Extensions;
+
 public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
 {
     public ChefSpriteLoader() : base(scale: 3)
@@ -125,15 +125,3 @@ public enum ChefAnimationType
     WalkUp
 }
 
-public static class ExtensionSize
-{
-    public static Size Scale(this Size size, int scale)
-        => new(size.Width * scale, size.Height * scale);
-
-    public static Size ScaleX(this Size size, int scale)
-        => new(size.Width * scale, size.Height);
-
-    public static Size ScaleY(this Size size, int scale)
-        => new(size.Width, size.Height * scale);
-
-}
