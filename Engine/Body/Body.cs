@@ -17,9 +17,16 @@ public interface IBody
 public interface ICollidableBody : IBody
 {
     bool IsColling(Rectangle box);
-    bool IsColling(Body body);
+    bool IsColling(Body body)
+        => IsColling(body.Box);
     bool IsCollidingMask(CollidableBody body);
-    List<T> IsCollidingList<T>(List<T> list) where T : Body;
+    
+    List<T> IsCollidingList<T>(List<T> list) where T : Body
+    {
+        var query = list.Where(c => IsColling(c)).ToList();
+        return query;
+    }
+
     List<T> IsCollidingMaskList<T>(List<T> list) where T : CollidableBody;
     void SetColllisionMask(Rectangle mask);
 }
@@ -82,11 +89,6 @@ public abstract class CollidableBody : Body, ICollidableBody
 
     public bool IsColling(Rectangle box)
         => box.IntersectsWith(this.Box);
-
-    public bool IsColling(Body body)
-    {
-        return IsColling(body.Box);
-    }
     
     public bool IsCollidingMask(CollidableBody coll)
     {
@@ -96,13 +98,6 @@ public abstract class CollidableBody : Body, ICollidableBody
     public void SetColllisionMask(Rectangle mask)
     {
         this.CollisionMask = new CollisionMask(this, mask);
-    }
-
-    public List<T> IsCollidingList<T>(List<T> list)
-        where T : Body
-    {
-        var query = list.Where(c => IsColling(c)).ToList();
-        return query;
     }
 
     public List<T> IsCollidingMaskList<T>(List<T> list)

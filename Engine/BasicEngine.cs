@@ -28,18 +28,18 @@ public class BasicEngine : GameEngine
 
     readonly List<IBody> RenderStack = new();
 
-    public readonly List<Wall> Walls = new();
-    public readonly List<Item> Items = new();
+    public readonly List<CollidableBody> Walls = new();
+    public readonly List<Interactable> Interactables = new();
 
     public TileSet tileSet;
 
     public override void AddBody(IBody body)
     {
-        if (body is Wall)
-            Walls.Add(body as Wall);
+        if (body is IUnwalkable)
+            Walls.Add(body as CollidableBody);
 
-        if(body is Item)
-            Items.Add(body as Item);
+        if(body is Interactable)
+            Interactables.Add(body as Interactable);
 
         RenderStack.Add(body);
     }
@@ -58,9 +58,9 @@ public class BasicEngine : GameEngine
 
     public override void Update()
     {
-        foreach (IBody body in RenderStack)
+        for(int i = 0; i < RenderStack.Count; i++)
         {
-            body.Update();
+            RenderStack[i].Update();
         }
     }
 }

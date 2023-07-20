@@ -23,6 +23,8 @@ public class Player : CollidableBody
 
     public Item holdingItem = null;
 
+    public bool IsHolding => holdingItem is not null;
+
     private DateTime LastInteraction = DateTime.Now;
     
     private readonly TimeSpan InteractionDelay = TimeSpan.FromSeconds(0.25);
@@ -76,28 +78,18 @@ public class Player : CollidableBody
             g.DrawRectangle(Pen, this.CollisionMask.Box);
     }
 
-    private void TakeItem()
+    private void FindInteraction()
     {        
         SetInteractionMask();
 
-        var items = InteractionHitBox.IsCollidingMaskList(BasicEngine.Current.Items);
+        var items = InteractionHitBox.IsCollidingMaskList(BasicEngine.Current.Interactables);
 
-        if (items is null || items.Count < 1) return;
-
-        var item = items.FirstOrDefault();
-        item.GetHold(this);
-
-        this.LastInteraction = DateTime.Now;
-    }
-
-    private void ReleaseItem()
-    {
-        if (this.holdingItem is null)
+        if(items.Count < 1)
             return;
 
-        this.holdingItem.GetReleased();
-        this.holdingItem = null;
+        var selected = items.FirstOrDefault();
 
+        selected.Interact(this);
         this.LastInteraction = DateTime.Now;
     }
 
@@ -134,10 +126,13 @@ public class Player : CollidableBody
 
         if (keyMap[Keys.E] && CanInteract())
         {
-            if (this.holdingItem is null)
-                TakeItem();
+            if(IsHolding)
+            {
+                holdingItem.Interact(this);
+                this.LastInteraction = DateTime.Now;
+            }                
             else
-                ReleaseItem();        
+                FindInteraction();   
         }
 
         this.Move();
