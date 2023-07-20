@@ -29,7 +29,7 @@ public abstract class Tile : Body
 
 public class GridTile : Tile
 {
-    public override Image TileImage { get; protected set; } = Image.FromFile("../../../../assets/tileShadows.png");
+    public override Image TileImage { get; protected set; } = Image.FromFile("C:\\Users\\disrct\\Desktop\\GameEngine\\assets\\tileShadows.png");
 
     public GridTile(Rectangle box, Image tileImage) : base(box, tileImage) {  }
     public GridTile(Rectangle box) : base(box) { }

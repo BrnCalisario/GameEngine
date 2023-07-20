@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Collections.Generic;
 using Engine.Sprite;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace Engine;
 
 using Extensions;
 public class Player : CollidableBody
 {
+    public Player(Rectangle box, Pen pen = null) : base(box, pen)
+    {
+        this.Box = new Rectangle(box.X, box.Y, 90, 120);
+        this.SetColllisionMask(new Rectangle(this.Box.Width / 2 - 18, this.Height / 2 + 16, 36, this.Height / 3));
+    }
+
     private readonly int speed = 10;
 
     private bool invert = false;
@@ -21,7 +25,8 @@ public class Player : CollidableBody
 
     private DateTime LastInteraction = DateTime.Now;
     
-    private TimeSpan InteractionDelay = TimeSpan.FromSeconds(0.25);
+    private readonly TimeSpan InteractionDelay = TimeSpan.FromSeconds(0.25);
+
 
     private bool CanInteract()
     {
@@ -30,17 +35,11 @@ public class Player : CollidableBody
         return diff >= InteractionDelay;
     }
 
-    public Image ChefSprite = Image.FromFile("../../../../assets/player_3x.png");
+    public Image ChefSprite = Image.FromFile("C:\\Users\\disrct\\Desktop\\GameEngine\\assets\\player_3x.png");
 
     public SpriteController<ChefSpriteLoader, ChefAnimationType> SpriteController
         = new ChefSpriteController();
 
-    public Player(Rectangle box, Pen pen = null) : base(box, pen)
-    {
-        this.Box = new Rectangle(box.X, box.Y, 90, 120);
-
-        this.SetColllisionMask(new Rectangle(this.Box.Width / 2 - 18, this.Height / 2 + 16, 36, this.Height / 3));
-    }
 
     public Direction CurrentDirection = Direction.Bottom;
 
@@ -99,6 +98,8 @@ public class Player : CollidableBody
     {
         var keyMap = BasicEngine.Current.KeyMap;
 
+        var lastDir = CurrentDirection;
+
         var f = keyMap.FirstOrDefault(c => c.Value).Key;
         CurrentDirection =
             f switch
@@ -109,6 +110,7 @@ public class Player : CollidableBody
                 Keys.S => Direction.Bottom,
                 _ => CurrentDirection,
             };
+
 
         if (keyMap[Keys.E] && CanInteract())
         {
@@ -158,7 +160,7 @@ public class Player : CollidableBody
         this.Box = new Rectangle(newPos, this.Box.Size);
         CollisionMask?.UpdatePoint(newPos);
 
-        walking = (keyMap[Keys.A] || keyMap[Keys.D] || keyMap[Keys.W] || keyMap[Keys.S]);
+        walking = keyMap[Keys.A] || keyMap[Keys.D] || keyMap[Keys.W] || keyMap[Keys.S];
     }
 
     private Point WallCollide(float velX, float velY)
