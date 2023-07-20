@@ -7,12 +7,16 @@ using System.Threading.Tasks;
 
 namespace Engine;
 
-public class CollisionMask : Body
+public class CollisionMask : CollidableBody
 {
     public CollisionMask(Body parent, Rectangle mask) : base(mask, null)
     {
-        Parent = parent;
-        Box = new Rectangle(Parent.X + mask.X, Parent.Y + mask.Y, mask.Width, mask.Height);
+        if(parent is not null)
+        {
+            Parent = parent;
+            Box = new Rectangle(Parent.X + mask.X, Parent.Y + mask.Y, mask.Width, mask.Height);
+
+        }
         RelativePosition = mask.Location;
     }
 

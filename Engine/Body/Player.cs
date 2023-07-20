@@ -27,6 +27,7 @@ public class Player : CollidableBody
     
     private readonly TimeSpan InteractionDelay = TimeSpan.FromSeconds(0.25);
 
+    private CollisionMask InteractionHitBox { get; set;} 
 
     private bool CanInteract()
     {
@@ -67,13 +68,19 @@ public class Player : CollidableBody
         g.DrawRectangle(Pen, this.Box);
         g.DrawString($"{CurrentDirection}", SystemFonts.DefaultFont, Pen.Brush, new Point(1, 30));
 
+
+        if(InteractionHitBox is not null)
+            g.DrawRectangle(new Pen(Color.GreenYellow), InteractionHitBox.Box);
+
         if (CollisionMask is not null)
             g.DrawRectangle(Pen, this.CollisionMask.Box);
     }
 
     private void TakeItem()
-    {
-        var items = IsCollidingMaskList(BasicEngine.Current.Items);
+    {        
+        SetInteractionMask();
+
+        var items = InteractionHitBox.IsCollidingMaskList(BasicEngine.Current.Items);
 
         if (items is null || items.Count < 1) return;
 
@@ -92,6 +99,19 @@ public class Player : CollidableBody
         this.holdingItem = null;
 
         this.LastInteraction = DateTime.Now;
+    }
+
+    private void SetInteractionMask()
+    {
+        var distX = CurrentDirection == Direction.Right ? this.Box.Width / 2 : 0;
+        var distY = CurrentDirection == Direction.Bottom ? (int)(this.Height / 1.7) : 0;
+
+        var sizeX = CurrentDirection.IsHorizontal() ? 2 : 1;
+        var sizeY = CurrentDirection.IsVertical() ? 2 : 1;
+
+        var rect = new Rectangle(this.Box.X + distX, this.Box.Y + distY, this.Box.Width / sizeX, this.Box.Height / sizeY);
+
+        InteractionHitBox = new(null, rect);
     }
 
     public override void Update()
@@ -209,4 +229,13 @@ public enum Direction
     Bottom,
     Left,
     Right
+}
+
+public static class DirectionExtension
+{
+    public static bool IsHorizontal(this Direction direction)
+        => direction == Direction.Left || direction == Direction.Right;
+
+    public static bool IsVertical(this Direction direction)
+        => direction == Direction.Top || direction == Direction.Bottom;     
 }
