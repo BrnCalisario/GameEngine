@@ -68,6 +68,19 @@ public abstract class Body : IBody
         this.Box = new Rectangle(newPos, this.Box.Size);
     }
 
+    protected void InvertVertical(Graphics g)
+    {   
+        int hei = BasicEngine.Current.Height;
+
+        g.TranslateTransform(0, hei / 2);
+        g.ScaleTransform(1, -1);
+        g.TranslateTransform(0, -hei / 2);
+        
+        var newPos = new Point(Box.X, hei - Box.Y - Box.Height);
+
+        this.Box = new Rectangle(newPos, this.Box.Size);        
+    }
+
     public virtual void Draw(Graphics g)
     {
         if(Filled)       

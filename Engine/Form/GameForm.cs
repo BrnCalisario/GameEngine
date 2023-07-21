@@ -63,7 +63,7 @@ public partial class GameForm : Form
         ItemBox<Tomato> tomatoBox = new(new Rectangle(0, 0, 50, 50).AlignTopLeft(tileSet.Box));
         engine.AddBody(tomatoBox);
 
-        ItemBox<Onion> onionBox = new(new Rectangle(600, 300, 50, 50));
+        ItemBox<Onion> onionBox = new(new Rectangle(600, 300, 50, 50).AlignTopRight(tileSet.Box));
         engine.AddBody(onionBox);
 
         ItemBox<Meat> meatBox = new(new Rectangle(800, 300, 50, 50));

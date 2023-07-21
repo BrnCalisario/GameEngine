@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms.VisualStyles;
 
 namespace Engine.Extensions;
 public static class RectangleExtension
@@ -40,6 +41,26 @@ public static class RectangleExtension
     {
         var botLeft = new Point(parent.Left, parent.Bottom - rec.Height);
         return new Rectangle(botLeft, rec.Size);
+    }
+
+    public static Rectangle AlignTopRight(this Rectangle rec, Rectangle parent)
+    {
+        var topRight = new Point(parent.Right - rec.Width, parent.Top);
+        return new Rectangle(topRight, rec.Size);
+    }
+
+    public static Rectangle AlignBottomRight(this Rectangle rec, Rectangle parent)
+    {
+        var botRight = new Point(parent.Right - rec.Width, parent.Bottom - rec.Height);
+        return new Rectangle(botRight, rec.Size);
+    }
+
+    public static Rectangle AlignMiddleCenter(this Rectangle rec, Rectangle parent)
+    {
+        var centerTop = new Point(parent.X + parent.Width / 2, parent.Top);
+        var relativePoint = new Point(centerTop.X - rec.Width / 2, centerTop.Y);
+
+        return new Rectangle(relativePoint, rec.Size);
     }
 }
 
