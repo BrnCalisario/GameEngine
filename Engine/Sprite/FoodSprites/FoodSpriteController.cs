@@ -23,8 +23,6 @@ namespace Engine.Sprites.FoodSprites
             int startY = 0;
 
             var tomatoes = new SpriteStream();
-            tomatoes.Interval = TimeSpan.FromSeconds(1);
-
             var onions = new SpriteStream();
             var meats = new SpriteStream();
             var fishes = new SpriteStream();
