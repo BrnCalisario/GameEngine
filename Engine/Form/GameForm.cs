@@ -81,7 +81,7 @@ public partial class GameForm : Form
         engine.AddBody(bench2);
 
 
-        Trash trash = new(new Rectangle(0, 0, 64, 64).AlignMiddleCenter(tileSet.Box), 2, Pens.Purple);
+        Trash trash = new(new Rectangle(0, 0, 64, 64).AlignMiddleCenter(tileSet.Box));
         engine.AddBody(trash);
 
         var player = new Player(new Rectangle(50, 50, 50, 50));

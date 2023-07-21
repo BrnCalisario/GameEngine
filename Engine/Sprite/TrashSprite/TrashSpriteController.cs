@@ -2,6 +2,7 @@
 using Engine.Sprites;
 using System;
 using System.Collections.Generic;
+using System.DirectoryServices.ActiveDirectory;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -20,14 +21,24 @@ namespace Engine.Sprites.TrashSprite
         {
             var scaled = SpriteSize.Scale(this.Scale);
 
-            int startX = 0;
+            int startY = 0;
 
-            var trash = new SpriteStream();
+            var trashClosed = new SpriteStream();
 
-            var rect = new Rectangle(startX, 0, scaled.Width, scaled.Height);
-            Sprite sprite = new Sprite(rect.Location, rect.Size);
-            trash.Add(sprite);
-            this.Animations.Add(TrashTypes.Open, trash);
+            var rectClosed = new Rectangle(0, startY, scaled.Width, scaled.Height);
+            Sprite spriteClosed = new Sprite(rectClosed.Location, rectClosed.Size);
+            trashClosed.Add(spriteClosed);
+            this.Animations.Add(TrashTypes.Closed, trashClosed);
+
+
+            startY += scaled.Height;
+            var trashOpen = new SpriteStream();
+
+            var rectOpen = new Rectangle(0, startY, scaled.Width, scaled .Height);
+            Sprite spriteOpen = new Sprite(rectOpen.Location, rectOpen.Size);
+            trashOpen.Add(spriteOpen);
+            this.Animations.Add(TrashTypes.Open, trashOpen);
+
         }
     }
 

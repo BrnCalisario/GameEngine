@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Engine.Sprites.FoodSprites;
+using Engine.Sprites;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Engine.Sprites.TrashSprite;
+using Engine.Extensions;
 
 namespace Engine;
 
@@ -49,17 +53,53 @@ public class ItemBox<T> : Interactable, IUnwalkable
 
 public class Trash : Interactable, IUnwalkable
 {
-    Image trashImage = Image.FromFile(AssetsPath + "trash3x.png");
-
-
-    public Trash(Rectangle box, float scale = 3, Pen pen = null) : base(box, scale, pen)
+    public Trash(Rectangle box) : base(new Rectangle(box.Location, new(48, 48)))
     {
-        this.Filled = true;
+        Loader = new TrashSpriteLoader();
+        SpriteStream = Loader.GetAnimation(TrashTypes.Closed);
     }
+
+    Image trashImage = Image.FromFile(AssetsPath + "trash3x.png");
+    SpriteStream SpriteStream { get; set; }
+    SpriteLoader<TrashTypes> Loader { get; set; }
+
+    public bool IsNear { get; set; } = false;
 
     public override void Draw(Graphics g)
     {
-        g.DrawImage(trashImage, Box);
+        var c = SpriteStream.Next();
+
+        g.DrawImage(
+           trashImage,
+           this.Box,
+           c.X,
+           c.Y,
+           c.Width,
+           c.Height,
+           GraphicsUnit.Pixel
+           );
+    }
+
+    public void Open()
+    {
+        SpriteStream = Loader.GetAnimation(TrashTypes.Open);
+    }
+
+    public void Close()
+    {
+        SpriteStream = Loader.GetAnimation(TrashTypes.Closed);
+    }
+
+    public override void Update()
+    {
+        if (this.CollisionMask.IsColling(BasicEngine.Current.Player.Box))
+        {
+            this.Open();
+        }
+        else
+        {
+            this.Close();
+        }
     }
 
     public override void Interact(Player p)
