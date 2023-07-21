@@ -85,7 +85,7 @@ public class Player : CollidableBody
 
 
         if (InteractionHitBox is not null)
-            g.DrawRectangle(new Pen(Color.GreenYellow), InteractionHitBox.Box);
+            g.DrawRectangle(new Pen(Color.Red), InteractionHitBox.Box);
 
         if (CollisionMask is not null)
             g.DrawRectangle(Pen, this.CollisionMask.Box);
@@ -116,13 +116,29 @@ public class Player : CollidableBody
             return;
         }
 
-        var distX = CurrentDirection == Direction.Right ? this.Box.Width / 2 : 0;
-        var distY = CurrentDirection == Direction.Bottom ? (int)(this.Height / 1.7) : 0;
+        var distX = CurrentDirection == Direction.Right ? Width / 2 : 0;
+        var distY = CurrentDirection == Direction.Bottom ? Height / 2 : 0;
 
-        var sizeX = CurrentDirection.IsHorizontal() ? 2 : 1;
-        var sizeY = CurrentDirection.IsVertical() ? 2 : 1;
+        if(CurrentDirection.IsHorizontal())
+        {
+            distY = Height / 2;
+        }
 
-        var rect = new Rectangle(this.Box.X + distX, this.Box.Y + distY, this.Box.Width / sizeX, this.Box.Height / sizeY);
+        float sizeX = CurrentDirection.IsHorizontal() ? 2 : 1;
+        var sizeY = CurrentDirection.IsVertical() ? 2 : 2;
+
+        if(CurrentDirection.IsVertical())
+        {
+            sizeX = 2.1f;
+            distY += CurrentDirection == Direction.Top ? -16 : 16;
+        }
+
+        var rect = new Rectangle(X + distX, Y + distY, (int)(Width / sizeX), (int)(Height / sizeY));
+
+        if(CurrentDirection.IsVertical())
+        {
+            rect.X = CollisionMask.X;
+        }
 
         InteractionHitBox = new(null, rect);
     }
@@ -208,16 +224,15 @@ public class Player : CollidableBody
     private Point WallCollide(float velX, float velY)
     {
         var maskRect = this.CollisionMask.Box;
-
         var newVelX = 0;
 
         var previewRectX = maskRect;
         previewRectX.X += (int)velX;
 
-        if (previewRectX.AnyPlaceMeeting(BasicEngine.Current.Walls, out _))
+        if (previewRectX.AnyPlaceMeeting(BasicEngine.Current.Walls, out CollidableBody w))
         {
             maskRect.X += MathF.Sign(velX);
-            while (!maskRect.AnyPlaceMeeting(BasicEngine.Current.Walls, out _))
+            while (!maskRect.IntersectsWith(w.Box))
             {
                 maskRect.X += MathF.Sign(velX);
                 newVelX += MathF.Sign(velX);
@@ -227,13 +242,12 @@ public class Player : CollidableBody
 
         var previewRectY = this.CollisionMask.Box;
         previewRectY.Y += (int)velY;
-
         var newVelY = 0;
 
-        if (previewRectY.AnyPlaceMeeting(BasicEngine.Current.Walls, out _))
+        if (previewRectY.AnyPlaceMeeting(BasicEngine.Current.Walls, out CollidableBody c))
         {
             maskRect.Y += MathF.Sign(velY);
-            while (!maskRect.AnyPlaceMeeting(BasicEngine.Current.Walls, out _))
+            while (!maskRect.IntersectsWith(c.Box))
             {
                 maskRect.Y += MathF.Sign(velY);
                 newVelY += MathF.Sign(velY);
