@@ -21,6 +21,8 @@ public class Player : CollidableBody
 
     private bool invert = false;
 
+    private bool espelhado = false;
+
     private bool walking = true;
 
     public Item holdingItem = null;
@@ -28,10 +30,10 @@ public class Player : CollidableBody
     public bool IsHolding => holdingItem is not null;
 
     private DateTime LastInteraction = DateTime.Now;
-    
+
     private readonly TimeSpan InteractionDelay = TimeSpan.FromSeconds(0.25);
 
-    private CollisionMask InteractionHitBox { get; set;} 
+    private CollisionMask InteractionHitBox { get; set; }
 
     private bool CanInteract()
     {
@@ -55,6 +57,9 @@ public class Player : CollidableBody
         if (invert)
             this.InvertDraw(g);
 
+        if (espelhado)
+            this.InvertVertical(g);
+
         g.DrawImage(
             ChefSprite,
             this.Box,
@@ -68,12 +73,16 @@ public class Player : CollidableBody
         if (invert)
             this.InvertDraw(g);
 
+        if (espelhado)
+            this.InvertVertical(g);
+
 
         g.DrawRectangle(Pen, this.Box);
         g.DrawString($"{CurrentDirection}", SystemFonts.DefaultFont, Pen.Brush, new Point(1, 30));
+        g.DrawString($"X:{X}, Y:{Y}", SystemFonts.DefaultFont, Pen.Brush, new Point(1, 90));
 
 
-        if(InteractionHitBox is not null)
+        if (InteractionHitBox is not null)
             g.DrawRectangle(new Pen(Color.GreenYellow), InteractionHitBox.Box);
 
         if (CollisionMask is not null)
@@ -81,12 +90,12 @@ public class Player : CollidableBody
     }
 
     private void FindInteraction()
-    {        
+    {
         SetInteractionMask();
 
         var items = InteractionHitBox.IsCollidingMaskList(BasicEngine.Current.Interactables);
 
-        if(items.Count < 1)
+        if (items.Count < 1)
             return;
 
         var selected = items.FirstOrDefault();
@@ -125,16 +134,22 @@ public class Player : CollidableBody
                 _ => CurrentDirection,
             };
 
+        if(keyMap[Keys.V])
+            this.espelhado = true;
+
+        if(keyMap[Keys.C])
+            this.espelhado = false;
 
         if (keyMap[Keys.E] && CanInteract())
         {
+            
             //if(IsHolding)
             //{
             //    holdingItem.Interact(this);
             //    this.LastInteraction = DateTime.Now;
             //}                
             //else
-                FindInteraction();   
+            FindInteraction();
         }
 
         this.Move();
@@ -234,5 +249,5 @@ public static class DirectionExtension
         => direction == Direction.Left || direction == Direction.Right;
 
     public static bool IsVertical(this Direction direction)
-        => direction == Direction.Top || direction == Direction.Bottom;     
+        => direction == Direction.Top || direction == Direction.Bottom;
 }

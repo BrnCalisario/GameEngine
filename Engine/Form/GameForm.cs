@@ -60,16 +60,13 @@ public partial class GameForm : Form
         engine.AddBody(w3);
         engine.AddBody(w4);
 
-
-
         ItemBox<Tomato> tomatoBox = new(new Rectangle(0, 0, 50, 50).AlignTopLeft(tileSet.Box));
         engine.AddBody(tomatoBox);
 
-        ItemBox<Onion> onionBox = new(new Rectangle(600, 300, 50, 50));
+        ItemBox<Onion> onionBox = new(new Rectangle(600, 300, 50, 50).AlignTopRight(tileSet.Box));
         engine.AddBody(onionBox);
-
-
-        Trash trash = new Trash(new Rectangle(0, 0, 50, 50).AlignBottomLeft(tileSet.Box), 2, Pens.Purple);
+        
+        Trash trash = new Trash(new Rectangle(0, 0, 50, 50).AlignMiddleCenter(tileSet.Box), 2, Pens.Purple);
         engine.AddBody(trash);
 
         var player = new Player(new Rectangle(50, 50, 50, 50));
