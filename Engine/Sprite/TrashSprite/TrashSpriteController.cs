@@ -1,50 +1,53 @@
 ﻿using Engine.Extensions;
-using Engine.Sprites;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Engine.Sprites.TrashSprite
+namespace Engine.Sprites;
+
+
+public class TrashSpriteLoader : SpriteLoader<TrashTypes>
 {
+    public TrashSpriteLoader() : base(scale: 3) { }
 
-    public class TrashSpriteLoader : SpriteLoader<TrashTypes>
+    Size SpriteSize = new(16, 16);
+
+    protected override void Load()
     {
-        public TrashSpriteLoader() : base(scale:3) { }
+        var scaled = SpriteSize.Scale(this.Scale);
 
-        Size SpriteSize = new(16,16);
+        int startY = 0;
 
-        protected override void Load()
-        {
-            var scaled = SpriteSize.Scale(this.Scale);
+        var trashClosed = new SpriteStream();
 
-            int startX = 0;
+        var rectClosed = new Rectangle(0, startY, scaled.Width, scaled.Height);
+        Sprite spriteClosed = new Sprite(rectClosed.Location, rectClosed.Size);
+        trashClosed.Add(spriteClosed);
+        this.Animations.Add(TrashTypes.Closed, trashClosed);
 
-            var trash = new SpriteStream();
 
-            var rect = new Rectangle(startX, 0, scaled.Width, scaled.Height);
-            Sprite sprite = new Sprite(rect.Location, rect.Size);
-            trash.Add(sprite);
-            this.Animations.Add(TrashTypes.Open, trash);
-        }
+        startY += scaled.Height;
+        var trashOpen = new SpriteStream();
+
+        var rectOpen = new Rectangle(0, startY, scaled.Width, scaled.Height);
+        Sprite spriteOpen = new Sprite(rectOpen.Location, rectOpen.Size);
+        trashOpen.Add(spriteOpen);
+        this.Animations.Add(TrashTypes.Open, trashOpen);
+
     }
-
-
-    public class TrashSpriteController
-        : SpriteController<TrashSpriteLoader, TrashTypes>
-    {
-        public TrashSpriteController()
-        { 
-            this.SpriteLoader = new TrashSpriteLoader();
-        }
-    }
-
-    public enum TrashTypes
-    { 
-        Open,
-        Closed
-    }
-
 }
+
+
+public class TrashSpriteController
+    : SpriteController<TrashSpriteLoader, TrashTypes>
+{
+    public TrashSpriteController()
+    {
+        this.SpriteLoader = new TrashSpriteLoader();
+    }
+}
+
+public enum TrashTypes
+{
+    Open,
+    Closed
+}
+

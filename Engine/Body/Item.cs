@@ -1,35 +1,10 @@
-﻿using Engine.Extensions;
-using Engine.Sprites;
-using Engine.Sprites.FoodSprites;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Engine;
 
-using static ProjectPaths;
-
-public abstract class Interactable : CollidableBody
-{
-    protected Interactable(Rectangle box, float scale = 2, Pen pen = null) : base(box, pen)
-    {
-        var scaledSize = new Size((int)(box.Width * scale),(int) (box.Height * scale));
-
-
-        var collMask = new Rectangle(new(0, 0), scaledSize);
-        collMask = collMask.AlignCenter(box);
-
-        var relativePos = new Point(collMask.X - box.X, collMask.Y - box.Y);
-        collMask = new Rectangle(relativePos, collMask.Size);
-
-        SetColllisionMask(collMask);
-    }
-
-    public abstract void Interact(Player p);
-}
+using Extensions;
 
 public abstract class Item : Interactable, IDisposable
 {
@@ -147,87 +122,3 @@ public abstract class Item : Interactable, IDisposable
         this.Player = null;
     }
 }
-
-
-public class Food : Item
-{
-    public Food(Rectangle r, FoodTypes type) : base(new Rectangle(r.Location, new(30, 30)))
-    {
-        Loader = new FoodSpriteLoader();
-        SpriteStream = Loader.GetAnimation(type);
-    }
-
-    public Food(Point point, FoodTypes type) : base(point)
-    {
-        Loader = new FoodSpriteLoader();
-        SpriteStream = Loader.GetAnimation(type);
-    }
-
-    Image foodImage = Image.FromFile(AssetsPath + "food3x.png");
-    SpriteLoader<FoodTypes> Loader { get; set; }
-     
-    SpriteStream SpriteStream { get; set; }
-
-    public override void Draw(Graphics g)
-    {
-        var c = SpriteStream.Sprites.Last();
-
-        g.DrawImage(
-            foodImage,
-            this.Box,
-            c.X,
-            c.Y,
-            c.Width,
-            c.Height,
-            GraphicsUnit.Pixel
-            );
-    }
-}
-
-public class Tomato : Food
-{
-    public Tomato(Rectangle r) : base(r, FoodTypes.Tomato)
-    {
-    }
-
-    public Tomato(Point point) : base(point, FoodTypes.Tomato)
-    {
-    }
-}
-
-public class Onion : Food
-{
-    public Onion(Rectangle r) : base(r, FoodTypes.Onion)
-    {
-    }
-
-    public Onion(Point point) : base(point, FoodTypes.Onion)
-    {
-    }
-}
-
-
-public class Meat : Food
-{
-    public Meat(Rectangle r) : base(r, FoodTypes.Meat)
-    {
-    }
-
-    public Meat(Point point) : base(point, FoodTypes.Meat)
-    {
-    }
-}
-
-public class Fish : Food
-{
-    public Fish(Rectangle r) : base(r, FoodTypes.Fish)
-    {
-    }
-
-    public Fish(Point point) : base(point, FoodTypes.Fish)
-    {
-    }
-}
-
-
-

@@ -6,8 +6,7 @@ namespace Engine;
 
 using static ProjectPaths;
 using Extensions;
-using Engine.Sprites.BenchSprites;
-using Engine.Sprites;
+using Sprites;
 
 public class Bench : Interactable, IUnwalkable
 {

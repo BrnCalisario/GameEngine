@@ -1,93 +1,90 @@
-﻿using Engine.Extensions;
-using System;
-using System.Collections.Generic;
+﻿
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Engine.Sprites.FoodSprites
+
+namespace Engine.Sprites;
+
+using Extensions;
+
+public class FoodSpriteLoader : SpriteLoader<FoodTypes>
 {
-    public class FoodSpriteLoader : SpriteLoader<FoodTypes>
+    public FoodSpriteLoader() : base(scale: 3) { }
+
+
+    Size SpriteSize = new(10, 10);
+
+    protected override void Load()
     {
-        public FoodSpriteLoader() : base(scale: 3) { }
+        var scaled = SpriteSize.Scale(this.Scale);
 
+        int startX = 0;
+        int startY = 0;
 
-        Size SpriteSize = new(10, 10);
+        var tomatoes = new SpriteStream();
+        var onions = new SpriteStream();
+        var meats = new SpriteStream();
+        var fishes = new SpriteStream();
 
-        protected override void Load()
+        for (int i = startX; i < scaled.Width * 4; i += scaled.Width + 3)
         {
-            var scaled = SpriteSize.Scale(this.Scale);
-
-            int startX = 0;
-            int startY = 0;
-
-            var tomatoes = new SpriteStream();
-            var onions = new SpriteStream();
-            var meats = new SpriteStream();
-            var fishes = new SpriteStream();
-
-            for (int i = startX; i < scaled.Width * 4; i+= scaled.Width + 3)
-            {
-                var rect = new Rectangle(i, startY, scaled.Width, scaled.Height);
-                var sprite = new Sprite(rect.Location, rect.Size);
-                tomatoes.Add(sprite);
-            }
-            this.Animations.Add(FoodTypes.Tomato, tomatoes);
-
-            startY += scaled.Height + 6;
-            
-            for(int i = startX; i < scaled.Width * 4; i+= scaled.Width + 3)
-            {
-                var rect = new Rectangle(i, startY, scaled.Width, scaled.Height);
-                var sprite = new Sprite(rect.Location, rect.Size);
-                onions.Add(sprite);
-            }
-            this.Animations.Add(FoodTypes.Onion, onions);
-
-            startY += scaled.Height + 6;
-            
-            for (int i = startX; i < scaled.Width * 4; i += scaled.Width + 3)
-            {
-                var rect = new Rectangle(i, startY, scaled.Width, scaled.Height);
-                var sprite = new Sprite(rect.Location, rect.Size);
-                meats.Add(sprite);
-            }
-            this.Animations.Add(FoodTypes.Meat, meats);
-
-            startY += scaled.Height + 6;
-            
-            for(int i = startX; i < scaled.Width * 4; i += scaled.Width + 3)
-            {
-                var rect = new Rectangle(i, startY, scaled.Width, scaled.Height);
-                var sprite = new Sprite(rect.Location, rect.Size);
-                fishes.Add(sprite);
-            }
-            this.Animations.Add(FoodTypes.Fish, fishes);
-
+            var rect = new Rectangle(i, startY, scaled.Width, scaled.Height);
+            var sprite = new Sprite(rect.Location, rect.Size);
+            tomatoes.Add(sprite);
         }
-    }
+        this.Animations.Add(FoodTypes.Tomato, tomatoes);
 
-    public class FoodSpriteController
-        : SpriteController<FoodSpriteLoader, FoodTypes>
-    {
-        public FoodSpriteController()
+        startY += scaled.Height + 6;
+
+        for (int i = startX; i < scaled.Width * 4; i += scaled.Width + 3)
         {
-            this.SpriteLoader = new FoodSpriteLoader();
-
+            var rect = new Rectangle(i, startY, scaled.Width, scaled.Height);
+            var sprite = new Sprite(rect.Location, rect.Size);
+            onions.Add(sprite);
         }
+        this.Animations.Add(FoodTypes.Onion, onions);
+
+        startY += scaled.Height + 6;
+
+        for (int i = startX; i < scaled.Width * 4; i += scaled.Width + 3)
+        {
+            var rect = new Rectangle(i, startY, scaled.Width, scaled.Height);
+            var sprite = new Sprite(rect.Location, rect.Size);
+            meats.Add(sprite);
+        }
+        this.Animations.Add(FoodTypes.Meat, meats);
+
+        startY += scaled.Height + 6;
+
+        for (int i = startX; i < scaled.Width * 4; i += scaled.Width + 3)
+        {
+            var rect = new Rectangle(i, startY, scaled.Width, scaled.Height);
+            var sprite = new Sprite(rect.Location, rect.Size);
+            fishes.Add(sprite);
+        }
+        this.Animations.Add(FoodTypes.Fish, fishes);
+
     }
-
-
-
-    public enum FoodTypes
-    {
-        Tomato,
-        Onion,
-        Meat,
-        Fish
-    }
-
-   
-
 }
+
+public class FoodSpriteController
+    : SpriteController<FoodSpriteLoader, FoodTypes>
+{
+    public FoodSpriteController()
+    {
+        this.SpriteLoader = new FoodSpriteLoader();
+
+    }
+}
+
+
+
+public enum FoodTypes
+{
+    Tomato,
+    Onion,
+    Meat,
+    Fish
+}
+
+
+

@@ -30,6 +30,9 @@ public class BasicEngine : GameEngine
 
     public readonly List<CollidableBody> Walls = new();
     public readonly List<Interactable> Interactables = new();
+    public readonly List<Trash> Trashes = new();
+
+    public Player Player = null;
 
     public TileSet tileSet;
 
@@ -40,6 +43,12 @@ public class BasicEngine : GameEngine
 
         if(body is Interactable)
             Interactables.Add(body as Interactable);
+        
+        if(body is Trash)
+            Trashes.Add(body as Trash);
+
+        if(body is Player)
+            this.Player = body as Player;
 
         RenderStack.Add(body);
     }
