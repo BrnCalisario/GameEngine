@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Engine.Sprites;
 
 namespace Engine;
 
@@ -59,7 +60,16 @@ public class Trash : Interactable, IUnwalkable
 
     public override void Draw(Graphics g)
     {
-        g.DrawImage(trashImage, Box);
+        Sprite sprite = new Sprite(new(3, 3), new(48, 48));
+
+        g.DrawImage(trashImage, 
+            Box,
+            sprite.X,
+            sprite.Y,
+            sprite.Width,
+            sprite.Height,
+        GraphicsUnit.Pixel
+        );
     }
 
     public override void Interact(Player p)

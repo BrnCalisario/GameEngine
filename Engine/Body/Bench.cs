@@ -4,21 +4,42 @@ using System.Drawing;
 
 namespace Engine;
 
-using System.Windows.Forms.VisualStyles;
+using static ProjectPaths;
 using Extensions;
+using Engine.Sprites.BenchSprites;
+using Engine.Sprites;
 
 public class Bench : Interactable, IUnwalkable
 {
-    public Bench(Rectangle box, float scale = 1.15f, Pen pen = null) : base(box, scale, pen)
+    public Bench(Rectangle box, float scale = 1, Pen pen = null) : base(new Rectangle(box.Location, new(96, 48)), scale, pen)
     {
         this.Pen = new Pen(Color.Purple);
+
+        benchSpriteLoader = new BenchSpriteLoader();
+        BenchSprite = benchSpriteLoader.GetAnimation(BenchTypes.Bench).Next();
     }
+
+    Image tableImage = Image.FromFile(AssetsPath + "bench3x.png");
+
+    readonly SpriteLoader<BenchTypes> benchSpriteLoader;
+    Sprite BenchSprite { get; set;}   
 
     public Item PlacedItem { get; private set; } = null;
 
     public override void Draw(Graphics g)
     {
-        g.FillRectangle(Pen.Brush, Box);        
+        g.DrawImage(
+            tableImage,
+            this.Box,
+            BenchSprite.X,
+            BenchSprite.Y,
+            BenchSprite.Width,
+            BenchSprite.Height,
+            GraphicsUnit.Pixel
+            );
+
+        // if (this.CollisionMask is not null)
+        //     g.DrawRectangle(Pen, CollisionMask.Box);
     }
 
     public override void Interact(Player p)
@@ -26,16 +47,20 @@ public class Bench : Interactable, IUnwalkable
         if(p.IsHolding && PlacedItem is not null)
             return;
 
-        if(PlacedItem is null)
+        if(PlacedItem is null && p.IsHolding)
         {
             PlacedItem = p.holdingItem;
             PlacedItem.Interact(p);
-            PlacedItem.Box = PlacedItem.Box.AlignCenter(this.Box);
+            var temp = PlacedItem.Box.AlignCenter(this.Box);
+            PlacedItem.Box = new Rectangle(temp.X, temp.Y - 10, temp.Width, temp.Height);
             return;
         }
 
-        PlacedItem.Interact(p);
-        PlacedItem = null;        
+        if(PlacedItem is not null)
+        {
+            PlacedItem.Interact(p);
+            PlacedItem = null;        
+        }
     }
 }
 

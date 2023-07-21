@@ -15,7 +15,7 @@ public class Player : CollidableBody
 {
     public Player(Rectangle box, Pen pen = null) : base(box, pen)
     {
-        this.Box = new Rectangle(box.X, box.Y, 90, 120);
+        this.Box = new Rectangle(box.X, box.Y, 60, 90);
         this.SetColllisionMask(new Rectangle(this.Box.Width / 2 - 18, this.Height / 2 + 16, 36, this.Height / 3));
     }
 

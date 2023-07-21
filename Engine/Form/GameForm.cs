@@ -74,14 +74,13 @@ public partial class GameForm : Form
         ItemBox<Fish> fishBox = new(new Rectangle(0, 0, 50, 50).AlignBesideRight(meatBox.Box, 30));
         engine.AddBody(fishBox);
 
-        Bench bench = new(new Rectangle(0,0, 100, 50).AlignBesideRight(fishBox.Box, 100));
+        Bench bench = new(new Rectangle().AlignMiddleCenter(tileSet.Box));
         engine.AddBody(bench);
 
-        Bench bench2 = new(new Rectangle(0,0, 100, 50).AlignBesideRight(bench.Box, 100));
+        Bench bench2 = new(new Rectangle(0,0, 100, 50).AlignBesideRight(bench.Box, 0));
         engine.AddBody(bench2);
 
-
-        Trash trash = new(new Rectangle(0, 0, 64, 64).AlignMiddleCenter(tileSet.Box), 2, Pens.Purple);
+        Trash trash = new(new Rectangle(0, 0, 48, 48).AlignBottomLeft(tileSet.Box), 2, Pens.Purple);
         engine.AddBody(trash);
 
         var player = new Player(new Rectangle(50, 50, 50, 50));

@@ -170,7 +170,7 @@ public class Food : Item
 
     public override void Draw(Graphics g)
     {
-        var c = SpriteStream.Next();
+        var c = SpriteStream.Sprites.Last();
 
         g.DrawImage(
             foodImage,
