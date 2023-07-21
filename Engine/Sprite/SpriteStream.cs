@@ -12,7 +12,7 @@ public class SpriteStream
     public SpriteStream() { }
 
 
-    public TimeSpan Interval = TimeSpan.FromSeconds(1);
+    public TimeSpan Interval = TimeSpan.FromSeconds(0.25);
     private int pointer { get; set; } = -1;
     private List<Sprite> sprites { get; set; } = new List<Sprite>();
 

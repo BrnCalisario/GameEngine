@@ -102,8 +102,6 @@ public class LoadAnimationArgs
     public int Gap { get; set; } = 0;
 }
 
-
-
 public class ChefSpriteController
     : SpriteController<ChefSpriteLoader, ChefAnimationType>
 {
