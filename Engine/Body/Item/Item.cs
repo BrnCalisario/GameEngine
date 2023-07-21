@@ -10,9 +10,12 @@ namespace Engine;
 
 public abstract class Interactable : CollidableBody
 {
-    protected Interactable(Rectangle box, Pen pen = null) : base(box, pen)
-    {    
-        var collMask = new Rectangle(0, 0,  box.Width * 2, box.Height * 2);
+    protected Interactable(Rectangle box, float scale = 2, Pen pen = null) : base(box, pen)
+    {
+        var scaledSize = new Size((int)(box.Width * scale),(int) (box.Height * scale));
+
+
+        var collMask = new Rectangle(new(0, 0), scaledSize);
         collMask = collMask.AlignCenter(box);
 
         var relativePos = new Point(collMask.X - box.X, collMask.Y - box.Y);
@@ -24,7 +27,7 @@ public abstract class Interactable : CollidableBody
     public abstract void Interact(Player p);
 }
 
-public abstract class Item : Interactable
+public abstract class Item : Interactable, IDisposable
 {
     public Item(Rectangle box) : base(box)
     {
@@ -131,6 +134,14 @@ public abstract class Item : Interactable
         else
             this.GetReleased();
     }
+
+    public void Dispose()
+    {
+        BasicEngine.Current.Interactables.Remove(this);
+        BasicEngine.Current.RenderStack.Remove(this);
+        this.Player.holdingItem = null;
+        this.Player = null;
+    }
 }
 
 public class Tomato : Item
@@ -143,5 +154,18 @@ public class Tomato : Item
     public Tomato(Point point) : base(point)
     {
         this.Pen = new Pen(Color.Red);
+    }
+}
+
+public class Onion : Item
+{
+    public Onion(Rectangle r) : base(new Rectangle(r.Location, new(20, 20)))
+    {
+        this.Pen = new Pen(Color.Beige);
+    }
+
+    public Onion(Point point) : base(point)
+    {
+        this.Pen = new Pen(Color.Beige);
     }
 }

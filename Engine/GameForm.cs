@@ -64,11 +64,16 @@ public partial class GameForm : Form
         player.Box = player.Box.AlignCenter(engine.Box);
         engine.AddBody(player);
 
-        Tomato t = new(new Point(500, 500));
-        engine.AddBody(t);
-        
-        ItemBox<Tomato> tomatoBox = new(new Rectangle(300, 170, 50, 50));
+        ItemBox<Tomato> tomatoBox = new(new Rectangle(0, 0, 50, 50).AlignTopLeft(tileSet.Box));
         engine.AddBody(tomatoBox);
+
+        ItemBox<Onion> onionBox = new(new Rectangle(600, 300, 50, 50));
+        engine.AddBody(onionBox);
+
+
+        Trash trash = new Trash(new Rectangle(0, 0, 50, 50).AlignBottomLeft(tileSet.Box), 2, Pens.Purple);
+        engine.AddBody(trash);
+
 
         engine.Start();
     }

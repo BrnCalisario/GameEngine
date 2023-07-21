@@ -76,7 +76,7 @@ public abstract class Body : IBody
             g.DrawRectangle(Pen, Box);
     }
 
-    public abstract void Update();
+    public virtual void Update() { }
 }
 
 public abstract class CollidableBody : Body, ICollidableBody

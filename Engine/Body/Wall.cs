@@ -18,24 +18,19 @@ public class Wall : CollidableBody, IUnwalkable
     {
         this.Filled = true;
     }
-
-    public override void Update()
-    {
-        
-    }
 }
 
 
 public class ItemBox<T> : Interactable, IUnwalkable
     where T : Item
 {
-    public ItemBox(Rectangle box) : base(box, new Pen(Color.LightBlue))
+    public ItemBox(Rectangle box) : base(box, 1.25f, new Pen(Color.Crimson))
     {
     }
 
     public override void Draw(Graphics g)
     {
-        g.DrawRectangle(Pen, Box);
+        g.FillRectangle(Pen.Brush, Box);
         g.DrawRectangle(Pens.Black, CollisionMask.Box);
     }
 
@@ -48,9 +43,25 @@ public class ItemBox<T> : Interactable, IUnwalkable
         BasicEngine.Current.AddBody(item);
         item.Interact(p);
     }
+}
 
-    public override void Update()
+public class Trash : Interactable, IUnwalkable
+{
+    public Trash(Rectangle box, float scale = 2, Pen pen = null) : base(box, scale, pen)
     {
-        
+        this.Filled = true;
     }
+
+    public override void Draw(Graphics g)
+    {
+        g.FillRectangle(Pen.Brush, Box);
+        g.DrawRectangle(Pens.Pink, CollisionMask.Box);
+    }
+
+    public override void Interact(Player p)
+    {
+        if (p.IsHolding)
+            p.holdingItem.Dispose();
+    }
+
 }

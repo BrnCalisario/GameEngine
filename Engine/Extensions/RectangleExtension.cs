@@ -29,6 +29,18 @@ public static class RectangleExtension
 
         return rec;
     }
+
+    public static Rectangle AlignTopLeft(this Rectangle rec, Rectangle parent)
+    {
+        var topLeft = new Point(parent.Left, parent.Top);
+        return new Rectangle(topLeft, rec.Size);
+    }
+
+    public static Rectangle AlignBottomLeft(this Rectangle rec, Rectangle parent)
+    {
+        var botLeft = new Point(parent.Left, parent.Bottom - rec.Height);
+        return new Rectangle(botLeft, rec.Size);
+    }
 }
 
 

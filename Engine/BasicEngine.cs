@@ -26,7 +26,7 @@ public class BasicEngine : GameEngine
     public static void New()
         => current = new BasicEngine();
 
-    readonly List<IBody> RenderStack = new();
+    public readonly List<IBody> RenderStack = new();
 
     public readonly List<CollidableBody> Walls = new();
     public readonly List<Interactable> Interactables = new();

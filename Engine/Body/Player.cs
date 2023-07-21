@@ -38,7 +38,7 @@ public class Player : CollidableBody
         return diff >= InteractionDelay;
     }
 
-    public Image ChefSprite = Image.FromFile("C:\\Users\\disrct\\Desktop\\GameEngine\\assets\\player_3x.png");
+    public Image ChefSprite = Image.FromFile("..\\..\\..\\..\\assets\\player_3x.png");
 
     public SpriteController<ChefSpriteLoader, ChefAnimationType> SpriteController
         = new ChefSpriteController();
@@ -126,12 +126,12 @@ public class Player : CollidableBody
 
         if (keyMap[Keys.E] && CanInteract())
         {
-            if(IsHolding)
-            {
-                holdingItem.Interact(this);
-                this.LastInteraction = DateTime.Now;
-            }                
-            else
+            //if(IsHolding)
+            //{
+            //    holdingItem.Interact(this);
+            //    this.LastInteraction = DateTime.Now;
+            //}                
+            //else
                 FindInteraction();   
         }
 
