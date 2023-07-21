@@ -6,6 +6,8 @@ using System.Linq;
 
 namespace Engine;
 
+using static ProjectPaths;
+
 using Extensions;
 public class Player : CollidableBody
 {
@@ -38,7 +40,7 @@ public class Player : CollidableBody
         return diff >= InteractionDelay;
     }
 
-    public Image ChefSprite = Image.FromFile("..\\..\\..\\..\\assets\\player_3x.png");
+    public Image ChefSprite = Image.FromFile(AssetsPath + "\\player_3x.png");
 
     public SpriteController<ChefSpriteLoader, ChefAnimationType> SpriteController
         = new ChefSpriteController();

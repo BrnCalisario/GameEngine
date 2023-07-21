@@ -1,12 +1,8 @@
-﻿using Engine.Sprite;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace Engine;
+
+using static ProjectPaths;
 
 public abstract class Tile : Body
 {
@@ -27,7 +23,7 @@ public abstract class Tile : Body
 
 public class GridTile : Tile
 {
-    public override Image TileImage { get; protected set; } = Image.FromFile("..\\..\\..\\..\\assets\\tileShadows.png");
+    public override Image TileImage { get; protected set; } = Image.FromFile(AssetsPath + "\\tileShadows.png");
 
     public GridTile(Rectangle box, Image tileImage) : base(box, tileImage) {  }
     public GridTile(Rectangle box) : base(box) { }

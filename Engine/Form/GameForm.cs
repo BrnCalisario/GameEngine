@@ -60,9 +60,7 @@ public partial class GameForm : Form
         engine.AddBody(w3);
         engine.AddBody(w4);
 
-        var player = new Player(new Rectangle(50, 50, 50, 50));
-        player.Box = player.Box.AlignCenter(engine.Box);
-        engine.AddBody(player);
+
 
         ItemBox<Tomato> tomatoBox = new(new Rectangle(0, 0, 50, 50).AlignTopLeft(tileSet.Box));
         engine.AddBody(tomatoBox);
@@ -73,6 +71,10 @@ public partial class GameForm : Form
 
         Trash trash = new Trash(new Rectangle(0, 0, 50, 50).AlignBottomLeft(tileSet.Box), 2, Pens.Purple);
         engine.AddBody(trash);
+
+        var player = new Player(new Rectangle(50, 50, 50, 50));
+        player.Box = player.Box.AlignCenter(engine.Box);
+        engine.AddBody(player);
 
 
         engine.Start();
