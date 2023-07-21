@@ -2,7 +2,7 @@
 using System.Linq;
 
 
-namespace Engine.Sprite;
+namespace Engine.Sprites;
 
 using Extensions;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Engine.Sprite;
+using Engine.Sprites;
 using System.Linq;
 
 namespace Engine;

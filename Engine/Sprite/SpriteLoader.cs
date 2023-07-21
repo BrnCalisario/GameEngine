@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace Engine.Sprite;
+namespace Engine.Sprites;
 
 public interface ISpriteLoader<T>
     where T : Enum
