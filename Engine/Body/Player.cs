@@ -9,6 +9,8 @@ namespace Engine;
 using static ProjectPaths;
 
 using Extensions;
+using Microsoft.VisualBasic;
+
 public class Player : CollidableBody
 {
     public Player(Rectangle box, Pen pen = null) : base(box, pen)
@@ -106,6 +108,14 @@ public class Player : CollidableBody
 
     private void SetInteractionMask()
     {
+        if(this.IsHolding)
+        {
+            var size = this.holdingItem.Box.Size.Scale(1.25f);
+            var scaledRect = new Rectangle(new Point(), size).AlignCenter(holdingItem.Box);
+            InteractionHitBox = new(null, scaledRect);
+            return;
+        }
+
         var distX = CurrentDirection == Direction.Right ? this.Box.Width / 2 : 0;
         var distY = CurrentDirection == Direction.Bottom ? (int)(this.Height / 1.7) : 0;
 

@@ -38,7 +38,7 @@ public partial class GameForm : Form
         this.engine = BasicEngine.Current;
 
 
-        var tileSet = new TileSet(16, 8, new Point(0, 0));
+        var tileSet = new TileSet(12, 6, new Point(0, 0));
         tileSet.Box = tileSet.Box.AlignCenter(engine.Box);
 
         BasicEngine.Current.tileSet = tileSet;
@@ -63,17 +63,17 @@ public partial class GameForm : Form
         ItemBox<Tomato> tomatoBox = new(new Rectangle(0, 0, 50, 50).AlignTopLeft(tileSet.Box));
         engine.AddBody(tomatoBox);
 
-        ItemBox<Onion> onionBox = new(new Rectangle(600, 300, 50, 50).AlignTopRight(tileSet.Box));
+        ItemBox<Onion> onionBox = new(new Rectangle(600, 300, 50, 50).AlignBesideRight(tomatoBox.Box, 30));
         engine.AddBody(onionBox);
 
-        ItemBox<Meat> meatBox = new(new Rectangle(800, 300, 50, 50));
+        ItemBox<Meat> meatBox = new(new Rectangle(800, 300, 50, 50).AlignBesideRight(onionBox.Box, 30));
         engine.AddBody(meatBox);
 
-        ItemBox<Fish> fishBox = new(new Rectangle(1000, 300, 50, 50));
+        ItemBox<Fish> fishBox = new(new Rectangle(1000, 300, 50, 50).AlignBesideRight(meatBox.Box, 30));
         engine.AddBody(fishBox);
 
 
-        Trash trash = new Trash(new Rectangle(0, 0, 50, 50).AlignBottomLeft(tileSet.Box), 2, Pens.Purple);
+        Trash trash = new(new Rectangle(0, 0, 50, 50).AlignBottomLeft(tileSet.Box), 2, Pens.Purple);
         engine.AddBody(trash);
 
         var player = new Player(new Rectangle(50, 50, 50, 50));

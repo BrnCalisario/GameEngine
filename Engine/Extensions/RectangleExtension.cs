@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms.VisualStyles;
 
 namespace Engine.Extensions;
+
+using static SizeExtension;
+
 public static class RectangleExtension
 {
     public static bool AnyPlaceMeeting<T>(this Rectangle rec, List<T> collList, out T collider)
@@ -20,7 +22,7 @@ public static class RectangleExtension
         collider = null;
         return false;
     }
-
+    
     public static Rectangle AlignCenter(this Rectangle rec, Rectangle parent)
     {
         var centerPoint = new Point(parent.X + parent.Width / 2, parent.Y + parent.Height / 2);
@@ -61,6 +63,22 @@ public static class RectangleExtension
         var relativePoint = new Point(centerTop.X - rec.Width / 2, centerTop.Y);
 
         return new Rectangle(relativePoint, rec.Size);
+    }
+    
+    public static Rectangle AlignBesideLeft(this Rectangle rec, Rectangle target)
+    {
+        var pos = new Point(target.Left, target.Top);
+        var relativePos = new Point(pos.X - rec.Width, pos.Y);
+
+        return new Rectangle(relativePos, rec.Size);
+    }
+
+    public static Rectangle AlignBesideRight(this Rectangle rec, Rectangle target, int gapX = 0, int gapY = 0)
+    {
+        var pos = new Point(target.Right, target.Top);
+        var relativePos = new Point(pos.X + gapX, pos.Y + gapY);
+
+        return new Rectangle(relativePos, rec.Size);
     }
 }
 
