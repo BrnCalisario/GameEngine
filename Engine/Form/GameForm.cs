@@ -1,3 +1,4 @@
+using System.Runtime.Versioning;
 using Engine.Tiles;
 using System;
 using System.Drawing;
@@ -5,6 +6,7 @@ using System.Windows.Forms;
 
 namespace Engine;
 
+using Engine.Resource;
 using Extensions;
 
 public partial class GameForm : Form
@@ -34,9 +36,9 @@ public partial class GameForm : Form
     private void GameForm_Load(object sender, EventArgs e)
     {
         BasicEngine.New(this);
+        Resources.Load();
 
         this.engine = BasicEngine.Current;
-
 
         var tileSet = new TileSet(12, 6, new Point(0, 0));
         tileSet.Box = tileSet.Box.AlignCenter(engine.Box);
@@ -62,25 +64,28 @@ public partial class GameForm : Form
 
         
 
-        ItemBox<Tomato> tomatoBox = new(new Rectangle(0, 0, 50, 50).AlignTopLeft(tileSet.Box));
+        FoodBox<Tomato> tomatoBox = new(new Rectangle(0, 0, 50, 50).AlignTopLeft(tileSet.Box));
         engine.AddBody(tomatoBox);
-
-        ItemBox<Onion> onionBox = new(new Rectangle(0, 0, 50, 50).AlignBesideRight(tomatoBox.Box, 30));
-        engine.AddBody(onionBox);
-
-        ItemBox<Meat> meatBox = new(new Rectangle(0, 0, 50, 50).AlignBesideRight(onionBox.Box, 30));
-        engine.AddBody(meatBox);
-
-        ItemBox<Fish> fishBox = new(new Rectangle(0, 0, 50, 50).AlignBesideRight(meatBox.Box, 30));
-        engine.AddBody(fishBox);
-
-        Bench bench = new(new Rectangle().AlignMiddleCenter(tileSet.Box));
-        engine.AddBody(bench);
-
-        Bench bench2 = new(new Rectangle(0,0, 100, 50).AlignBesideRight(bench.Box, 0));
+        
+        Bench bench2 = new(new Rectangle(0,0, 100, 50).AlignBesideRight(tomatoBox.Box, 0));
         engine.AddBody(bench2);
 
-        Trash trash = new(new Rectangle(0, 0, 48, 48).AlignBesideRight(bench2.Box));
+        FoodBox<Onion> onionBox = new(new Rectangle(0, 0, 50, 50).AlignBesideRight(bench2.Box));
+        engine.AddBody(onionBox);
+
+        Bench bench = new(new Rectangle().AlignBesideRight(onionBox.Box));
+        engine.AddBody(bench);
+
+        FoodBox<Meat> meatBox = new(new Rectangle(0, 0, 50, 50).AlignBesideRight(bench.Box));
+        engine.AddBody(meatBox);
+
+        Bench bench3 = new(new Rectangle().AlignBesideRight(meatBox.Box));
+        engine.AddBody(bench3);
+
+        FoodBox<Fish> fishBox = new(new Rectangle(0, 0, 50, 50).AlignBesideRight(bench3.Box));
+        engine.AddBody(fishBox);
+
+        Trash trash = new(new Rectangle(0, 0, 48, 48).AlignBesideRight(fishBox.Box));
         engine.AddBody(trash);
 
         var player = new Player(new Rectangle(50, 50, 50, 50));

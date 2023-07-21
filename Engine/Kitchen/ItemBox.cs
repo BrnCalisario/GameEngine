@@ -1,24 +1,84 @@
 using System;
 using System.Drawing;
+using Engine.Resource;
+using Engine.Sprites;
+using System.Linq;
 
 namespace Engine;
 
-public class ItemBox<T> : Interactable, IUnwalkable
-    where T : Item
+using Extensions;
+
+public class FoodBox<T> : Interactable, IUnwalkable
+    where T : Item, new()
 {
-    public ItemBox(Rectangle box) : base(box, 1.25f, new Pen(Color.Crimson))
+
+    public Image BenchImage { get; set; } = Resources.BenchImage;
+    public Image FoodImage { get; set; } = Resources.FoodImage;
+
+    Sprite BenchSprite { get; set; }
+
+    Sprite ItemSprite { get; set; }
+
+    Rectangle FoodRectangle { get; set;} = new Rectangle();
+
+
+    readonly SpriteLoader<BenchTypes> SpriteLoader;
+
+    readonly SpriteLoader<FoodTypes> FoodSpriteLoader;
+
+    public FoodBox(Rectangle box) : base(new Rectangle(box.Location, new(96, 48)), 1.055f, new Pen(Color.Crimson))
     {
+        SpriteLoader = new BenchSpriteLoader();
+        FoodSpriteLoader = new FoodSpriteLoader();
+        BenchSprite = SpriteLoader.GetAnimation(BenchTypes.ItemBox).Next();
+
+        switch (Activator.CreateInstance(typeof(T)))
+        {
+            case Tomato:
+                ItemSprite = FoodSpriteLoader.GetAnimation(FoodTypes.Tomato).Sprites.Last();
+                break;
+            case Onion:
+                ItemSprite = FoodSpriteLoader.GetAnimation(FoodTypes.Onion).Sprites.Last();
+                break;
+            case Meat:
+                ItemSprite = FoodSpriteLoader.GetAnimation(FoodTypes.Meat).Sprites.Last();
+                break;
+            case Fish:
+                ItemSprite = FoodSpriteLoader.GetAnimation(FoodTypes.Fish).Sprites.Last();
+                break;
+        }
+
+        FoodRectangle = new Rectangle(0, 0, 30, 30).AlignCenter(Box);
     }
 
     public override void Draw(Graphics g)
     {
-        g.FillRectangle(Pen.Brush, Box);
-        g.DrawRectangle(Pens.Black, CollisionMask.Box);
+        g.DrawImage(
+            BenchImage,
+            this.Box,
+            BenchSprite.X,
+            BenchSprite.Y,
+            BenchSprite.Width,
+            BenchSprite.Height,
+            GraphicsUnit.Pixel
+            );
+
+        g.DrawImage(
+            FoodImage,
+            FoodRectangle,
+            ItemSprite.X,
+            ItemSprite.Y,
+            ItemSprite.Width,
+            ItemSprite.Height,
+            GraphicsUnit.Pixel
+            );
+
+        g.DrawRectangle(Pens.AliceBlue, this.CollisionMask.Box);
     }
 
     public override void Interact(Player p)
     {
-        if(p.IsHolding)
+        if (p.IsHolding)
             return;
 
         Item item = (T)Activator.CreateInstance(typeof(T), new object[] { Box });

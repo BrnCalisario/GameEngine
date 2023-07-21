@@ -4,19 +4,20 @@ using Engine.Sprites;
 
 namespace Engine;
 
+using Engine.Resource;
 using Sprites;
 
 using static ProjectPaths;
 
 public class Trash : Interactable, IUnwalkable
 {
-    public Trash(Rectangle box) : base(new Rectangle(box.Location, new(48, 48)))
+    public Trash(Rectangle box) : base(new Rectangle(box.Location, new(48, 48)), 1.25f)
     {
         Loader = new TrashSpriteLoader();
         SpriteStream = Loader.GetAnimation(TrashTypes.Closed);
     }
 
-    Image trashImage = Image.FromFile(AssetsPath + "trash3x.png");
+    Image trashImage = Resources.TrashImage;
     SpriteStream SpriteStream { get; set; }
     SpriteLoader<TrashTypes> Loader { get; set; }
 

@@ -9,7 +9,8 @@ namespace Engine;
 using static ProjectPaths;
 
 using Extensions;
-using Microsoft.VisualBasic;
+
+using Resource;
 
 public class Player : CollidableBody
 {
@@ -44,7 +45,7 @@ public class Player : CollidableBody
         return diff >= InteractionDelay;
     }
 
-    public Image ChefSprite = Image.FromFile(AssetsPath + "\\player_3x.png");
+    public Image ChefSprite = Resources.CookerImage;
 
     public SpriteController<ChefSpriteLoader, ChefAnimationType> SpriteController
         = new ChefSpriteController();
