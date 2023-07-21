@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace Engine;
 
+using Engine.Resource;
 using Sprites;
 using static ProjectPaths;
 
@@ -20,7 +21,13 @@ public class Food : Item
         SpriteStream = Loader.GetAnimation(type);
     }
 
-    Image foodImage = Image.FromFile(AssetsPath + "food3x.png");
+    public Food() : base(new Point(0, 0))
+    {
+        Loader = new FoodSpriteLoader();
+        SpriteStream = Loader.GetAnimation(FoodTypes.Tomato);
+    }
+
+    Image FoodImage = Resources.FoodImage;
     SpriteLoader<FoodTypes> Loader { get; set; }
      
     SpriteStream SpriteStream { get; set; }
@@ -30,7 +37,7 @@ public class Food : Item
         var c = SpriteStream.Sprites.Last();
 
         g.DrawImage(
-            foodImage,
+            FoodImage,
             this.Box,
             c.X,
             c.Y,
@@ -50,6 +57,8 @@ public class Tomato : Food
     public Tomato(Point point) : base(point, FoodTypes.Tomato)
     {
     }
+
+    public Tomato() { }
 }
 
 public class Onion : Food
@@ -61,6 +70,8 @@ public class Onion : Food
     public Onion(Point point) : base(point, FoodTypes.Onion)
     {
     }
+
+    public Onion() { }
 }
 
 
@@ -73,6 +84,8 @@ public class Meat : Food
     public Meat(Point point) : base(point, FoodTypes.Meat)
     {
     }
+
+    public Meat() { }
 }
 
 public class Fish : Food
@@ -84,6 +97,8 @@ public class Fish : Food
     public Fish(Point point) : base(point, FoodTypes.Fish)
     {
     }
+
+    public Fish() { }
 }
 
 

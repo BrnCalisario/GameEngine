@@ -1,4 +1,5 @@
 ﻿
+using System.Runtime.Versioning;
 using System.Drawing;
 
 
@@ -7,6 +8,7 @@ namespace Engine;
 using static ProjectPaths;
 using Extensions;
 using Sprites;
+using Engine.Resource;
 
 public class Bench : Interactable, IUnwalkable
 {
@@ -18,7 +20,7 @@ public class Bench : Interactable, IUnwalkable
         BenchSprite = benchSpriteLoader.GetAnimation(BenchTypes.Bench).Next();
     }
 
-    Image tableImage = Image.FromFile(AssetsPath + "bench3x.png");
+    Image tableImage = Resources.BenchImage;
 
     readonly SpriteLoader<BenchTypes> benchSpriteLoader;
     Sprite BenchSprite { get; set;}   
@@ -37,8 +39,6 @@ public class Bench : Interactable, IUnwalkable
             GraphicsUnit.Pixel
             );
 
-        // if (this.CollisionMask is not null)
-        //     g.DrawRectangle(Pen, CollisionMask.Box);
     }
 
     public override void Interact(Player p)

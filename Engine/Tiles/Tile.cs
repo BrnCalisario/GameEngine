@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Engine.Resource;
 
 namespace Engine;
 
@@ -23,7 +24,7 @@ public abstract class Tile : Body
 
 public class GridTile : Tile
 {
-    public override Image TileImage { get; protected set; } = Image.FromFile(AssetsPath + "\\tileShadows.png");
+    public override Image TileImage { get; protected set; } = Resources.TileImage;
 
     public GridTile(Rectangle box, Image tileImage) : base(box, tileImage) {  }
     public GridTile(Rectangle box) : base(box) { }
