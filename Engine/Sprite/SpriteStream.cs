@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Engine.Sprite;
+namespace Engine.Sprites;
 
 public class SpriteStream
 {
     public SpriteStream() { }
 
 
-    private TimeSpan Interval = TimeSpan.FromSeconds(0.20);
+    public TimeSpan Interval = TimeSpan.FromSeconds(1);
     private int pointer { get; set; } = -1;
     private List<Sprite> sprites { get; set; } = new List<Sprite>();
 

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Engine.Sprite;
+namespace Engine.Sprites;
 
 public struct Sprite
 {

@@ -1,4 +1,6 @@
 ﻿using Engine.Extensions;
+using Engine.Sprites;
+using Engine.Sprites.FoodSprites;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -7,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Engine;
+
+using static ProjectPaths;
 
 public abstract class Interactable : CollidableBody
 {
@@ -144,28 +148,86 @@ public abstract class Item : Interactable, IDisposable
     }
 }
 
-public class Tomato : Item
+
+public class Food : Item
 {
-    public Tomato(Rectangle r) : base(new Rectangle(r.Location, new(20, 20)))
+    public Food(Rectangle r, FoodTypes type) : base(new Rectangle(r.Location, new(30, 30)))
     {
-        this.Pen = new Pen(Color.Red);
+        Loader = new FoodSpriteLoader();
+        SpriteStream = Loader.GetAnimation(type);
     }
 
-    public Tomato(Point point) : base(point)
+    public Food(Point point, FoodTypes type) : base(point)
     {
-        this.Pen = new Pen(Color.Red);
+        Loader = new FoodSpriteLoader();
+        SpriteStream = Loader.GetAnimation(type);
+    }
+
+    Image foodImage = Image.FromFile(AssetsPath + "food3x.png");
+    SpriteLoader<FoodTypes> Loader { get; set; }
+     
+    SpriteStream SpriteStream { get; set; }
+
+    public override void Draw(Graphics g)
+    {
+        var c = SpriteStream.Next();
+
+        g.DrawImage(
+            foodImage,
+            this.Box,
+            c.X,
+            c.Y,
+            c.Width,
+            c.Height,
+            GraphicsUnit.Pixel
+            );
     }
 }
 
-public class Onion : Item
+public class Tomato : Food
 {
-    public Onion(Rectangle r) : base(new Rectangle(r.Location, new(20, 20)))
+    public Tomato(Rectangle r) : base(r, FoodTypes.Tomato)
     {
-        this.Pen = new Pen(Color.Beige);
     }
 
-    public Onion(Point point) : base(point)
+    public Tomato(Point point) : base(point, FoodTypes.Tomato)
     {
-        this.Pen = new Pen(Color.Beige);
     }
 }
+
+public class Onion : Food
+{
+    public Onion(Rectangle r) : base(r, FoodTypes.Onion)
+    {
+    }
+
+    public Onion(Point point) : base(point, FoodTypes.Onion)
+    {
+    }
+}
+
+
+public class Meat : Food
+{
+    public Meat(Rectangle r) : base(r, FoodTypes.Meat)
+    {
+    }
+
+    public Meat(Point point) : base(point, FoodTypes.Meat)
+    {
+    }
+}
+
+public class Fish : Food
+{
+    public Fish(Rectangle r) : base(r, FoodTypes.Fish)
+    {
+    }
+
+    public Fish(Point point) : base(point, FoodTypes.Fish)
+    {
+    }
+}
+
+
+
