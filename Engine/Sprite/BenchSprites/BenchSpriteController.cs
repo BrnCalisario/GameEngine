@@ -1,12 +1,73 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Engine.Extensions;
+using Engine.Sprites;
+using System.Drawing;
 
-namespace Engine.Sprite.BenchSprites
+
+namespace Engine.Sprites.BenchSprites
 {
-    internal class BenchSpriteController
+
+    public class BenchSpriteLoader : SpriteLoader<BenchTypes>
     {
+        public BenchSpriteLoader() : base(scale:3) { }
+
+        Size SpriteSize = new(32,16);
+        protected override void Load()
+        {
+            var scaled = SpriteSize.Scale(this.Scale);
+
+            int startY = 0;
+
+            var corner = new SpriteStream();
+            var bench = new SpriteStream();
+            var itemBox = new SpriteStream();
+            var oven = new SpriteStream();
+
+            var rectCorner = new Rectangle(0,startY, scaled.Width, scaled.Height);
+            Sprite spriteCorner = new Sprite(rectCorner.Location, rectCorner.Size);
+            corner.Add(spriteCorner);
+            this.Animations.Add(BenchTypes.Corner, corner);
+
+            startY += 9;
+
+            var rectBench = new Rectangle(0, startY, scaled.Width, scaled.Height);
+            Sprite spriteBench = new Sprite(rectBench.Location, rectBench.Size);
+            bench.Add(spriteBench);
+            this.Animations.Add(BenchTypes.Bench, bench);
+
+            startY += 9;
+
+            var rectItemBox = new Rectangle(0,startY, scaled.Width, scaled.Height);
+            Sprite spriteItemBox = new Sprite(rectItemBox.Location, rectItemBox.Size);
+            itemBox.Add(spriteItemBox);
+            this.Animations.Add(BenchTypes.ItemBox, itemBox);
+
+            startY += 9;
+
+            var rectOven = new Rectangle(0,startY, scaled.Width, scaled.Height);
+            Sprite spriteOven = new Sprite(rectOven.Location,rectOven.Size);
+            oven.Add(spriteOven);
+            this.Animations.Add(BenchTypes.Oven, oven);
+        }
     }
+
+
+
+
+    public class BenchSpriteController
+        : SpriteController<BenchSpriteLoader, BenchTypes>
+    {
+        public BenchSpriteController()
+        { 
+            this.SpriteLoader = new BenchSpriteLoader();
+        }
+    }
+
+    public enum BenchTypes
+    {
+        Bench,
+        ItemBox,
+        Oven,
+        Corner
+    }
+
 }
