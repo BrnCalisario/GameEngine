@@ -59,7 +59,6 @@ public class Trash : Interactable, IUnwalkable
 
     public override void Draw(Graphics g)
     {
-
         g.DrawImage(trashImage, Box);
     }
 
