@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace Engine;
 
+using static ProjectPaths;
+
 public interface IUnwalkable
 {
 
@@ -47,15 +49,18 @@ public class ItemBox<T> : Interactable, IUnwalkable
 
 public class Trash : Interactable, IUnwalkable
 {
-    public Trash(Rectangle box, float scale = 2, Pen pen = null) : base(box, scale, pen)
+    Image trashImage = Image.FromFile(AssetsPath + "trash3x.png");
+
+
+    public Trash(Rectangle box, float scale = 3, Pen pen = null) : base(box, scale, pen)
     {
         this.Filled = true;
     }
 
     public override void Draw(Graphics g)
     {
-        g.FillRectangle(Pen.Brush, Box);
-        g.DrawRectangle(Pens.Pink, CollisionMask.Box);
+
+        g.DrawImage(trashImage, Box);
     }
 
     public override void Interact(Player p)
