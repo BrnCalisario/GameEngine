@@ -8,9 +8,15 @@ using Sprites;
 
 using static ProjectPaths;
 
-public class Pan : Interactable
+public class Pan : Item
 {
     public Pan(Rectangle r, PanTypes type) : base(new Rectangle(r.Location, new(48, 48)))
+    {
+        Loader = new PanSpriteLoader();
+        SpriteStream = Loader.GetAnimation(type);
+    }
+
+    public Pan(Point point, PanTypes type) : base(point)
     {
         Loader = new PanSpriteLoader();
         SpriteStream = Loader.GetAnimation(type);
@@ -20,10 +26,6 @@ public class Pan : Interactable
     SpriteStream SpriteStream { get; set; }
     SpriteLoader<PanTypes> Loader { get; set; }
 
-    public override void Interact(Player p)
-    {
-        throw new System.NotImplementedException();
-    }
 
     public override void Draw(Graphics g)
     {
