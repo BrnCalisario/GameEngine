@@ -6,7 +6,7 @@ namespace Engine;
 
 using Engine.Resource;
 using Sprites;
-
+using System.Net.Mail;
 using static ProjectPaths;
 
 public class Trash : Interactable, IUnwalkable
@@ -64,8 +64,21 @@ public class Trash : Interactable, IUnwalkable
 
     public override void Interact(Player p)
     {
-        if (p.IsHolding)
-            p.holdingItem.Dispose();
+        if (!p.IsHolding)
+            return;
+
+        var holding = p.holdingItem as Food;
+
+        if(holding is not null)
+        {
+            holding.Dispose();
+            return;
+        }
+
+        var pan = p.holdingItem as Pan;
+
+        pan?.ClearPan();
+        
     }
 
 }

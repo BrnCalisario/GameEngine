@@ -1,4 +1,5 @@
-﻿using Engine.Resource;
+﻿using Engine.Extensions;
+using Engine.Resource;
 using Engine.Sprites;
 using System;
 using System.Collections.Generic;
@@ -37,14 +38,34 @@ public class Oven : Interactable, IUnwalkable
             OvenSprite.Height,
             GraphicsUnit.Pixel
             );
-
     }
 
 
 
     public override void Interact(Player p)
     {
-        throw new NotImplementedException();
+        var holding = p.holdingItem;
+
+        if(holding as Pan is not null)
+        {
+            PlacedItem = holding as Pan;
+            PlacedItem.Interact(p);
+            var temp = PlacedItem.Box.AlignCenter(this.Box);
+            PlacedItem.Box = new Rectangle(temp.X, temp.Y - 5, temp.Width, temp.Height);
+            return;
+        }
+        
+        if(holding as Food is not null)
+        {
+            PlacedItem.Interact(p);
+            return;
+        }
+
+        if(PlacedItem is not null)
+        {
+            PlacedItem.Interact(p);
+            PlacedItem = null;
+        }
     }
 }
 

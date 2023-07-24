@@ -6,10 +6,10 @@ namespace Engine;
 
 using Engine.Resource;
 using Sprites;
-
+using System.Collections.Generic;
 using static ProjectPaths;
 
-public class Pan : Interactable
+public class Pan : Item
 {
     public Pan(Rectangle r, PanTypes type) : base(new Rectangle(r.Location, new(48, 48)))
     {
@@ -20,15 +20,31 @@ public class Pan : Interactable
     Image panImage = Resources.PanImage;
     SpriteStream SpriteStream { get; set; }
     SpriteLoader<PanTypes> Loader { get; set; }
+    public List<Food> Ingredients { get; set; } = new List<Food>();
 
     public override void Interact(Player p)
     {
-        throw new System.NotImplementedException();
+        if(!p.IsHolding || p.holdingItem == this)
+            base.Interact(p);
+
+        var holding = p.holdingItem as Food;
+
+        if (holding is null)
+            return;
+
+        holding.Interact(p);
+
+        holding.Dispose();
+        Ingredients.Add(holding);
+       
     }
+
+    public void ClearPan()
+        => Ingredients.Clear();
 
     public override void Draw(Graphics g)
     {
-        var c = SpriteStream.Sprites.Last();
+        var c = SpriteStream.Sprites.First();
 
         g.DrawImage(
             panImage,

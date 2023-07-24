@@ -127,6 +127,14 @@ public abstract class CollidableBody : Body, ICollidableBody
         return query;
     }
 
+    public override void Draw(Graphics g)
+    {
+        base.Draw(g);
+
+        this.CollisionMask?.Draw(g);
+
+    }
+
 
     public EventHandler<CollideEventArgs> OnCollide;
 }

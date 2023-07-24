@@ -118,7 +118,11 @@ public abstract class Item : Interactable, IDisposable
     {
         BasicEngine.Current.Interactables.Remove(this);
         BasicEngine.Current.RenderStack.Remove(this);
-        this.Player.holdingItem = null;
-        this.Player = null;
+
+        if(Player is not null)
+        {
+            this.Player.holdingItem = null;
+            this.Player = null;
+        }
     }
 }

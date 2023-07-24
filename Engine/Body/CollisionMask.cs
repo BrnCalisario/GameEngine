@@ -29,6 +29,12 @@ public class CollisionMask : CollidableBody
         this.Box = new Rectangle(newPos, this.Box.Size);
     }
 
+    public void Rotate90deg()
+    {
+        var newSize = new Size(Box.Height, Box.Width);
+        this.Box = new(Box.Location, newSize);
+    }
+
     public override void Update()
     {   
     }
