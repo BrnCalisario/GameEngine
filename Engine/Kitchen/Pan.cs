@@ -1,9 +1,10 @@
 ﻿using System.Drawing;
 using Engine.Sprites;
-
+using System.Linq;
 
 namespace Engine;
 
+using Engine.Resource;
 using Sprites;
 
 using static ProjectPaths;
@@ -16,7 +17,7 @@ public class Pan : Interactable
         SpriteStream = Loader.GetAnimation(type);
     }
 
-    Image panImage = Image.FromFile(AssetsPath + "pan3x.png");
+    Image panImage = Resources.PanImage;
     SpriteStream SpriteStream { get; set; }
     SpriteLoader<PanTypes> Loader { get; set; }
 

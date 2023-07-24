@@ -32,14 +32,14 @@ public class BenchSpriteLoader : SpriteLoader<BenchTypes>
         bench.Add(spriteBench);
         this.Animations.Add(BenchTypes.Bench, bench);
 
-        startY += scaled.Height + 12;
+        startY += scaled.Height + 9;
 
         var rectItemBox = new Rectangle(3, startY, scaled.Width, scaled.Height);
         Sprite spriteItemBox = new Sprite(rectItemBox.Location, rectItemBox.Size);
         itemBox.Add(spriteItemBox);
         this.Animations.Add(BenchTypes.ItemBox, itemBox);
 
-        startY += scaled.Height + 12;
+        startY += scaled.Height + 9;
 
         var rectOven = new Rectangle(3, startY, scaled.Width, scaled.Height);
         Sprite spriteOven = new Sprite(rectOven.Location, rectOven.Size);

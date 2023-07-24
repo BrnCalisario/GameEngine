@@ -81,6 +81,13 @@ public abstract class Body : IBody
         this.Box = new Rectangle(newPos, this.Box.Size);        
     }
 
+    protected void RotateAngle(Graphics g, float angle)
+    {
+        
+        g.RotateTransform(angle);
+
+    }
+
     public virtual void Draw(Graphics g)
     {
         if(Filled)       

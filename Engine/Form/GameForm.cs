@@ -6,6 +6,7 @@ using System.Windows.Forms;
 
 namespace Engine;
 
+using Engine.Kitchen;
 using Engine.Resource;
 using Extensions;
 
@@ -66,8 +67,8 @@ public partial class GameForm : Form
 
         FoodBox<Tomato> tomatoBox = new(new Rectangle(0, 0, 50, 50).AlignTopLeft(tileSet.Box));
         engine.AddBody(tomatoBox);
-        
-        Bench bench2 = new(new Rectangle(0,0, 100, 50).AlignBesideRight(tomatoBox.Box, 0));
+
+        Bench bench2 = new(new Rectangle(0, 0, 100, 50).AlignBesideRight(tomatoBox.Box, 0));
         engine.AddBody(bench2);
 
         FoodBox<Onion> onionBox = new(new Rectangle(0, 0, 50, 50).AlignBesideRight(bench2.Box));
@@ -87,6 +88,9 @@ public partial class GameForm : Form
 
         Trash trash = new(new Rectangle(0, 0, 48, 48).AlignBesideRight(fishBox.Box));
         engine.AddBody(trash);
+
+        Oven oven = new(new Rectangle(0, 0, 0, 0).AlignBesideRight(trash.Box));
+        engine.AddBody(oven);
 
         var player = new Player(new Rectangle(50, 50, 50, 50));
         player.Box = player.Box.AlignCenter(engine.Box);

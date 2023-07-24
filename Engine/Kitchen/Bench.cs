@@ -39,6 +39,8 @@ public class Bench : Interactable, IUnwalkable
             GraphicsUnit.Pixel
             );
 
+
+        //g.DrawRectangle(Pen, Box);
     }
 
     public override void Interact(Player p)

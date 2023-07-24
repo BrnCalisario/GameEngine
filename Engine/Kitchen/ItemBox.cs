@@ -48,7 +48,12 @@ public class FoodBox<T> : Interactable, IUnwalkable
                 break;
         }
 
-        FoodRectangle = new Rectangle(0, 0, 30, 30).AlignCenter(Box);
+        var tempRect = new Rectangle(0, 0, 20, 20).AlignCenter(Box);
+        tempRect.X -= 2;
+        tempRect.Y -= 8;
+
+        FoodRectangle = tempRect;
+
     }
 
     public override void Draw(Graphics g)
@@ -73,7 +78,10 @@ public class FoodBox<T> : Interactable, IUnwalkable
             GraphicsUnit.Pixel
             );
 
-        g.DrawRectangle(Pens.AliceBlue, this.CollisionMask.Box);
+        //newPos = new Point(wid - X - Box.Width, Y);
+        //this.Box = new Rectangle(newPos, this.Box.Size);
+
+
     }
 
     public override void Interact(Player p)
