@@ -131,7 +131,7 @@ public abstract class CollidableBody : Body, ICollidableBody
     {
         base.Draw(g);
 
-        this.CollisionMask?.Draw(g);
+        //this.CollisionMask?.Draw(g);
 
     }
 

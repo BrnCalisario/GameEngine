@@ -46,57 +46,23 @@ public partial class GameForm : Form
 
         BasicEngine.Current.tileSet = tileSet;
 
-        //var rct1 = new Rectangle(new Point(tileSet.Location.X - 20, tileSet.Location.Y - 20), new Size(tileSet.BoxWidth + 40, 20));
-        //var w1 = new Wall(rct1);
+        CornerBench cb = new(new Rectangle().AlignTopLeft(tileSet.Box), Direction.Bottom);
+        engine.AddBody(cb);
 
-        //var rct2 = new Rectangle(new Point(tileSet.Location.X - 20, tileSet.Location.Y - 20), new Size(20, tileSet.BoxHeight + 40));
-        //var w2 = new Wall(rct2);
+        FoodBench fb1 = new(new Rectangle().AlignBesideRight(cb.CollisionMask.Box), Direction.Bottom);
+        engine.AddBody(fb1);
 
-        //var rct3 = new Rectangle(new Point(tileSet.Location.X - 20, tileSet.Location.Y + tileSet.BoxHeight + 1), new Size(tileSet.BoxWidth + 40, 20));
-        //var w3 = new Wall(rct3);
-
-        //var rct4 = new Rectangle(new Point(tileSet.Location.X + tileSet.BoxWidth + 1, tileSet.Location.Y - 20), new Size(20, tileSet.BoxHeight + 40));
-        //var w4 = new Wall(rct4);
-
-        //engine.AddBody(w1);
-        //engine.AddBody(w2);
-        //engine.AddBody(w3);
-        //engine.AddBody(w4);
-
-        FoodBox<Tomato> tomatoBox = new(new Rectangle(0, 0, 50, 50).AlignTopLeft(tileSet.Box));
+        var tomatoBox = new FoodBox<Tomato>(new Rectangle().AlignBesideRight(fb1.CollisionMask.Box));
         engine.AddBody(tomatoBox);
 
-        FoodBench bench2 = new(new Rectangle(0, 0, 100, 50).AlignBesideRight(tomatoBox.Box, 0), Direction.Left);
-        engine.AddBody(bench2);
 
-        FoodBox<Onion> onionBox = new(new Rectangle(0, 0, 50, 50).AlignBesideRight(bench2.Box));
-        engine.AddBody(onionBox);
 
-        FoodBench bench = new(new Rectangle().AlignBesideRight(onionBox.Box));
-        engine.AddBody(bench);
-
-        FoodBox<Meat> meatBox = new(new Rectangle(0, 0, 50, 50).AlignBesideRight(bench.Box));
-        engine.AddBody(meatBox);
-
-        FoodBench bench3 = new(new Rectangle().AlignBesideRight(meatBox.Box));
-        engine.AddBody(bench3);
-
-        FoodBox<Fish> fishBox = new(new Rectangle(0, 0, 50, 50).AlignBesideRight(bench3.Box));
-        engine.AddBody(fishBox);
-
-        Trash trash = new(new Rectangle(0, 0, 48, 48).AlignBesideRight(fishBox.Box));
-        engine.AddBody(trash);
-
-        Oven oven = new(new Rectangle(0, 0, 0, 0).AlignBesideRight(trash.Box));
-        engine.AddBody(oven);
+        FoodBench fb2 = new(new Rectangle().AlignBesideBottom(cb.CollisionMask.Box), Direction.Right);
+        engine.AddBody(fb2);
 
         var player = new Player(new Rectangle(50, 50, 50, 50));
         player.Box = player.Box.AlignCenter(engine.Box);
-        engine.AddBody(player);
-
-
-        Pan p = new Pan(new Rectangle().AlignCenter(tileSet.Box), Sprites.PanTypes.Void);
-        engine.AddBody(p);
+        engine.AddBody(player); 
 
         Plate plate = new Plate(new Rectangle().AlignCenter(tileSet.Box), Sprites.PlateTypes.TomatoPlate);
         engine.AddBody(plate);

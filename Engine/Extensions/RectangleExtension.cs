@@ -80,6 +80,13 @@ public static class RectangleExtension
 
         return new Rectangle(relativePos, rec.Size);
     }
+
+    public static Rectangle AlignBesideBottom(this Rectangle rec, Rectangle target, int gapX = 0, int gapY = 0) 
+    {
+        var pos = new Point(target.Left, target.Bottom);
+
+        return new Rectangle(pos, rec.Size);
+    }
 }
 
 
