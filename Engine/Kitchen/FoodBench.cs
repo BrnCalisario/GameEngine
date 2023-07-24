@@ -37,16 +37,18 @@ public abstract class Bench : Interactable, IUnwalkable
 
         if (dir == Direction.Right)
         {
+
             var tempRect = new Size(CollisionMask.Height, CollisionMask.Width);
             this.CollisionMask.Box = new(CollisionMask.Box.Location, tempRect);
         }
 
         if(dir == Direction.Left)
         {
-            var tempLoc = new Point(X + this.Width / 2, Y);
-            var tempRect = new Size(CollisionMask.Height, CollisionMask.Width);
-            this.CollisionMask.Box = new(tempLoc, tempRect);
+            var tempLoc = new Point(X - Width / 2, Y);
+            this.Box = new(tempLoc, Box.Size);
 
+            var tempRect = new Size(CollisionMask.Height, CollisionMask.Width);
+            this.CollisionMask.Box = new(CollisionMask.Box.Location, tempRect);
         }
     }
 
@@ -103,11 +105,9 @@ public abstract class Bench : Interactable, IUnwalkable
             g.EndContainer(container);
 
 
-        g.DrawRectangle(Pen, CollisionMask.Box);
+        //g.DrawRectangle(Pen, CollisionMask.Box);
     }
 }
-
-
 
 public class FoodBench : Bench
 {
@@ -115,8 +115,6 @@ public class FoodBench : Bench
         : base(new Rectangle(box.Location, new(96, 48)), 1, null, dir)
     {
         BenchSprite = this.benchSpriteLoader.GetAnimation(BenchTypes.Bench).Next();
-
-
     }
 
     public Item PlacedItem { get; private set; } = null;
@@ -143,3 +141,16 @@ public class FoodBench : Bench
     }
 }
 
+public class CornerBench : Bench
+{
+    public CornerBench(Rectangle box, Direction dir = Direction.Bottom) 
+        : base(new Rectangle(box.Location, new(48, 48)), 1, null, dir)
+    {
+        BenchSprite = this.benchSpriteLoader.GetAnimation(BenchTypes.Corner).Next();
+    }
+
+    public override void Interact(Player p)
+    {
+        
+    }
+}

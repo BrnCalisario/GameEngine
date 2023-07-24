@@ -9,23 +9,27 @@ public class BenchSpriteLoader : SpriteLoader<BenchTypes>
     public BenchSpriteLoader() : base(scale: 3) { }
 
     Size SpriteSize = new(32, 16);
+    Size cornerSize = new(16, 16);
+
     protected override void Load()
     {
         var scaled = SpriteSize.Scale(this.Scale);
 
-        int startY = 0;
+        var scaledCorner = cornerSize.Scale(this.Scale);
+
+        int startY = 3;
 
         var corner = new SpriteStream();
         var bench = new SpriteStream();
         var itemBox = new SpriteStream();
         var oven = new SpriteStream();
 
-        var rectCorner = new Rectangle(3, startY, scaled.Width, scaled.Height);
+        var rectCorner = new Rectangle(3, startY, scaledCorner.Width, scaledCorner.Height);
         Sprite spriteCorner = new Sprite(rectCorner.Location, rectCorner.Size);
         corner.Add(spriteCorner);
         this.Animations.Add(BenchTypes.Corner, corner);
 
-        startY += scaled.Height + 12;
+        startY += scaled.Height + 9;
 
         var rectBench = new Rectangle(3, startY, scaled.Width, scaled.Height);
         Sprite spriteBench = new Sprite(rectBench.Location, rectBench.Size);
