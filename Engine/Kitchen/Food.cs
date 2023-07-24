@@ -29,7 +29,7 @@ public class Food : Item
 
     Image FoodImage = Resources.FoodImage;
     SpriteLoader<FoodTypes> Loader { get; set; }
-     
+
     SpriteStream SpriteStream { get; set; }
 
     public override void Draw(Graphics g)

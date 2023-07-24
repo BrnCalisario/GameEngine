@@ -12,7 +12,7 @@ public static class RectangleExtension
     {
         foreach (var coll in collList)
         {
-            if (coll.IsColling(rec))
+            if (coll.CollisionMask.IsColling(rec))
             {
                 collider = coll;
                 return true;

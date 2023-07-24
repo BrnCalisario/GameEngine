@@ -233,7 +233,7 @@ public class Player : CollidableBody
         if (previewRectX.AnyPlaceMeeting(BasicEngine.Current.Walls, out CollidableBody w))
         {
             maskRect.X += MathF.Sign(velX);
-            while (!maskRect.IntersectsWith(w.Box))
+            while (!maskRect.IntersectsWith(w.CollisionMask.Box))
             {
                 maskRect.X += MathF.Sign(velX);
                 newVelX += MathF.Sign(velX);
@@ -248,7 +248,7 @@ public class Player : CollidableBody
         if (previewRectY.AnyPlaceMeeting(BasicEngine.Current.Walls, out CollidableBody c))
         {
             maskRect.Y += MathF.Sign(velY);
-            while (!maskRect.IntersectsWith(c.Box))
+            while (!maskRect.IntersectsWith(c.CollisionMask.Box))
             {
                 maskRect.Y += MathF.Sign(velY);
                 newVelY += MathF.Sign(velY);

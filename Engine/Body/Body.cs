@@ -81,6 +81,13 @@ public abstract class Body : IBody
         this.Box = new Rectangle(newPos, this.Box.Size);        
     }
 
+    protected void RotateAngle(Graphics g, float angle)
+    {
+        
+        g.RotateTransform(angle);
+
+    }
+
     public virtual void Draw(Graphics g)
     {
         if(Filled)       
@@ -118,6 +125,14 @@ public abstract class CollidableBody : Body, ICollidableBody
     {
         var query = list.Where(c => this.IsColling(c.CollisionMask.Box)).ToList();
         return query;
+    }
+
+    public override void Draw(Graphics g)
+    {
+        base.Draw(g);
+
+        this.CollisionMask?.Draw(g);
+
     }
 
 
