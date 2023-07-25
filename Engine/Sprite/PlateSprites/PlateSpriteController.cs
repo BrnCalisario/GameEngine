@@ -26,21 +26,21 @@ public class PlateSpriteLoader : SpriteLoader<PlateTypes>
         voidPlate.Add(spriteVoid);
         this.Animations.Add(PlateTypes.VoidPlate, voidPlate);
 
-        startX =+ scaled.Width + 3;
+        startX += scaled.Width;
 
         var rectTomato = new Rectangle(startX, 0, scaled.Width, scaled.Height);
         Sprite spriteTomato = new Sprite(rectTomato.Location, rectTomato.Size);
         tomatoPlate.Add(spriteTomato);
         this.Animations.Add(PlateTypes.TomatoPlate, tomatoPlate);
 
-        startX = + scaled.Width + 3;
+        startX += scaled.Width;
 
         var rectOnion = new Rectangle(startX, 0, scaled.Width, scaled.Height);
         Sprite spriteOnion = new Sprite(rectOnion.Location, rectOnion.Size);
         onionPlate.Add(spriteOnion);
         this.Animations.Add(PlateTypes.OnionPlate, onionPlate);
 
-        startX = + scaled.Width + 3;
+        startX += scaled.Width;
 
         var rectTomOnion = new Rectangle(startX, 0, scaled.Width, scaled.Height);
         Sprite spriteTomOnion = new Sprite(rectTomOnion.Location, rectTomOnion.Size);
