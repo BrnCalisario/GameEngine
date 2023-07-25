@@ -41,7 +41,6 @@ public interface ISpriteController<T, S>
     void SetOnStreamEnd(S type, EventHandler action);
 }
 
-
 public abstract class SpriteController<T, S> : 
     ISpriteController<T, S>
     where T : SpriteLoader<S>
@@ -65,6 +64,12 @@ public abstract class SpriteController<T, S> :
     public virtual void StartAnimation(S type)
     {
         if(SpriteLoader.Contains(type))
-            this.CurrentAnimation = SpriteLoader.GetAnimation(type);
+        {
+            var animation = SpriteLoader.GetAnimation(type);
+
+            if (animation == CurrentAnimation) return;
+
+            this.CurrentAnimation = animation;
+        }
     }
 }

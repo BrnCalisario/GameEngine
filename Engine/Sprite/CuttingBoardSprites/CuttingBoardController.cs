@@ -1,7 +1,5 @@
 ﻿using Engine.Extensions;
 using System.Drawing;
-using static Engine.Sprites.CuttingBoardSpriteLoader;
-using static System.Windows.Forms.AxHost;
 
 namespace Engine.Sprites;
 
@@ -41,11 +39,10 @@ public class CuttingBoardSpriteLoader : SpriteLoader<BoardTypes>
             this.SpriteLoader = new CuttingBoardSpriteLoader();
         }
     }
+}
 
-    public enum BoardTypes
-    {
-        WithKnife,
-        WithoutKnife
-    }
-
+public enum BoardTypes
+{
+    WithKnife,
+    WithoutKnife
 }

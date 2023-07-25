@@ -34,8 +34,10 @@ public class Pan : Item
         if (p.holdingItem is not Food holding)
             return;
 
-        holding.Interact(p);
+        if (!holding.Cutted)
+            return;
 
+        holding.Interact(p);
         holding.Dispose();
         Ingredients.Add(holding);
 

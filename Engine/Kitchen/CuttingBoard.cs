@@ -1,16 +1,12 @@
-﻿using System.Drawing;
-using Engine.Sprites;
+﻿using System;
+using System.Drawing;
 
 namespace Engine;
 
-using Engine.Extensions;
-using Engine.Resource;
 using Sprites;
-using System;
-using System.Collections.Generic;
-using System.Net.Mail;
-using static Engine.Sprites.CuttingBoardSpriteLoader;
-using static ProjectPaths;
+using Extensions;
+using Resource;
+
 
 public class CuttingBoard : Bench
 {
@@ -18,11 +14,16 @@ public class CuttingBoard : Bench
     {
         CbSpriteLoader = new CuttingBoardSpriteLoader();
 
-        CbSprite = CbSpriteLoader.GetAnimation(BoardTypes.WithKnife).Next();        
+        CbSprite = CbSpriteLoader.GetAnimation(BoardTypes.WithKnife).Next();
         BenchSprite = this.benchSpriteLoader.GetAnimation(BenchTypes.Bench).Next();
 
         var tempRect = new Rectangle(0, 0, 60, 30).AlignCenter(this.Box);
-        tempRect.Y -= 5;
+        
+        if(dir != Direction.Right)
+        {
+            tempRect.Y -= 5;
+
+        }
 
         this.CbRectangle = tempRect;
     }
@@ -33,7 +34,7 @@ public class CuttingBoard : Bench
     Rectangle CbRectangle { get; set; }
     Sprite CbSprite { get; set; }
 
-    public TimeSpan ActionTime { get; set; } = TimeSpan.FromSeconds(1.25);
+    public TimeSpan ActionTime { get; set; } = TimeSpan.FromSeconds(3);
 
     private bool inAction { get; set; } = false;
 
@@ -44,8 +45,6 @@ public class CuttingBoard : Bench
     protected override void DrawBench(Graphics g)
     {
         base.DrawBench(g);
-
-        CbSprite = CbSpriteLoader.GetAnimation(BoardTypes.WithKnife).Next();
 
         g.DrawImage(
             CbImage,
@@ -73,11 +72,18 @@ public class CuttingBoard : Bench
 
         if (diff >= ActionTime)
         {
-            this.inAction = false;
-            this.Interactor.canWalk = true;
-            this.Interactor = null;
+            var food = this.Interactor.holdingItem as Food;
+            food.Cutted = true;
 
+            this.Interactor.holdingItem = food;
+
+            this.inAction = false;
+            this.Interactor.Cutting = false;
+            
+            this.Interactor = null;
             this.LastInteraction = null;
+
+            CbSprite = CbSpriteLoader.GetAnimation(BoardTypes.WithKnife).Next();
         }
     }
 
@@ -85,10 +91,14 @@ public class CuttingBoard : Bench
     {
         if (this.inAction) return;
 
+        if (p.holdingItem is not Food food)
+            return;
+
+
         this.inAction = true;
         this.LastInteraction = DateTime.Now;
-
+        CbSprite = CbSpriteLoader.GetAnimation(BoardTypes.WithoutKnife).Next();
         Interactor = p;
-        Interactor.canWalk = false;        
+        Interactor.Cutting = true;
     }
 }

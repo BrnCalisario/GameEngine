@@ -6,7 +6,8 @@ using System.Linq;
 
 namespace Engine;
 
-using static ProjectPaths;
+using static ChefSpriteController;
+
 
 using Extensions;
 
@@ -23,7 +24,7 @@ public class Player : CollidableBody
 
     private readonly int speed = 10;
 
-    private bool cutting = false; //AQUI
+    public bool Cutting = false; //AQUI
 
     private bool invert = false;
 
@@ -58,10 +59,9 @@ public class Player : CollidableBody
 
     public override void Draw(Graphics g)
     {
-        var c = SpriteController.CurrentSprite;
+        var c = SpriteController.CurrentAnimation.Next();
 
         GraphicsContainer container = null;
-
         Image image = ChefSprite; //AQUI
 
         if (invert)
@@ -71,11 +71,11 @@ public class Player : CollidableBody
             this.Box = new Rectangle(newPos, this.Box.Size);
         }
 
-        if(cutting) //AQUI
+        if(Cutting) //AQUI
         {
             image = ChefCuttingSprite;
+            this.SpriteController.StartAnimation(GetChefAnimationByDir(this.CurrentDirection));
         }
-
 
 
         g.DrawImage(
@@ -213,7 +213,7 @@ public class Player : CollidableBody
 
     private void Move()
     {
-        if(!canWalk) return;
+        if(Cutting) return;
 
         var keyMap = BasicEngine.Current.KeyMap;
 

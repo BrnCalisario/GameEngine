@@ -5,13 +5,12 @@ namespace Engine;
 
 using Engine.Resource;
 using Sprites;
-using static ProjectPaths;
 
 public class Food : Item
 {
     public Food(Rectangle r, FoodTypes type) : base(new Rectangle(r.Location, new(30, 30)))
     {
-        Loader = new FoodSpriteLoader();
+        Loader = new WrappedFoodSpriteLoader();
         SpriteStream = Loader.GetAnimation(type);
     }
 
@@ -32,9 +31,14 @@ public class Food : Item
 
     SpriteStream SpriteStream { get; set; }
 
+    public bool Cutted { get; set; } = false;
+
     public override void Draw(Graphics g)
     {
-        var c = SpriteStream.Sprites.Last();
+        var c = Cutted ?
+            SpriteStream.Sprites.Last()
+            : SpriteStream.Sprites.First();
+
 
         g.DrawImage(
             FoodImage,

@@ -50,7 +50,7 @@ public partial class GameForm : Form
         CornerBench cb = new(new Rectangle().AlignTopLeft(tileSet.Box));
         engine.AddBody(cb);
 
-        FoodBench fb = new(new Rectangle().AlignBesideBottom(cb.CollisionMask.Box), Direction.Right);
+        CuttingBoard fb = new(new Rectangle().AlignBesideBottom(cb.CollisionMask.Box), Direction.Right);
         engine.AddBody(fb);
 
         FoodBench fb2 = new(new Rectangle().AlignBesideRight(cb.CollisionMask.Box));

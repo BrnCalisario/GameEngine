@@ -5,6 +5,8 @@ using System.Linq;
 namespace Engine.Sprites;
 
 using Extensions;
+using System;
+using System.DirectoryServices.ActiveDirectory;
 
 public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
 {
@@ -80,29 +82,32 @@ public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
 
 
         LoadAnimationArgs cutFrontArgs = new()
-        { 
+        {
             AnimationType = ChefAnimationType.CuttingFront,
-            StartingPoint = new Point(0,0),
+            StartingPoint = new Point(0, 0),
             Quantity = 4,
-            Gap = 1
+            Gap = 1,
+            AnimationTime = TimeSpan.FromSeconds(0.5)
         };
         this.AddAnimation(cutFrontArgs);
 
         LoadAnimationArgs cutSideArgs = new()
-        { 
+        {
             AnimationType = ChefAnimationType.CuttingSide,
-            StartingPoint = new Point(0,scaled.Height),
+            StartingPoint = new Point(0, scaled.Height),
             Quantity = 4,
-            Gap = 1
+            Gap = 1,
+            AnimationTime = TimeSpan.FromSeconds(0.5)
         };
         this.AddAnimation(cutSideArgs);
 
         LoadAnimationArgs cutUpArgs = new()
-        { 
+        {
             AnimationType = ChefAnimationType.CuttingUp,
             StartingPoint = new Point(0, scaled.Height * 2 + 1),
             Quantity = 4,
-            Gap = 1
+            Gap = 1,
+            AnimationTime = TimeSpan.FromSeconds(0.5)
         };
         this.AddAnimation(cutUpArgs);
 
@@ -112,8 +117,11 @@ public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
 
     private void AddAnimation(LoadAnimationArgs args)
     {
-        var animationStream = new SpriteStream();
-        for(int i = args.StartingPoint.X; i < args.Size.Width * args.Quantity + args.Gap; i += args.Size.Width)
+        var animationStream = new SpriteStream()
+        {
+            Interval = args.AnimationTime ?? TimeSpan.FromSeconds(0.25)
+        };
+        for (int i = args.StartingPoint.X; i < args.Size.Width * args.Quantity + args.Gap; i += args.Size.Width)
         {
             var spr = new Sprite(new Point(i, args.StartingPoint.Y), args.Size);
             animationStream.Add(spr);
@@ -136,6 +144,7 @@ public class LoadAnimationArgs
     public int Quantity { get; set; } = 1;
     public Size Size { get; set; }
     public int Gap { get; set; } = 0;
+    public TimeSpan? AnimationTime { get; set; } = null;
 }
 
 public class ChefSpriteController
@@ -145,6 +154,19 @@ public class ChefSpriteController
     {
         this.SpriteLoader = new ChefSpriteLoader();
         StartAnimation(ChefAnimationType.IdleFront);
+    }
+
+    public static ChefAnimationType GetChefAnimationByDir(Direction dir)
+    {
+        var type = dir switch
+        {
+            Direction.Top => ChefAnimationType.CuttingUp,
+            Direction.Left or Direction.Right => ChefAnimationType.CuttingSide,
+            Direction.Bottom => ChefAnimationType.CuttingFront,
+            _ => ChefAnimationType.CuttingFront
+        };
+
+        return type;
     }
 }
 
