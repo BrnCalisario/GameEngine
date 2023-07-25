@@ -15,7 +15,13 @@ public static class Resources
     public static Image TrashImage { get; private set; }
 
     public static Image FoodImage { get; private set; }
+
     public static Image PanImage { get; private set; }
+
+    public static Image PlateImage { get; private set; }
+
+    public static Image CuttingBoardImage { get; private set; }
+    public static Image CheckOutImage { get; private set; }
 
     public static void Load()
     {
@@ -24,6 +30,9 @@ public static class Resources
         BenchImage = Image.FromFile(AssetsPath + "\\bench3x.png");
         TrashImage = Image.FromFile(AssetsPath + "\\trash3x.png");
         FoodImage = Image.FromFile(AssetsPath + "\\food3x.png");
+        PlateImage = Image.FromFile(AssetsPath + "\\plate3x.png");
+        CuttingBoardImage = Image.FromFile(AssetsPath + "\\tabua3x.png");
+        CheckOutImage = Image.FromFile(AssetsPath + "\\esteira3x.png");
         PanImage = Image.FromFile(AssetsPath + "\\panela\\panela3x.png");
     }
 }

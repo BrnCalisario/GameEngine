@@ -78,6 +78,9 @@ public partial class GameForm : Form
         Pan pan = new(new Rectangle().AlignCenter(tileSet.Box));
         engine.AddBody(pan);
 
+        Plate plate = new Plate(new Rectangle().AlignCenter(tileSet.Box), Sprites.PlateTypes.TomatoPlate);
+        engine.AddBody(plate);
+
 
         engine.Start();
     }
