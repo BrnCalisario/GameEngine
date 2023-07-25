@@ -20,6 +20,7 @@ public class Plate : Item
     Image plateImage = Resources.PlateImage;
     SpriteStream SpriteStream { get; set; }
     SpriteLoader<PlateTypes> Loader { get; set; }
+    public List<Food> Ingredients { get; set; } = new List<Food>();
 
 
     public override void Interact(Player p)

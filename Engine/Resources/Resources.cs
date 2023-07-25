@@ -21,6 +21,7 @@ public static class Resources
     public static Image PlateImage { get; private set; }
 
     public static Image CuttingBoardImage { get; private set; }
+    public static Image CheckOutImage { get; private set; }
 
     public static void Load()
     {
@@ -32,5 +33,6 @@ public static class Resources
         PanImage = Image.FromFile(AssetsPath + "\\panela3x.png");
         PlateImage = Image.FromFile(AssetsPath + "\\plate3x.png");
         CuttingBoardImage = Image.FromFile(AssetsPath + "\\tabua3x.png");
+        CheckOutImage = Image.FromFile(AssetsPath + "\\esteira3x.png");
     }
 }

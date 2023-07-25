@@ -10,18 +10,21 @@ using System.Net.Mail;
 using static Engine.Sprites.CuttingBoardSpriteLoader;
 using static ProjectPaths;
 
-public class CuttingBoard : Interactable, IUnwalkable
+public class CheckOut : Interactable, IUnwalkable
 {
-    public CuttingBoard(Rectangle box) : base(new Rectangle(box.Location, new(48, 48)), 1.25f)
+
+    public CheckOut(Rectangle box) : base(new Rectangle(box.Location, new(96, 48)), 1.25f)
     {
-        Loader = new CuttingBoardSpriteLoader();
-        SpriteStream = Loader.GetAnimation(BoardTypes.WithKnife);
+        Loader = new CheckOutSpriteLoader();
+        CheckOutSprite = Loader.GetAnimation(CheckOutTypes.TransportingBelt).Next();
+        SpriteStream = Loader.GetAnimation(CheckOutTypes.TransportingBelt);
     }
 
-    Image cuttingBoardImage = Resources.CuttingBoardImage;
-    SpriteStream SpriteStream { get; set; }
-    SpriteLoader<BoardTypes> Loader { get; set; }
+    SpriteLoader<CheckOutTypes> Loader { get; set; }
     public List<Food> Ingredients { get; set; } = new List<Food>();
+    Image checkOutImage = Resources.CheckOutImage;
+    Sprite CheckOutSprite;
+    SpriteStream SpriteStream { get; set; }
 
 
     public override void Draw(Graphics g)
@@ -29,7 +32,7 @@ public class CuttingBoard : Interactable, IUnwalkable
         var c = SpriteStream.Next();
 
         g.DrawImage(
-           cuttingBoardImage,
+           checkOutImage,
            this.Box,
            c.X,
            c.Y,
