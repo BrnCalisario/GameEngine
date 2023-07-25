@@ -14,16 +14,15 @@ public class Plate : Item
 {
     public Plate(Rectangle r, PlateTypes type) : base(new Rectangle(r.Location, new(45, 33)))
     {
-        Loader = new PlateSpriteLoader();
-        SpriteStream = Loader.GetAnimation(type);
+        //Loader = new PlateSpriteLoader();
+        //SpriteStream = Loader.GetAnimation(type);
 
         SpriteController = new PlateSpriteController();
-        SpriteController.StartAnimation(PlateTypes.VoidPlate);
+        SpriteController.StartAnimation(type);
     }
 
     Image plateImage = Resources.PlateImage;
-    SpriteStream SpriteStream { get; set; }
-    SpriteLoader<PlateTypes> Loader { get; set; }
+
     public List<Food> Ingredients { get; set; } = new List<Food>();
     public PlateSpriteController SpriteController { get; set; }
 
@@ -55,14 +54,20 @@ public class Plate : Item
 
             holding.ClearPan();
 
-            if (hasTomato && !hasOnion)
+            //MessageBox.Show("Onion: " + hasOnion + "\nTomato: " + hasTomato);
+
+
+            if (hasTomato)
                 SpriteController.StartAnimation(PlateTypes.TomatoPlate);
 
-            if (!hasTomato && hasOnion)
+            if (hasOnion)
                 SpriteController.StartAnimation(PlateTypes.OnionPlate);
 
             if (hasTomato && hasOnion)
                 SpriteController.StartAnimation(PlateTypes.Tom_OnionPlate);
+
+            if(!hasTomato && !hasOnion)
+                SpriteController.StartAnimation(PlateTypes.VoidPlate);
         }
     }
 

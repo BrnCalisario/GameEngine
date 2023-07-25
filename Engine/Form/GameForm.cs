@@ -97,8 +97,17 @@ public partial class GameForm : Form
         Trash t = new(new Rectangle().AlignBesideBottom(fb3.CollisionMask.Box));
         engine.AddBody(t);
 
-        Plate plate = new Plate(new Rectangle().AlignCenter(tileSet.Box), Sprites.PlateTypes.VoidPlate);
-        engine.AddBody(plate);
+        //Plate plate = new Plate(new Rectangle().AlignCenter(tileSet.Box), Sprites.PlateTypes.VoidPlate);
+        //engine.AddBody(plate);
+
+        Plate plateTomato = new Plate(new Rectangle().AlignCenter(tileSet.Box), Sprites.PlateTypes.VoidPlate);
+        engine.AddBody(plateTomato);
+
+        //Plate plateOnion = new Plate(new Rectangle().AlignCenter(tileSet.Box), Sprites.PlateTypes.OnionPlate);
+        //engine.AddBody(plateOnion);
+
+        //Plate plateTomOnion = new Plate(new Rectangle().AlignCenter(tileSet.Box), Sprites.PlateTypes.Tom_OnionPlate);
+        //engine.AddBody(plateTomOnion);
 
 
         engine.Start();
