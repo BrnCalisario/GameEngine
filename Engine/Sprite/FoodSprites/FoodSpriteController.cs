@@ -11,7 +11,7 @@ public class FoodSpriteLoader : SpriteLoader<FoodTypes>
     public FoodSpriteLoader() : base(scale: 3) { }
 
 
-    Size SpriteSize = new(10, 10);
+    Size SpriteSize = new(12, 12);
 
     protected override void Load()
     {
@@ -25,43 +25,81 @@ public class FoodSpriteLoader : SpriteLoader<FoodTypes>
         var meats = new SpriteStream();
         var fishes = new SpriteStream();
 
-        for (int i = startX; i < scaled.Width * 4; i += scaled.Width + 3)
-        {
-            var rect = new Rectangle(i, startY, scaled.Width, scaled.Height);
-            var sprite = new Sprite(rect.Location, rect.Size);
-            tomatoes.Add(sprite);
-        }
+        var tomatoesCutted = new SpriteStream();
+        var onionsCutted = new SpriteStream();
+        var meatsCutted = new SpriteStream();
+        var fishesCutted = new SpriteStream();
+
+       
+        var rect = new Rectangle(startX, startY, scaled.Width, scaled.Height);
+        var sprite = new Sprite(rect.Location, rect.Size);
+        tomatoes.Add(sprite);
         this.Animations.Add(FoodTypes.Tomato, tomatoes);
 
-        startY += scaled.Height + 6;
+        startX = startX + scaled.Width;
 
-        for (int i = startX; i < scaled.Width * 4; i += scaled.Width + 3)
-        {
-            var rect = new Rectangle(i, startY, scaled.Width, scaled.Height);
-            var sprite = new Sprite(rect.Location, rect.Size);
-            onions.Add(sprite);
-        }
+        rect = new Rectangle(startX, startY, scaled.Width, scaled.Height);
+        sprite = new Sprite(rect.Location, rect.Size);
+        tomatoesCutted.Add(sprite);
+        this.Animations.Add(FoodTypes.SlicedTomato, tomatoesCutted);
+
+
+
+        startY += scaled.Height + 6;
+        startX = 0;
+
+
+
+        rect = new Rectangle(startX, startY, scaled.Width, scaled.Height);
+        sprite = new Sprite(rect.Location, rect.Size);
+        onions.Add(sprite);
         this.Animations.Add(FoodTypes.Onion, onions);
 
-        startY += scaled.Height + 6;
+        startX = startX + scaled.Width;
 
-        for (int i = startX; i < scaled.Width * 4; i += scaled.Width + 3)
-        {
-            var rect = new Rectangle(i, startY, scaled.Width, scaled.Height);
-            var sprite = new Sprite(rect.Location, rect.Size);
-            meats.Add(sprite);
-        }
+        rect = new Rectangle(startX, startY, scaled.Width, scaled.Height);
+        sprite = new Sprite(rect.Location, rect.Size);
+        onionsCutted.Add(sprite);
+        this.Animations.Add(FoodTypes.SlicedOnion, onionsCutted);
+
+
+
+        startY += scaled.Height + 6;
+        startX = 0;
+
+
+
+
+        rect = new Rectangle(startX, startY, scaled.Width, scaled.Height);
+        sprite = new Sprite(rect.Location, rect.Size);
+        meats.Add(sprite);
         this.Animations.Add(FoodTypes.Meat, meats);
 
-        startY += scaled.Height + 6;
+        startX = startX + scaled.Width;
 
-        for (int i = startX; i < scaled.Width * 4; i += scaled.Width + 3)
-        {
-            var rect = new Rectangle(i, startY, scaled.Width, scaled.Height);
-            var sprite = new Sprite(rect.Location, rect.Size);
-            fishes.Add(sprite);
-        }
+        rect = new Rectangle(startX, startY, scaled.Width, scaled.Height);
+        sprite = new Sprite(rect.Location, rect.Size);
+        meatsCutted.Add(sprite);
+        this.Animations.Add(FoodTypes.SlicedMeat, meatsCutted);
+
+
+
+        startY += scaled.Height + 6;
+        startX = 0;
+
+
+
+        rect = new Rectangle(startX, startY, scaled.Width, scaled.Height);
+        sprite = new Sprite(rect.Location, rect.Size);
+        fishes.Add(sprite);
         this.Animations.Add(FoodTypes.Fish, fishes);
+
+        startX= startX + scaled.Width;
+
+        rect = new Rectangle(startX, startY, scaled.Width, scaled.Height);
+        sprite = new Sprite(rect.Location, rect.Size);
+        fishesCutted.Add(sprite);
+        this.Animations.Add(FoodTypes.SlicedFish, fishesCutted);
 
     }
 }
@@ -81,9 +119,13 @@ public class FoodSpriteController
 public enum FoodTypes
 {
     Tomato,
+    SlicedTomato,
     Onion,
+    SlicedOnion,
     Meat,
-    Fish
+    SlicedMeat,
+    Fish,
+    SlicedFish
 }
 
 
