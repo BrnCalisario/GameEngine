@@ -94,6 +94,8 @@ public class CuttingBoard : Bench
         if (p.holdingItem is not Food food)
             return;
 
+        if (food.Cutted)
+            return;
 
         this.inAction = true;
         this.LastInteraction = DateTime.Now;

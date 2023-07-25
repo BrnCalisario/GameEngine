@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace Engine.Sprites;
 
@@ -10,7 +9,6 @@ public interface ISpriteLoader<T>
     SpriteStream GetAnimation(T animationType);
     bool Contains(T animationType);
 }
-
 
 public abstract class SpriteLoader<T> : ISpriteLoader<T>
     where T : Enum

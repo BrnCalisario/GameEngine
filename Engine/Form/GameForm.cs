@@ -13,8 +13,8 @@ using Extensions;
 
 public partial class GameForm : Form
 {
+    
     GameEngine engine;
-
     public GameForm()
     {
         InitializeComponent();
@@ -72,25 +72,28 @@ public partial class GameForm : Form
         FoodBox<Fish> fbx = new(new Rectangle().AlignBesideRight(mbx.CollisionMask.Box));
         engine.AddBody(fbx);
 
+        CuttingBoard cbo = new(new Rectangle().AlignBesideRight(fbx.CollisionMask.Box));
+        engine.AddBody(cbo);
 
         Oven ov2 = new(new Rectangle().AlignBesideBottom(fb.CollisionMask.Box), Direction.Right);
         engine.AddBody(ov2);
 
-
-        //CheckOut c = new(new Rectangle().AlignBesideRight(fbx.CollisionMask.Box));
-        //engine.AddBody(c);
-
-        CuttingBoard cbo = new(new Rectangle().AlignBesideRight(fbx.CollisionMask.Box));
-        engine.AddBody(cbo);
-
+        FoodBench fb3 = new(new Rectangle().AlignBesideBottom(ov2.CollisionMask.Box), Direction.Right);
+        engine.AddBody(fb3);
 
         var player = new Player(new Rectangle(50, 50, 50, 50));
         player.Box = player.Box.AlignCenter(engine.Box);
         engine.AddBody(player);
 
 
-        Pan pan = new(new Rectangle().AlignCenter(tileSet.Box));
+        Pan pan = new(new Rectangle());
         engine.AddBody(pan);
+        ov2.SetItem(pan);
+
+        Pan pan2 = new(new Rectangle().AlignCenter(ov.Box));
+        engine.AddBody(pan2);
+        ov.SetItem(pan2);
+
 
         Plate plate = new Plate(new Rectangle().AlignCenter(tileSet.Box), Sprites.PlateTypes.VoidPlate);
         engine.AddBody(plate);

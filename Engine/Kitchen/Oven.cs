@@ -20,6 +20,16 @@ public class Oven : Bench
 
     public Pan PlacedItem { get; set; }
 
+    public void SetItem(Pan pan)
+    {
+        this.PlacedItem = pan;
+        var temp = PlacedItem.Box.AlignCenter(this.Box);
+        PlacedItem.IsCooking = true;
+        
+        var relativePoint = GetRelativeItemPoint(PlacedItem);
+        PlacedItem.Box = new Rectangle(relativePoint, temp.Size);
+    }
+
     public override void Interact(Player p)
     {
         var holding = p.holdingItem;
