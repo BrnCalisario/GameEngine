@@ -34,7 +34,7 @@ public class BasicEngine : GameEngine
 
     public Player Player = null;
 
-    public TileSet tileSet;
+    public TileSet tileSet { get; set; }
 
     public override void AddBody(IBody body)
     {

@@ -41,7 +41,8 @@ public static class RectangleExtension
 
     public static Rectangle AlignBottomLeft(this Rectangle rec, Rectangle parent)
     {
-        var botLeft = new Point(parent.Left, parent.Bottom - rec.Height);
+        var botLeft = new Point(parent.Left, parent.Bottom);
+        botLeft.Y -= rec.Height;
         return new Rectangle(botLeft, rec.Size);
     }
 
