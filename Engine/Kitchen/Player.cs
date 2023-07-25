@@ -117,6 +117,13 @@ public class Player : CollidableBody
         if (items.Count < 1)
             return;
 
+        items = items.OrderBy(i =>
+        {
+            if (i is Plate)
+                return 0;
+            return 1;
+        }).ToList();
+
         var selected = items.FirstOrDefault();
 
         selected.Interact(this);
