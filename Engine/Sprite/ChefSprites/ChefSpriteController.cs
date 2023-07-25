@@ -72,6 +72,42 @@ public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
             Gap = 1
         };
         this.AddAnimation(walkUpArgs);
+
+
+
+
+        //AQUI
+
+
+        LoadAnimationArgs cutFrontArgs = new()
+        { 
+            AnimationType = ChefAnimationType.CuttingFront,
+            StartingPoint = new Point(0,0),
+            Quantity = 4,
+            Gap = 1
+        };
+        this.AddAnimation(cutFrontArgs);
+
+        LoadAnimationArgs cutSideArgs = new()
+        { 
+            AnimationType = ChefAnimationType.CuttingSide,
+            StartingPoint = new Point(0,scaled.Height),
+            Quantity = 4,
+            Gap = 1
+        };
+        this.AddAnimation(cutSideArgs);
+
+        LoadAnimationArgs cutUpArgs = new()
+        { 
+            AnimationType = ChefAnimationType.CuttingUp,
+            StartingPoint = new Point(0, scaled.Height * 2 + 1),
+            Quantity = 4,
+            Gap = 1
+        };
+        this.AddAnimation(cutUpArgs);
+
+        //---------------------
+
     }
 
     private void AddAnimation(LoadAnimationArgs args)
@@ -110,10 +146,6 @@ public class ChefSpriteController
         this.SpriteLoader = new ChefSpriteLoader();
         StartAnimation(ChefAnimationType.IdleFront);
     }
-
-
-
-
 }
 
 public enum ChefAnimationType
@@ -123,6 +155,9 @@ public enum ChefAnimationType
     IdleUp,
     WalkFront,
     WalkSide,
-    WalkUp
+    WalkUp,
+    CuttingFront,
+    CuttingSide,
+    CuttingUp
 }
 
