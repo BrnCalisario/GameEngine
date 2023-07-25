@@ -14,9 +14,6 @@ public class Plate : Item
 {
     public Plate(Rectangle r, PlateTypes type) : base(new Rectangle(r.Location, new(45, 33)))
     {
-        //Loader = new PlateSpriteLoader();
-        //SpriteStream = Loader.GetAnimation(type);
-
         SpriteController = new PlateSpriteController();
         SpriteController.StartAnimation(type);
     }
@@ -32,7 +29,10 @@ public class Plate : Item
     public override void Interact(Player p)
     {
         if (!p.IsHolding || p.holdingItem == this)
+        {
+
             base.Interact(p);
+        }
 
 
         if (p.holdingItem is not Pan holding)

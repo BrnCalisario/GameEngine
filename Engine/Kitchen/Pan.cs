@@ -64,7 +64,7 @@ public class Pan : Item
 
         if (hasTomato && hasOnion)
             SpriteController.StartAnimation(PanTypes.TomOnionPan);
-        //SpriteController.IsCooking = true;
+        
     }
 
     public void ClearPan()

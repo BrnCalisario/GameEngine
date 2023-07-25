@@ -77,7 +77,15 @@ public class Trash : Interactable, IUnwalkable
 
         var pan = p.holdingItem as Pan;
 
-        pan?.ClearPan();
+        if(pan is not null)
+        {
+            pan.ClearPan();
+            return;
+        }
+
+        var plate = p.holdingItem as Plate;
+
+        plate.ClearPlate();
         
     }
 
