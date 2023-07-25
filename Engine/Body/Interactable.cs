@@ -8,7 +8,6 @@ public abstract class Interactable : CollidableBody
     {
         var scaledSize = new Size((int)(box.Width * scale),(int) (box.Height * scale));
 
-
         var collMask = new Rectangle(new(0, 0), scaledSize);
         collMask = collMask.AlignCenter(box);
 

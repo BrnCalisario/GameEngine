@@ -3,48 +3,92 @@ using Engine.Sprites;
 
 namespace Engine;
 
+using Engine.Extensions;
 using Engine.Resource;
 using Sprites;
+using System;
 using System.Collections.Generic;
 using System.Net.Mail;
 using static Engine.Sprites.CuttingBoardSpriteLoader;
 using static ProjectPaths;
 
-public class CuttingBoard : Interactable, IUnwalkable
+public class CuttingBoard : Bench
 {
-    public CuttingBoard(Rectangle box) : base(new Rectangle(box.Location, new(48, 48)), 1.25f)
+    public CuttingBoard(Rectangle box, Direction dir = Direction.Bottom) : base(new Rectangle(box.Location, new(96, 48)), 1, null, dir)
     {
-        Loader = new CuttingBoardSpriteLoader();
-        SpriteStream = Loader.GetAnimation(BoardTypes.WithKnife);
+        CbSpriteLoader = new CuttingBoardSpriteLoader();
+
+        CbSprite = CbSpriteLoader.GetAnimation(BoardTypes.WithKnife).Next();        
+        BenchSprite = this.benchSpriteLoader.GetAnimation(BenchTypes.Bench).Next();
+
+        var tempRect = new Rectangle(0, 0, 60, 30).AlignCenter(this.Box);
+        tempRect.Y -= 5;
+
+        this.CbRectangle = tempRect;
     }
 
-    Image cuttingBoardImage = Resources.CuttingBoardImage;
-    SpriteStream SpriteStream { get; set; }
-    SpriteLoader<BoardTypes> Loader { get; set; }
-    public List<Food> Ingredients { get; set; } = new List<Food>();
+    CuttingBoardSpriteLoader CbSpriteLoader { get; set; }
+    
+    Image CbImage = Resources.CuttingBoardImage;
+    Rectangle CbRectangle { get; set; }
+    Sprite CbSprite { get; set; }
 
+    public TimeSpan ActionTime { get; set; } = TimeSpan.FromSeconds(1.25);
 
-    public override void Draw(Graphics g)
+    private bool inAction { get; set; } = false;
+
+    private DateTime? LastInteraction = null;
+
+    private Player Interactor { get; set; }
+
+    protected override void DrawBench(Graphics g)
     {
-        var c = SpriteStream.Next();
+        base.DrawBench(g);
+
+        CbSprite = CbSpriteLoader.GetAnimation(BoardTypes.WithKnife).Next();
 
         g.DrawImage(
-           cuttingBoardImage,
-           this.Box,
-           c.X,
-           c.Y,
-           c.Width,
-           c.Height,
-           GraphicsUnit.Pixel
-           );
-
-        g.DrawRectangle(Pens.DarkRed, this.CollisionMask.Box);
+            CbImage,
+            CbRectangle,
+            CbSprite.X,
+            CbSprite.Y,
+            CbSprite.Width,
+            CbSprite.Height,
+            GraphicsUnit.Pixel
+        );
     }
 
+    protected override void CorrectVertical()
+    {
+        base.CorrectVertical();
+        this.CbRectangle = CorrectPosition(CbRectangle);
+    }
 
+    public override void Update()
+    {
+        if (LastInteraction is null)
+            return;
+
+        var diff = DateTime.Now - LastInteraction;
+
+        if (diff >= ActionTime)
+        {
+            this.inAction = false;
+            this.Interactor.canWalk = true;
+            this.Interactor = null;
+
+            this.LastInteraction = null;
+        }
+    }
 
     public override void Interact(Player p)
     {
-        throw new System.NotImplementedException();
+        if (this.inAction) return;
+
+        this.inAction = true;
+        this.LastInteraction = DateTime.Now;
+
+        Interactor = p;
+        Interactor.canWalk = false;        
     }
 }

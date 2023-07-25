@@ -23,14 +23,14 @@ public class CuttingBoardSpriteLoader : SpriteLoader<BoardTypes>
         var rectWith = new Rectangle(startX, 0, scaled.Width, scaled.Height);
         Sprite spriteWithKnife = new Sprite(rectWith.Location, rectWith.Size);
         boardKnife.Add(spriteWithKnife);
-        this.Animations.Add(BoardTypes.WithKnife, boardKnife);
+        this.Animations.Add(BoardTypes.WithoutKnife, boardKnife);
 
-        startX += scaled.Width + 6;
+        startX += scaled.Width;
 
         var rectWithout = new Rectangle(startX, 0, scaled.Width, scaled.Height);
         Sprite spriteWithoutKnife = new Sprite(rectWithout.Location, rectWithout.Size);
         board.Add(spriteWithoutKnife);
-        this.Animations.Add(BoardTypes.WithoutKnife, board);
+        this.Animations.Add(BoardTypes.WithKnife, board);
     }
 
     public class CuttingBoardSpriteController

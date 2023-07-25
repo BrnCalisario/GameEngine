@@ -25,7 +25,7 @@ public class Player : CollidableBody
 
     private bool invert = false;
 
-    private bool espelhado = false;
+    public bool canWalk = true;
 
     private bool walking = true;
 
@@ -42,7 +42,6 @@ public class Player : CollidableBody
     private bool CanInteract()
     {
         var diff = DateTime.Now - LastInteraction;
-
         return diff >= InteractionDelay;
     }
 
@@ -66,9 +65,6 @@ public class Player : CollidableBody
             var newPos = new Point(BasicEngine.Current.Width - Box.X - Box.Width, Box.Y);
             this.Box = new Rectangle(newPos, this.Box.Size);
         }
-
-
-
 
         g.DrawImage(
             ChefSprite,
@@ -168,12 +164,6 @@ public class Player : CollidableBody
                 _ => CurrentDirection,
             };
 
-        if(keyMap[Keys.V])
-            this.espelhado = true;
-
-        if(keyMap[Keys.C])
-            this.espelhado = false;
-
         if (keyMap[Keys.E] && CanInteract())
         {
             
@@ -210,6 +200,8 @@ public class Player : CollidableBody
 
     private void Move()
     {
+        if(!canWalk) return;
+
         var keyMap = BasicEngine.Current.KeyMap;
 
         float velX = keyMap[Keys.A] ? speed * -1 : keyMap[Keys.D] ? speed : 0;

@@ -48,9 +48,9 @@ public class FoodBox<T> : Interactable, IUnwalkable
                 break;
         }
 
-        var tempRect = new Rectangle(0, 0, 20, 20).AlignCenter(Box);
-        tempRect.X -= 2;
-        tempRect.Y -= 8;
+        var tempRect = new Rectangle(0, 0, 25, 25).AlignCenter(Box);
+ 
+        tempRect.Y -= 6;
 
         FoodRectangle = tempRect;
 

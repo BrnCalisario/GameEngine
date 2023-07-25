@@ -56,18 +56,32 @@ public partial class GameForm : Form
         FoodBench fb2 = new(new Rectangle().AlignBesideRight(cb.CollisionMask.Box));
         engine.AddBody(fb2);
 
-        FoodBox<Tomato> tbx = new FoodBox<Tomato>(new Rectangle().AlignBesideRight(fb2.CollisionMask.Box));
+        FoodBox<Tomato> tbx = new(new Rectangle().AlignBesideRight(fb2.CollisionMask.Box));
         engine.AddBody(tbx);
 
         Oven ov = new(new Rectangle().AlignBesideRight(tbx.CollisionMask.Box));
         engine.AddBody(ov);
 
-        FoodBox<Onion> obx = new FoodBox<Onion>(new Rectangle().AlignBesideRight(ov.CollisionMask.Box));
+        FoodBox<Onion> obx = new(new Rectangle().AlignBesideRight(ov.CollisionMask.Box));
         engine.AddBody(obx);
+
+        FoodBox<Meat> mbx = new(new Rectangle().AlignBesideRight(obx.CollisionMask.Box));
+        engine.AddBody(mbx);
+
+
+        FoodBox<Fish> fbx = new(new Rectangle().AlignBesideRight(mbx.CollisionMask.Box));
+        engine.AddBody(fbx);
+
 
         Oven ov2 = new(new Rectangle().AlignBesideBottom(fb.CollisionMask.Box), Direction.Right);
         engine.AddBody(ov2);
 
+
+        //CheckOut c = new(new Rectangle().AlignBesideRight(fbx.CollisionMask.Box));
+        //engine.AddBody(c);
+
+        CuttingBoard cbo = new(new Rectangle().AlignBesideRight(fbx.CollisionMask.Box));
+        engine.AddBody(cbo);
 
 
         var player = new Player(new Rectangle(50, 50, 50, 50));

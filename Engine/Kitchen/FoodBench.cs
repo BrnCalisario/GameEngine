@@ -2,14 +2,12 @@
 using System.Runtime.Versioning;
 using System.Drawing;
 
-
 namespace Engine;
 
 using static ProjectPaths;
 using Extensions;
 using Sprites;
 using Engine.Resource;
-using System.ComponentModel;
 using System.Drawing.Drawing2D;
 
 public abstract class Bench : Interactable, IUnwalkable
@@ -42,6 +40,7 @@ public abstract class Bench : Interactable, IUnwalkable
         }
     }
 
+
     public GraphicsContainer RotateLeft(Graphics g, GraphicsContainer container = null)
     {
         container ??= g.BeginContainer();
@@ -55,6 +54,30 @@ public abstract class Bench : Interactable, IUnwalkable
         return container;
     }
 
+    protected virtual void DrawBench(Graphics g)
+    {
+        g.DrawImage(
+            BenchImage,
+            this.Box,
+            BenchSprite.X,
+            BenchSprite.Y,
+            BenchSprite.Width,
+            BenchSprite.Height,
+            GraphicsUnit.Pixel
+        );
+    }
+
+    protected virtual void CorrectVertical()
+    {
+        this.Box = CorrectPosition(Box);
+    }
+
+    protected Rectangle CorrectPosition(Rectangle box)
+    {
+        var newPos = new Point(box.X, BasicEngine.Current.Height - box.Y - box.Height);
+        return new Rectangle(newPos, box.Size);
+    }
+
     public override void Draw(Graphics g)
     {
         var container = Direction switch
@@ -66,22 +89,10 @@ public abstract class Bench : Interactable, IUnwalkable
         if (Direction == Direction.Right || Direction == Direction.Top)
         {
             container = InvertVertical(g, container);
-            var newPos = new Point(Box.X, BasicEngine.Current.Height - Box.Y - Box.Height);
-            this.Box = new Rectangle(newPos, this.Box.Size);
+            CorrectVertical();
         }
 
-
-
-
-        g.DrawImage(
-            BenchImage,
-            this.Box,
-            BenchSprite.X,
-            BenchSprite.Y,
-            BenchSprite.Width,
-            BenchSprite.Height,
-            GraphicsUnit.Pixel
-        );
+        this.DrawBench(g);
 
         if (container is not null)
         {
@@ -90,8 +101,7 @@ public abstract class Bench : Interactable, IUnwalkable
 
             if (Direction == Direction.Right || Direction == Direction.Top)
             {
-                var newPos = new Point(Box.X, BasicEngine.Current.Height - Box.Y - Box.Height);
-                this.Box = new Rectangle(newPos, this.Box.Size);
+                CorrectVertical();
             }
         }
 

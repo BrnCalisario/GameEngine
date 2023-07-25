@@ -36,39 +36,30 @@ public class FoodSpriteLoader : SpriteLoader<FoodTypes>
         tomatoes.Add(sprite);
         this.Animations.Add(FoodTypes.Tomato, tomatoes);
 
-        startX = startX + scaled.Width;
+        startX += scaled.Width;
 
         rect = new Rectangle(startX, startY, scaled.Width, scaled.Height);
         sprite = new Sprite(rect.Location, rect.Size);
         tomatoesCutted.Add(sprite);
         this.Animations.Add(FoodTypes.SlicedTomato, tomatoesCutted);
 
-
-
-        startY += scaled.Height + 6;
+        startY += scaled.Height;
         startX = 0;
-
-
 
         rect = new Rectangle(startX, startY, scaled.Width, scaled.Height);
         sprite = new Sprite(rect.Location, rect.Size);
         onions.Add(sprite);
         this.Animations.Add(FoodTypes.Onion, onions);
 
-        startX = startX + scaled.Width;
+        startX += scaled.Width;
 
         rect = new Rectangle(startX, startY, scaled.Width, scaled.Height);
         sprite = new Sprite(rect.Location, rect.Size);
         onionsCutted.Add(sprite);
         this.Animations.Add(FoodTypes.SlicedOnion, onionsCutted);
 
-
-
-        startY += scaled.Height + 6;
+        startY += scaled.Height;
         startX = 0;
-
-
-
 
         rect = new Rectangle(startX, startY, scaled.Width, scaled.Height);
         sprite = new Sprite(rect.Location, rect.Size);
@@ -83,18 +74,15 @@ public class FoodSpriteLoader : SpriteLoader<FoodTypes>
         this.Animations.Add(FoodTypes.SlicedMeat, meatsCutted);
 
 
-
-        startY += scaled.Height + 6;
+        startY += scaled.Height ;
         startX = 0;
-
-
 
         rect = new Rectangle(startX, startY, scaled.Width, scaled.Height);
         sprite = new Sprite(rect.Location, rect.Size);
         fishes.Add(sprite);
         this.Animations.Add(FoodTypes.Fish, fishes);
 
-        startX= startX + scaled.Width;
+        startX += scaled.Width;
 
         rect = new Rectangle(startX, startY, scaled.Width, scaled.Height);
         sprite = new Sprite(rect.Location, rect.Size);

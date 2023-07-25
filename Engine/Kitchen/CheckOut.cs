@@ -6,9 +6,6 @@ namespace Engine;
 using Engine.Resource;
 using Sprites;
 using System.Collections.Generic;
-using System.Net.Mail;
-using static Engine.Sprites.CuttingBoardSpriteLoader;
-using static ProjectPaths;
 
 public class CheckOut : Interactable, IUnwalkable
 {

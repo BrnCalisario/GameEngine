@@ -25,14 +25,14 @@ public static class Resources
 
     public static void Load()
     {
-        CookerImage = Image.FromFile(AssetsPath + "\\player_3x.png");
-        TileImage = Image.FromFile(AssetsPath + "\\tileShadows.png");
-        BenchImage = Image.FromFile(AssetsPath + "\\bench3x.png");
-        TrashImage = Image.FromFile(AssetsPath + "\\trash3x.png");
-        FoodImage = Image.FromFile(AssetsPath + "\\food3x.png");
-        PlateImage = Image.FromFile(AssetsPath + "\\plate3x.png");
+        CookerImage = Image.FromFile(AssetsPath + "\\player\\player_3x.png");
+        TileImage = Image.FromFile(AssetsPath + "\\tiles\\tileShadows.png");
+        BenchImage = Image.FromFile(AssetsPath + "\\benchs\\bench3x.png");
+        TrashImage = Image.FromFile(AssetsPath + "\\trash\\trash3x.png");
+        FoodImage = Image.FromFile(AssetsPath + "\\foods\\foodSliced3x.png");
+        PlateImage = Image.FromFile(AssetsPath + "\\plates\\plate3x.png");
         CuttingBoardImage = Image.FromFile(AssetsPath + "\\tabua3x.png");
         CheckOutImage = Image.FromFile(AssetsPath + "\\esteira3x.png");
-        PanImage = Image.FromFile(AssetsPath + "\\panela\\panela3x.png");
+        PanImage = Image.FromFile(AssetsPath + "\\pans\\panela3x.png");
     }
 }
