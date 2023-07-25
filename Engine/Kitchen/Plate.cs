@@ -42,27 +42,39 @@ public class Plate : Item
 
         if (holding.HasCookedFood)
         {
-            this.Ingredients = holding.Ingredients;
+            foreach (var ingredient in holding.Ingredients)
+            {
+                Ingredients.Add(ingredient);
+
+                if (ingredient is Tomato)
+                    hasTomato = true;
+
+                if (ingredient is Onion)
+                    hasOnion = true;
+            }
+
             holding.ClearPan();
+
+            if (hasTomato && !hasOnion)
+                SpriteController.StartAnimation(PlateTypes.TomatoPlate);
+
+            if (!hasTomato && hasOnion)
+                SpriteController.StartAnimation(PlateTypes.OnionPlate);
+
+            if (hasTomato && hasOnion)
+                SpriteController.StartAnimation(PlateTypes.Tom_OnionPlate);
         }
+    }
 
-        //foreach (var ingredient in this.Ingredients)
-        //{
-        //    if (ingredient is Tomato)
-        //        hasTomato = true;
-
-        //    if (ingredient is Onion)
-        //        hasOnion = true;
-        //}
-
-        //if (hasOnion && !hasTomato)
-        //    SpriteController.StartAnimation(PlateTypes.OnionPlate);
+    public void ClearPlate()
+    {
+        Ingredients.Clear();
+        SpriteController.StartAnimation(PlateTypes.VoidPlate);
     }
 
     public override void Draw(Graphics g)
     {
-        var c = SpriteStream.Sprites.First();
-
+        var c = SpriteController.CurrentAnimation.Next();
 
         g.DrawImage(
             plateImage,
