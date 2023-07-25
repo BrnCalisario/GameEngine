@@ -119,9 +119,9 @@ public class Player : CollidableBody
 
         items = items.OrderBy(i =>
         {
-            if (i is Plate && this.holdingItem != i)
+            if (i is Plate && this.holdingItem is Pan)
                 return 0;
-            if ((i is Item && !this.IsHolding) || i is Bench && this.IsHolding)
+            if (i is Bench)
                 return 1;
             return 2;
         }).ToList();

@@ -47,69 +47,52 @@ public partial class GameForm : Form
 
         BasicEngine.Current.tileSet = tileSet;
 
-        CornerBench cb = new(new Rectangle().AlignTopLeft(tileSet.Box));
-        engine.AddBody(cb);
-
-        CuttingBoard fb = new(new Rectangle().AlignBesideBottom(cb.CollisionMask.Box), Direction.Right);
-        engine.AddBody(fb);
-
-        FoodBench fb2 = new(new Rectangle().AlignBesideRight(cb.CollisionMask.Box));
-        engine.AddBody(fb2);
-
-        FoodBox<Tomato> tbx = new(new Rectangle().AlignBesideRight(fb2.CollisionMask.Box));
-        engine.AddBody(tbx);
-
-        Oven ov = new(new Rectangle().AlignBesideRight(tbx.CollisionMask.Box));
-        engine.AddBody(ov);
-
-        FoodBox<Onion> obx = new(new Rectangle().AlignBesideRight(ov.CollisionMask.Box));
-        engine.AddBody(obx);
-
-        FoodBox<Meat> mbx = new(new Rectangle().AlignBesideRight(obx.CollisionMask.Box));
-        engine.AddBody(mbx);
+        GenerateTables();
 
 
-        FoodBox<Fish> fbx = new(new Rectangle().AlignBesideRight(mbx.CollisionMask.Box));
-        engine.AddBody(fbx);
 
-        CuttingBoard cbo = new(new Rectangle().AlignBesideRight(fbx.CollisionMask.Box));
-        engine.AddBody(cbo);
 
-        Oven ov2 = new(new Rectangle().AlignBesideBottom(fb.CollisionMask.Box), Direction.Right);
-        engine.AddBody(ov2);
 
-        FoodBench fb3 = new(new Rectangle().AlignBesideBottom(ov2.CollisionMask.Box), Direction.Right);
-        engine.AddBody(fb3);
-
-        var player = new Player(new Rectangle(50, 50, 50, 50));
-        player.Box = player.Box.AlignCenter(engine.Box);
+        Player player = new Player(new Rectangle().AlignCenter(tileSet.Box));
         engine.AddBody(player);
 
-
-        Pan pan = new(new Rectangle());
-        engine.AddBody(pan);
-        ov2.SetItem(pan);
-
-        Pan pan2 = new(new Rectangle().AlignCenter(ov.Box));
-        engine.AddBody(pan2);
-        ov.SetItem(pan2);
-
-        Trash t = new(new Rectangle().AlignBesideBottom(fb3.CollisionMask.Box));
-        engine.AddBody(t);
-
-        //Plate plate = new Plate(new Rectangle().AlignCenter(tileSet.Box), Sprites.PlateTypes.VoidPlate);
-        //engine.AddBody(plate);
-
-        Plate plateTomato = new Plate(new Rectangle().AlignCenter(tileSet.Box), Sprites.PlateTypes.VoidPlate);
-        engine.AddBody(plateTomato);
-
-        //Plate plateOnion = new Plate(new Rectangle().AlignCenter(tileSet.Box), Sprites.PlateTypes.OnionPlate);
-        //engine.AddBody(plateOnion);
-
-        //Plate plateTomOnion = new Plate(new Rectangle().AlignCenter(tileSet.Box), Sprites.PlateTypes.Tom_OnionPlate);
-        //engine.AddBody(plateTomOnion);
-
-
         engine.Start();
+    }
+
+    private void GenerateTables()
+    {
+        CornerBench corner1 = new(new Rectangle().AlignTopLeft(BasicEngine.Current.tileSet.Box));
+        this.engine.AddBody(corner1);
+
+        FoodBox<Tomato> tmBox = new(new Rectangle().AlignBesideRight(corner1.Box));
+        engine.AddBody(tmBox);
+
+        FoodBench fb1 = new(new Rectangle().AlignBesideBottom(corner1.Box), Direction.Right);
+        engine.AddBody(fb1);
+
+        Oven fb2 = new(new Rectangle().AlignBesideBottom(fb1.CollisionMask.Box), Direction.Right);
+        engine.AddBody(fb2);
+
+
+        CuttingBoard fb3 = new(new Rectangle().AlignBesideBottom(fb2.CollisionMask.Box), Direction.Right);
+        engine.AddBody(fb3);
+
+        Oven fb4 = new(new Rectangle().AlignBesideBottom(fb3.CollisionMask.Box), Direction.Right);
+        engine.AddBody(fb4);
+
+        FoodBench fb5 = new(new Rectangle().AlignBesideBottom(fb4.CollisionMask.Box), Direction.Right);
+        engine.AddBody(fb5);
+
+        CornerBench corner2 = new(new Rectangle(0, 0, 48,48).AlignBottomLeft(BasicEngine.Current.tileSet.Box), Direction.Top);
+        this.engine.AddBody(corner2);
+
+        Pan pan2 = new(new Rectangle());
+        fb4.SetItem(pan2);
+        engine.AddBody(pan2);
+
+
+        Pan pan1 = new(new Rectangle());
+        engine.AddBody(pan1);
+        fb2.SetItem(pan1);
     }
 }
