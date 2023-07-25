@@ -188,13 +188,6 @@ public class Player : CollidableBody
 
         if (keyMap[Keys.E] && CanInteract())
         {
-            
-            //if(IsHolding)
-            //{
-            //    holdingItem.Interact(this);
-            //    this.LastInteraction = DateTime.Now;
-            //}                
-            //else
             FindInteraction();
         }
 

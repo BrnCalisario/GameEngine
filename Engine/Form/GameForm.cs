@@ -94,6 +94,8 @@ public partial class GameForm : Form
         engine.AddBody(pan2);
         ov.SetItem(pan2);
 
+        Trash t = new(new Rectangle().AlignBesideBottom(fb3.CollisionMask.Box));
+        engine.AddBody(t);
 
         Plate plate = new Plate(new Rectangle().AlignCenter(tileSet.Box), Sprites.PlateTypes.VoidPlate);
         engine.AddBody(plate);
