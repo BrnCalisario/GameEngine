@@ -30,7 +30,16 @@ public class CuttingBoardSpriteLoader : SpriteLoader<BoardTypes>
         var rectWithout = new Rectangle(startX, 0, scaled.Width, scaled.Height);
         Sprite spriteWithoutKnife = new Sprite(rectWithout.Location, rectWithout.Size);
         board.Add(spriteWithoutKnife);
-        //this.Animations.Add(BoardTypes.WithoutKnife, bor)
+        this.Animations.Add(BoardTypes.WithoutKnife, board);
+    }
+
+    public class CuttingBoardSpriteController
+    : SpriteController<CuttingBoardSpriteLoader, BoardTypes>
+    {
+        public CuttingBoardSpriteController()
+        {
+            this.SpriteLoader = new CuttingBoardSpriteLoader();
+        }
     }
 
     public enum BoardTypes
