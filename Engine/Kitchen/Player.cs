@@ -23,6 +23,8 @@ public class Player : CollidableBody
 
     private readonly int speed = 10;
 
+    private bool cutting = false; //AQUI
+
     private bool invert = false;
 
     public bool canWalk = true;
@@ -46,6 +48,7 @@ public class Player : CollidableBody
     }
 
     public Image ChefSprite = Resources.CookerImage;
+    public Image ChefCuttingSprite = Resources.CuttingImage; //AQUI
 
     public SpriteController<ChefSpriteLoader, ChefAnimationType> SpriteController
         = new ChefSpriteController();
@@ -59,6 +62,8 @@ public class Player : CollidableBody
 
         GraphicsContainer container = null;
 
+        Image image = ChefSprite; //AQUI
+
         if (invert)
         {
             container = this.InvertHorizontal(g);
@@ -66,8 +71,15 @@ public class Player : CollidableBody
             this.Box = new Rectangle(newPos, this.Box.Size);
         }
 
+        if(cutting) //AQUI
+        {
+            image = ChefCuttingSprite;
+        }
+
+
+
         g.DrawImage(
-            ChefSprite,
+            image, //AQUI
             this.Box,
             c.X,
             c.Y,
@@ -75,6 +87,7 @@ public class Player : CollidableBody
             c.Height,
             GraphicsUnit.Pixel
             );
+
 
         if (container is not null)
         {
