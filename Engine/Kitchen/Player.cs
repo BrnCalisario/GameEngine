@@ -11,6 +11,7 @@ using static ProjectPaths;
 using Extensions;
 
 using Resource;
+using System.Drawing.Drawing2D;
 
 public class Player : CollidableBody
 {
@@ -57,11 +58,17 @@ public class Player : CollidableBody
     {
         var c = SpriteController.CurrentSprite;
 
-        if (invert)
-            this.InvertDraw(g);
+        GraphicsContainer container = null;
 
-        if (espelhado)
-            this.InvertVertical(g);
+        if (invert)
+        {
+            container = this.InvertHorizontal(g);
+            var newPos = new Point(BasicEngine.Current.Width - Box.X - Box.Width, Box.Y);
+            this.Box = new Rectangle(newPos, this.Box.Size);
+        }
+
+
+
 
         g.DrawImage(
             ChefSprite,
@@ -73,12 +80,12 @@ public class Player : CollidableBody
             GraphicsUnit.Pixel
             );
 
-        if (invert)
-            this.InvertDraw(g);
-
-        if (espelhado)
-            this.InvertVertical(g);
-
+        if (container is not null)
+        {
+            g.EndContainer(container);
+            var newPos = new Point(BasicEngine.Current.Width - Box.X - Box.Width, Box.Y);
+            this.Box = new Rectangle(newPos, this.Box.Size);
+        }
 
         g.DrawRectangle(Pen, this.Box);
         g.DrawString($"{CurrentDirection}", SystemFonts.DefaultFont, Pen.Brush, new Point(1, 30));

@@ -8,6 +8,7 @@ namespace Engine;
 
 using Engine.Kitchen;
 using Engine.Resource;
+using Engine.Sprites;
 using Extensions;
 
 public partial class GameForm : Form
@@ -46,23 +47,36 @@ public partial class GameForm : Form
 
         BasicEngine.Current.tileSet = tileSet;
 
-        CornerBench cb = new(new Rectangle().AlignTopLeft(tileSet.Box), Direction.Bottom);
+        CornerBench cb = new(new Rectangle().AlignTopLeft(tileSet.Box));
         engine.AddBody(cb);
 
-        FoodBench fb1 = new(new Rectangle().AlignBesideRight(cb.CollisionMask.Box), Direction.Bottom);
-        engine.AddBody(fb1);
+        FoodBench fb = new(new Rectangle().AlignBesideBottom(cb.CollisionMask.Box), Direction.Right);
+        engine.AddBody(fb);
 
-        var tomatoBox = new FoodBox<Tomato>(new Rectangle().AlignBesideRight(fb1.CollisionMask.Box));
-        engine.AddBody(tomatoBox);
-
-
-
-        FoodBench fb2 = new(new Rectangle().AlignBesideBottom(cb.CollisionMask.Box), Direction.Right);
+        FoodBench fb2 = new(new Rectangle().AlignBesideRight(cb.CollisionMask.Box));
         engine.AddBody(fb2);
+
+        FoodBox<Tomato> tbx = new FoodBox<Tomato>(new Rectangle().AlignBesideRight(fb2.CollisionMask.Box));
+        engine.AddBody(tbx);
+
+        Oven ov = new(new Rectangle().AlignBesideRight(tbx.CollisionMask.Box));
+        engine.AddBody(ov);
+
+        FoodBox<Onion> obx = new FoodBox<Onion>(new Rectangle().AlignBesideRight(ov.CollisionMask.Box));
+        engine.AddBody(obx);
+
+        Oven ov2 = new(new Rectangle().AlignBesideBottom(fb.CollisionMask.Box), Direction.Right);
+        engine.AddBody(ov2);
+
+
 
         var player = new Player(new Rectangle(50, 50, 50, 50));
         player.Box = player.Box.AlignCenter(engine.Box);
-        engine.AddBody(player); 
+        engine.AddBody(player);
+
+
+        Pan pan = new(new Rectangle().AlignCenter(tileSet.Box));
+        engine.AddBody(pan);
 
 
         engine.Start();

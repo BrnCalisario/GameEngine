@@ -11,40 +11,53 @@ using static ProjectPaths;
 
 public class Pan : Item
 {
-    public Pan(Rectangle r, PanTypes type) : base(new Rectangle(r.Location, new(48, 48)))
+    public Pan(Rectangle r) : base(new Rectangle(r.Location, new(48, 48)))
     {
-        Loader = new PanSpriteLoader();
-        SpriteStream = Loader.GetAnimation(type);
+        SpriteController = new PanSpriteController();
+        SpriteController.StartAnimation(PanTypes.Void);
     }
 
-    Image panImage = Resources.PanImage;
-    SpriteStream SpriteStream { get; set; }
-    SpriteLoader<PanTypes> Loader { get; set; }
+    readonly Image panImage = Resources.PanImage;
+    public PanSpriteController SpriteController { get; set; }
     public List<Food> Ingredients { get; set; } = new List<Food>();
+
+    public bool IsCooking { get; set; } = false;
 
     public override void Interact(Player p)
     {
         if(!p.IsHolding || p.holdingItem == this)
+        {
             base.Interact(p);
+            this.IsCooking = false;
+        }
 
-        var holding = p.holdingItem as Food;
-
-        if (holding is null)
+        if (p.holdingItem is not Food holding)
             return;
 
         holding.Interact(p);
 
         holding.Dispose();
         Ingredients.Add(holding);
-       
+
+        if (holding is Tomato)
+            SpriteController.StartAnimation(PanTypes.TomatoPan);
+
+        if (holding is Onion)
+            SpriteController.StartAnimation(PanTypes.OnionPan);
+
+        //SpriteController.IsCooking = true;
     }
 
     public void ClearPan()
-        => Ingredients.Clear();
+    {
+        Ingredients.Clear();
+        SpriteController.StartAnimation(PanTypes.Void);
+    }
+      
 
     public override void Draw(Graphics g)
     {
-        var c = SpriteStream.Sprites.First();
+        var c = SpriteController.GetCurrentSprite(this.IsCooking);
 
         g.DrawImage(
             panImage,

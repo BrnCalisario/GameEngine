@@ -24,6 +24,6 @@ public static class Resources
         BenchImage = Image.FromFile(AssetsPath + "\\bench3x.png");
         TrashImage = Image.FromFile(AssetsPath + "\\trash3x.png");
         FoodImage = Image.FromFile(AssetsPath + "\\food3x.png");
-        PanImage = Image.FromFile(AssetsPath + "\\panela3x.png");
+        PanImage = Image.FromFile(AssetsPath + "\\panela\\panela3x.png");
     }
 }

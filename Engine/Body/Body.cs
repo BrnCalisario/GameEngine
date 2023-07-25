@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
@@ -57,28 +58,34 @@ public abstract class Body : IBody
 
     public virtual Pen Pen { get; set; } = new Pen(Color.Black, 1);
 
-    protected void InvertDraw(Graphics g)
+    protected GraphicsContainer InvertHorizontal(Graphics g, GraphicsContainer container = null)
     {
+        container ??= g.BeginContainer();
+
         g.TranslateTransform(BasicEngine.Current.Width / 2, 0);
         g.ScaleTransform(-1, 1);
         g.TranslateTransform(-BasicEngine.Current.Width / 2, 0);
 
-        var newPos = new Point(BasicEngine.Current.Width - Box.X - Box.Width, Box.Y);
+        //var newPos = new Point(BasicEngine.Current.Width - Box.X - Box.Width, Box.Y);
+        //this.Box = new Rectangle(newPos, this.Box.Size);
 
-        this.Box = new Rectangle(newPos, this.Box.Size);
+        return container;
     }
 
-    protected void InvertVertical(Graphics g)
-    {   
+    protected GraphicsContainer InvertVertical(Graphics g, GraphicsContainer container = null)
+    {
+        container ??= g.BeginContainer();
+
         int hei = BasicEngine.Current.Height;
 
         g.TranslateTransform(0, hei / 2);
         g.ScaleTransform(1, -1);
         g.TranslateTransform(0, -hei / 2);
         
-        var newPos = new Point(Box.X, hei - Box.Y - Box.Height);
-
-        this.Box = new Rectangle(newPos, this.Box.Size);        
+        //var newPos = new Point(Box.X, hei - Box.Y - Box.Height);
+        //this.Box = new Rectangle(newPos, this.Box.Size);      
+        
+        return container;
     }
 
     protected void RotateAngle(Graphics g, float angle)

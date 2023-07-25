@@ -21,91 +21,95 @@ public abstract class Bench : Interactable, IUnwalkable
         SetDirection(dir);
     }
 
+    protected readonly Image BenchImage = Resources.BenchImage;
 
-    Image BenchImage = Resources.BenchImage;
-
-    protected readonly SpriteLoader<BenchTypes> benchSpriteLoader;
+    protected SpriteLoader<BenchTypes> benchSpriteLoader;
     protected Sprite BenchSprite { get; set; }
-
-
     public Direction Direction { get; set; }
 
-
-    private void SetDirection(Direction dir)
+    protected void SetDirection(Direction dir)
     {
         this.Direction = dir;
 
-        if (dir == Direction.Right)
-        {
-
-            var tempRect = new Size(CollisionMask.Height, CollisionMask.Width);
-            this.CollisionMask.Box = new(CollisionMask.Box.Location, tempRect);
-        }
-
-        if(dir == Direction.Left)
+        if (Direction == Direction.Left || Direction == Direction.Right)
         {
             var tempLoc = new Point(X - Width / 2, Y);
             this.Box = new(tempLoc, Box.Size);
 
-            var tempRect = new Size(CollisionMask.Height, CollisionMask.Width);
-            this.CollisionMask.Box = new(CollisionMask.Box.Location, tempRect);
+            var tempSize = new Size(CollisionMask.Height, CollisionMask.Width);
+            this.CollisionMask.Box = new(CollisionMask.Box.Location, tempSize);
+
         }
     }
 
-
-    public GraphicsContainer RotateRight(Graphics g)
+    public GraphicsContainer RotateLeft(Graphics g, GraphicsContainer container = null)
     {
+        container ??= g.BeginContainer();
+
         var rect = this.Box;
-        var container = g.BeginContainer();
 
-        g.TranslateTransform(rect.X + rect.Width / 2 - this.Width / 4, rect.Y + rect.Height / 2);
-        g.RotateTransform(-90f);
-        g.TranslateTransform(-rect.X - rect.Width / 2 - this.Width / 4, -rect.Y - rect.Height / 2);
-
-        return container;
-    }
-
-    public GraphicsContainer RotateLeft(Graphics g)
-    {
-        var rect = this.Box;
-        var container = g.BeginContainer();
-
-        g.TranslateTransform(rect.X + rect.Width / 2 + Width / 4, rect.Y + rect.Height / 2);
+        g.TranslateTransform(rect.X + rect.Width / 2 + Width / 4, rect.Y + rect.Height / 2 - Height);
         g.RotateTransform(90f);
-        g.TranslateTransform(-rect.X - rect.Width / 2 + Width / 4, -rect.Y - rect.Height / 2);
+        g.TranslateTransform(-rect.X + rect.Width / 2 - Width / 4, -rect.Y + rect.Height / 2 - Height);
 
         return container;
     }
-
 
     public override void Draw(Graphics g)
     {
-
         var container = Direction switch
         {
-            Direction.Right => RotateRight(g),
-            Direction.Left => RotateLeft(g),
+            Direction.Left or Direction.Right => RotateLeft(g),
             _ => null
         };
 
+        if (Direction == Direction.Right || Direction == Direction.Top)
+        {
+            container = InvertVertical(g, container);
+            var newPos = new Point(Box.X, BasicEngine.Current.Height - Box.Y - Box.Height);
+            this.Box = new Rectangle(newPos, this.Box.Size);
+        }
+
+
+
 
         g.DrawImage(
-           BenchImage,
-           this.Box,
-           BenchSprite.X,
-           BenchSprite.Y,
-           BenchSprite.Width,
-           BenchSprite.Height,
-           GraphicsUnit.Pixel
-           );
-
-
+            BenchImage,
+            this.Box,
+            BenchSprite.X,
+            BenchSprite.Y,
+            BenchSprite.Width,
+            BenchSprite.Height,
+            GraphicsUnit.Pixel
+        );
 
         if (container is not null)
+        {
             g.EndContainer(container);
 
 
-        //g.DrawRectangle(Pen, CollisionMask.Box);
+            if (Direction == Direction.Right || Direction == Direction.Top)
+            {
+                var newPos = new Point(Box.X, BasicEngine.Current.Height - Box.Y - Box.Height);
+                this.Box = new Rectangle(newPos, this.Box.Size);
+            }
+        }
+
+
+        //CollisionMask?.Draw(g);
+    }
+
+    protected virtual Point GetRelativeItemPoint(Item item)
+    {
+        var temp = item.Box.AlignCenter(this.Box);
+        Point p = Direction switch
+        {
+            Direction.Top or Direction.Bottom => new Point(temp.X, temp.Y - 10),
+            Direction.Left or Direction.Right => new Point(temp.X + 20, temp.Y + 15),
+            _ => temp.Location
+        };
+
+        return p;
     }
 }
 
@@ -128,8 +132,11 @@ public class FoodBench : Bench
         {
             PlacedItem = p.holdingItem;
             PlacedItem.Interact(p);
-            var temp = PlacedItem.Box.AlignCenter(this.Box);
-            PlacedItem.Box = new Rectangle(temp.X, temp.Y - 10, temp.Width, temp.Height);
+
+            var relativePoint = GetRelativeItemPoint(PlacedItem);
+
+            PlacedItem.Box = new Rectangle(relativePoint, PlacedItem.Box.Size);
+
             return;
         }
 
@@ -139,11 +146,12 @@ public class FoodBench : Bench
             PlacedItem = null;
         }
     }
+
 }
 
 public class CornerBench : Bench
 {
-    public CornerBench(Rectangle box, Direction dir = Direction.Bottom) 
+    public CornerBench(Rectangle box, Direction dir = Direction.Bottom)
         : base(new Rectangle(box.Location, new(48, 48)), 1, null, dir)
     {
         BenchSprite = this.benchSpriteLoader.GetAnimation(BenchTypes.Corner).Next();
@@ -151,6 +159,6 @@ public class CornerBench : Bench
 
     public override void Interact(Player p)
     {
-        
+
     }
 }

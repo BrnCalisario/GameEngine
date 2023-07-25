@@ -10,37 +10,15 @@ using System.Threading.Tasks;
 
 namespace Engine.Kitchen;
 
-public class Oven : Interactable, IUnwalkable
+public class Oven : Bench
 {
    
-    public Oven(Rectangle box, float scale = 1, Pen pen = null) : base(new Rectangle(box.Location, new(96, 48)), scale, pen)
-    {
-        benchSpriteLoader = new BenchSpriteLoader();
-        OvenSprite = benchSpriteLoader.GetAnimation(BenchTypes.Oven).Next();
-
+    public Oven(Rectangle box, Direction dir = Direction.Bottom) : base(new Rectangle(box.Location, new(96, 48)), 1, null, dir)
+    {     
+        BenchSprite = benchSpriteLoader.GetAnimation(BenchTypes.Oven).Next();
     }
 
-    Image ovenImage = Resources.BenchImage;
-    readonly SpriteLoader<BenchTypes> benchSpriteLoader;
-    
-    
-    Sprite OvenSprite;
     public Pan PlacedItem { get; set; }
-
-    public override void Draw(Graphics g)
-    {
-        g.DrawImage(
-            ovenImage,
-            this.Box,
-            OvenSprite.X,
-            OvenSprite.Y,
-            OvenSprite.Width,
-            OvenSprite.Height,
-            GraphicsUnit.Pixel
-            );
-    }
-
-
 
     public override void Interact(Player p)
     {
@@ -50,14 +28,19 @@ public class Oven : Interactable, IUnwalkable
         {
             PlacedItem = holding as Pan;
             PlacedItem.Interact(p);
+
             var temp = PlacedItem.Box.AlignCenter(this.Box);
-            PlacedItem.Box = new Rectangle(temp.X, temp.Y - 5, temp.Width, temp.Height);
+            PlacedItem.IsCooking = true;
+
+            var relativePoint = GetRelativeItemPoint(PlacedItem);
+
+            PlacedItem.Box = new Rectangle(relativePoint, temp.Size);
             return;
         }
         
         if(holding as Food is not null)
         {
-            PlacedItem.Interact(p);
+            PlacedItem?.Interact(p);
             return;
         }
 

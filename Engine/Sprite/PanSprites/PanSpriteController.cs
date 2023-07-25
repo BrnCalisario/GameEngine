@@ -2,12 +2,7 @@
 
 namespace Engine.Sprites;
 using Extensions;
-
-
-
-
-
-
+using System.Linq;
 
 public class PanSpriteLoader : SpriteLoader<PanTypes>
 {
@@ -25,17 +20,14 @@ public class PanSpriteLoader : SpriteLoader<PanTypes>
         var onionPan = new SpriteStream();
         var tomOnionPan = new SpriteStream();
 
-        for (int i = 0; i<scaled.Width * 5; i += scaled.Width)
-        {
-            var rect = new Rectangle(i, startY, scaled.Width, scaled.Height);
-            var sprite = new Sprite(rect.Location, rect.Size);
-            voidPan.Add(sprite);
-        }
+        var rectV = new Rectangle(0, startY, scaled.Width, scaled.Height);
+        var spriteV = new Sprite(rectV.Location, rectV.Size);
+        voidPan.Add(spriteV);
+        
         this.Animations.Add(PanTypes.Void, voidPan);
 
-        startY += scaled.Width + 9;
-        
-        for (int i = 0; i<scaled.Width * 5; i += scaled.Width)
+        startY += scaled.Height + 6;        
+        for (int i = 0; i< scaled.Width * 5; i += scaled.Width + 9)
         {
             var rect = new Rectangle(i, startY, scaled.Width, scaled.Height);
             var sprite = new Sprite(rect.Location, rect.Size);
@@ -43,9 +35,9 @@ public class PanSpriteLoader : SpriteLoader<PanTypes>
         }
         this.Animations.Add(PanTypes.TomatoPan, tomatoPan);
 
-        startY += scaled.Width + 9;
+        startY += scaled.Width + 6;
 
-        for(int i = 0;i<scaled.Width * 5;i += scaled.Width)
+        for(int i = 0;i<scaled.Width * 5;i += scaled.Width + 9)
         {
             var rect = new Rectangle(i, startY, scaled.Width, scaled.Height);
             var sprite = new Sprite(rect.Location, rect.Size);
@@ -53,9 +45,9 @@ public class PanSpriteLoader : SpriteLoader<PanTypes>
         }
         this.Animations.Add(PanTypes.OnionPan, onionPan);
 
-        startY += scaled.Width + 9;
+        startY += scaled.Width + 6;
 
-        for (int i = 0; i < scaled.Width * 5; i += scaled.Width)
+        for (int i = 0; i < scaled.Width * 5; i += scaled.Width + 9)
         {
             var rect = new Rectangle(i, startY, scaled.Width, scaled.Height);
             var sprite = new Sprite(rect.Location, rect.Size);
@@ -73,7 +65,14 @@ public class PanSpriteController
     public PanSpriteController()
     {
         this.SpriteLoader = new PanSpriteLoader();
+    }
 
+    public Sprite GetCurrentSprite(bool isCooking)
+    {
+        if (isCooking)
+            return this.CurrentAnimation.Next();
+
+        return this.CurrentAnimation.Sprites.First();
     }
 }
 

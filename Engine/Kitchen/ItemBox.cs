@@ -26,7 +26,7 @@ public class FoodBox<T> : Interactable, IUnwalkable
 
     readonly SpriteLoader<FoodTypes> FoodSpriteLoader;
 
-    public FoodBox(Rectangle box) : base(new Rectangle(box.Location, new(96, 48)), 1.055f, new Pen(Color.Crimson))
+    public FoodBox(Rectangle box) : base(new Rectangle(box.Location, new(96, 48)), 1, new Pen(Color.Crimson))
     {
         SpriteLoader = new BenchSpriteLoader();
         FoodSpriteLoader = new FoodSpriteLoader();
@@ -81,7 +81,7 @@ public class FoodBox<T> : Interactable, IUnwalkable
         //newPos = new Point(wid - X - Box.Width, Y);
         //this.Box = new Rectangle(newPos, this.Box.Size);
 
-
+        g.DrawRectangle(Pen, CollisionMask.Box);
     }
 
     public override void Interact(Player p)
