@@ -7,6 +7,7 @@ namespace Engine;
 using Engine.Resource;
 using Sprites;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using static ProjectPaths;
 
 public class Pan : Item
@@ -21,7 +22,12 @@ public class Pan : Item
     public PanSpriteController SpriteController { get; set; }
     public List<Food> Ingredients { get; set; } = new List<Food>();
 
+    public bool HasCookedFood => Ingredients.Count() >= 3;
+
     public bool IsCooking { get; set; } = false;
+
+    bool hasTomato = false;
+    bool hasOnion = false;
 
     public override void Interact(Player p)
     {
@@ -39,12 +45,23 @@ public class Pan : Item
         holding.Dispose();
         Ingredients.Add(holding);
 
-        if (holding is Tomato)
+        foreach (var ingredient in Ingredients)
+        {
+            if (ingredient is Tomato)
+                hasTomato = true;
+
+            if (ingredient is Onion)
+                hasOnion = true;
+        }
+
+        if(hasTomato && !hasOnion)
             SpriteController.StartAnimation(PanTypes.TomatoPan);
 
-        if (holding is Onion)
+        if(!hasTomato && hasOnion)
             SpriteController.StartAnimation(PanTypes.OnionPan);
 
+        if (hasTomato && hasOnion)
+            SpriteController.StartAnimation(PanTypes.TomOnionPan);
         //SpriteController.IsCooking = true;
     }
 

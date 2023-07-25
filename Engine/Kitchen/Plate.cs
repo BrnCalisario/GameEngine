@@ -7,6 +7,7 @@ namespace Engine;
 using Engine.Resource;
 using Sprites;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using static ProjectPaths;
 
 public class Plate : Item
@@ -15,32 +16,53 @@ public class Plate : Item
     {
         Loader = new PlateSpriteLoader();
         SpriteStream = Loader.GetAnimation(type);
+
+        SpriteController = new PlateSpriteController();
+        SpriteController.StartAnimation(PlateTypes.VoidPlate);
     }
 
     Image plateImage = Resources.PlateImage;
     SpriteStream SpriteStream { get; set; }
     SpriteLoader<PlateTypes> Loader { get; set; }
     public List<Food> Ingredients { get; set; } = new List<Food>();
+    public PlateSpriteController SpriteController { get; set; }
 
+    bool hasTomato = false;
+    bool hasOnion = false;
 
     public override void Interact(Player p)
     {
         if (!p.IsHolding || p.holdingItem == this)
             base.Interact(p);
 
-        var holding = p.holdingItem as Pan;
 
-        if (holding is null)
+        if (p.holdingItem is not Pan holding)
             return;
 
-        holding.Interact(p);
 
-        holding.Dispose();
+        if (holding.HasCookedFood)
+        {
+            this.Ingredients = holding.Ingredients;
+            holding.ClearPan();
+        }
+
+        //foreach (var ingredient in this.Ingredients)
+        //{
+        //    if (ingredient is Tomato)
+        //        hasTomato = true;
+
+        //    if (ingredient is Onion)
+        //        hasOnion = true;
+        //}
+
+        //if (hasOnion && !hasTomato)
+        //    SpriteController.StartAnimation(PlateTypes.OnionPlate);
     }
 
     public override void Draw(Graphics g)
     {
         var c = SpriteStream.Sprites.First();
+
 
         g.DrawImage(
             plateImage,
