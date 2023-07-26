@@ -34,9 +34,13 @@ public abstract class Item : Interactable, IDisposable
 
     public bool Interactable => CanInteract();
 
-    public FoodBench FoodBench { get; set; } = null;
-    public Player Player { get; private set; } = null;
-    public bool BeingHold => Player != null;
+
+    public Player PlayerParent = null;
+
+    public FoodBench BenchParent = null;
+
+    public bool BeingHold => PlayerParent != null;
+    public bool InBench => BenchParent != null;
 
     public Direction Direction { get; set; } = Direction.Bottom;
 
@@ -50,50 +54,50 @@ public abstract class Item : Interactable, IDisposable
 
     public override void Update()
     {
-        if(BeingHold)        
+        if (BeingHold)
         {
-            this.Box = this.Box.AlignCenter(Player.Box);
-            SetRelativePosition(Player.CurrentDirection);
+            this.Box = this.Box.AlignCenter(PlayerParent.Box);
+            SetRelativePosition(PlayerParent.CurrentDirection);
         }
-        
+
         this.CollisionMask.UpdatePoint(this.Box.Location);
     }
 
     private void GetHold(Player p)
     {
-        if (Player is not null)
+        if (PlayerParent is not null)
             return;
 
-        if(p.IsHolding)
+        if (p.IsHolding)
             return;
 
-        this.Player = p;
-        p.holdingItem = this;
+        this.AssignPlayer(p);
+
         LastInteraction = DateTime.Now;
     }
 
     private void GetReleased()
     {
-        Point newPos = Direction switch 
+        Point newPos = Direction switch
         {
-            Direction.Top => new Point(Left , Player.Top),
-            Direction.Bottom => new Point(Left, Player.Bottom),
-            Direction.Right => new Point(Player.CollisionMask.Right, Y + Player.CollisionMask.Width / 2),
-            Direction.Left => new Point(Player.CollisionMask.Left - Width, Y + Player.CollisionMask.Width / 2),
-            _ => new Point(Left, Player.Bottom)
+            Direction.Top => new Point(Left, PlayerParent.Top),
+            Direction.Bottom => new Point(Left, PlayerParent.Bottom),
+            Direction.Right => new Point(PlayerParent.CollisionMask.Right, Y + PlayerParent.CollisionMask.Width / 2),
+            Direction.Left => new Point(PlayerParent.CollisionMask.Left - Width, Y + PlayerParent.CollisionMask.Width / 2),
+            _ => new Point(Left, PlayerParent.Bottom)
         };
 
         this.Box = new Rectangle(newPos, Box.Size);
-        this.Player.holdingItem = null;
-        this.Player = null;
+        
+        UnassignPlayer();
         LastInteraction = DateTime.Now;
     }
 
     public void SetRelativePosition(Direction direction, int offset = 30, int offsetY = 30)
-    {        
+    {
         Direction = direction;
 
-        if(Player is null) return;
+        if (PlayerParent is null) return;
 
         Point relativePos = direction switch
         {
@@ -111,8 +115,6 @@ public abstract class Item : Interactable, IDisposable
     {
         Direction = direction;
 
-        //if (Player is null) return;
-
         Point relativePos = direction switch
         {
             Direction.Top => new Point(X, Y - offset),
@@ -128,7 +130,7 @@ public abstract class Item : Interactable, IDisposable
 
     public override void Interact(Player p)
     {
-        if(Player is null)
+        if (PlayerParent is null)
             this.GetHold(p);
         else
             this.GetReleased();
@@ -139,10 +141,41 @@ public abstract class Item : Interactable, IDisposable
         BasicEngine.Current.Interactables.Remove(this);
         BasicEngine.Current.RenderStack.Remove(this);
 
-        if(Player is not null)
+        if (PlayerParent is not null)
         {
-            this.Player.holdingItem = null;
-            this.Player = null;
+            UnassignPlayer();
         }
+    }
+
+    public void UnassignPlayer()
+    {
+        if (this.PlayerParent is null) return;
+
+        this.PlayerParent = null;
+        this.PlayerParent.holdingItem = null;
+    }
+
+    public void UnassignBench()
+    {
+        if (this.BenchParent is null) return;
+
+        this.BenchParent = null;
+        this.BenchParent.UnassignItem();
+    }
+
+    public void AssignPlayer(Player p)
+    {
+        if (this.PlayerParent is not null) return;
+
+        p.holdingItem = this;
+        this.PlayerParent.AssignItem(this);
+    }
+
+    public void AssignBench(FoodBench fb)
+    {
+        if (this.BenchParent is not null) return;
+
+        this.BenchParent = fb;
+        fb.AssignItem(this);
     }
 }

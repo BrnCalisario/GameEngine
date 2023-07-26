@@ -4,7 +4,7 @@ namespace Engine;
 using Extensions;
 public abstract class Interactable : CollidableBody
 {
-    protected Interactable(Rectangle box, float scale = 2, Pen pen = null) : base(box, pen)
+    protected Interactable(Rectangle box, float scale = 1, Pen pen = null) : base(box, pen)
     {
         var scaledSize = new Size((int)(box.Width * scale),(int) (box.Height * scale));
 

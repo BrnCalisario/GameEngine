@@ -277,7 +277,17 @@ public class Player : CollidableBody
 
         return new Point(this.Box.X + (int)velX + newVelX, this.Box.Y + (int)velY + newVelY);
     }
+    
+    public void AssignItem(Item i)
+    {
+        if (this.holdingItem is not null) return;
+
+        this.holdingItem = i;
+        this.holdingItem.AssignPlayer(this);
+    }
 }
+
+
 
 public enum Direction
 {

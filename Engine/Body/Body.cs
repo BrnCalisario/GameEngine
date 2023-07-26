@@ -88,15 +88,6 @@ public abstract class Body : IBody
         return container;
     }
 
-
-
-    protected void RotateAngle(Graphics g, float angle)
-    {
-        
-        g.RotateTransform(angle);
-
-    }
-
     public virtual void Draw(Graphics g)
     {
         if(Filled)       
@@ -144,31 +135,15 @@ public abstract class CollidableBody : Body, ICollidableBody
 
     }
 
-    protected virtual void CorrectHorizontal()
-    {
-        //this.Box = this.CollisionMask.Box;
-        var newPos = new Point(BasicEngine.Current.Width - Box.X - Box.Width, Box.Y);
-        this.Box = new Rectangle(newPos, this.Box.Size);
+    protected Rectangle CorrectHorizontal(Rectangle box)
+    {        
+        var newPos = new Point(BasicEngine.Current.Width - box.X - box.Width, box.Y);
+        return new Rectangle(newPos, box.Size);
     }
 
     protected Rectangle CorrectVertical(Rectangle box)
     {
         var newPos = new Point(box.X, BasicEngine.Current.Height - box.Y - box.Height);
         return new Rectangle(newPos, box.Size);
-    }
-
-
-    public EventHandler<CollideEventArgs> OnCollide;
-}
-
-public class CollideEventArgs : EventArgs
-{
-    public CollideEventArgs(CollidableBody collider, Type bodyType)
-    {
-        Collider = collider;
-        BodyType = bodyType;
-    }
-
-    public CollidableBody Collider { get; set; }
-    public Type BodyType { get; set;  }
+    }    
 }
