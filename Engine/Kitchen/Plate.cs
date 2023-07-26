@@ -109,6 +109,14 @@ public class Plate : Item
         SpriteController.StartAnimation(PlateTypes.VoidPlate);
     }
 
+    public void Deliver()
+    {
+        Rectangle rect = new Rectangle(700, 350, this.Box.Width, this.Box.Height);
+        this.Box = rect;
+        //this.BenchParent.SetItem(this);
+        //fb11.setItem(this);
+    }
+
     public override void Draw(Graphics g)
     {
         var c = SpriteController.CurrentAnimation.Next();

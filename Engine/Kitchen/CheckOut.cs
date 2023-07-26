@@ -46,15 +46,16 @@ public class CheckOut : Bench
 
     public override void Interact(Player p)
     {
-        MessageBox.Show("Interagiu!");
         if (p.holdingItem is not Plate holding)
             return;
 
         this.plate = holding;
-
-        MessageBox.Show(holding.Ingredients.Count.ToString());
-
         holding.ClearPlate();
+
+        plate.Interact(p);
+
+        holding.Deliver();
+
     }
 
     public override void Update()

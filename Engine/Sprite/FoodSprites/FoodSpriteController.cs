@@ -79,7 +79,6 @@ public class FoodSpriteController
     public FoodSpriteController()
     {
         this.SpriteLoader = new FoodSpriteLoader();
-
     }
 }
 

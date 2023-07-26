@@ -272,12 +272,5 @@ public partial class GameForm : Form
         FryingPan pan4 = new(new Rectangle());
         engine.AddBody(pan4);
         ov4.SetItem(pan4);
-
-        Plate plate = new Plate(new Rectangle().AlignBelow(fb27.CollisionMask.Box));
-        engine.AddBody(plate);
-
-        //Trash trash = new Trash(new Rectangle().AlignBelow(fb28.CollisionMask.Box));
-        //engine.AddBody(trash);
-
     }
 }
