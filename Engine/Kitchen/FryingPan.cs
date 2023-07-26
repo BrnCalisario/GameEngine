@@ -41,11 +41,13 @@ public class FryingPan : CookingTool
         }
 
         base.Interact(p);
-        
+
+
+        var food = this.Ingredients[0];
 
         if (hasFood)
         {
-            var food = this.Ingredients[0];
+            
             FoodSprite = food switch
             {
                 Meat => FoodSpriteLoader.GetAnimation(FoodTypes.Meat).Sprites.Last(),
@@ -75,7 +77,6 @@ public class FryingPan : CookingTool
     {
         this.IsCooking = HasFood;
        
-
         var c = SpriteController.GetCurrentSprite(this.IsCooking);
 
         GraphicsContainer container = null;

@@ -37,9 +37,9 @@ public static class Resources
         FoodImage = Image.FromFile(AssetsPath + "\\teste3x.png");
         PlateImage = Image.FromFile(AssetsPath + "\\plates\\plate3x.png");
         CuttingBoardImage = Image.FromFile(AssetsPath + "\\tabua3x.png");
-        CheckOutImage = Image.FromFile(AssetsPath + "\\esteira3x.png");
+        CheckOutImage = Image.FromFile(AssetsPath + "\\esteiras\\esteira3x.png");
         PanImage = Image.FromFile(AssetsPath + "\\pans\\panela3x.png");
         CuttingImage = Image.FromFile(AssetsPath + "\\cutting3x.png");
-        FryingPanImage = Image.FromFile(AssetsPath + "\\frigideira3x.png");
+        FryingPanImage = Image.FromFile(AssetsPath + "\\frigideiras\\frigideira3x.png");
     }
 }
