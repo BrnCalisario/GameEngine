@@ -120,13 +120,13 @@ public class Player : CollidableBody
 
         items = items.OrderBy(i =>
         {
-            if (i is Plate && this.holdingItem is Pan)
-                return 0;            
-            if (i is FoodBench fb && fb.PlacedItem is not null)
+            if (i is Plate && this.holdingItem is CookingTool)
+                return 0;
+            if (i is FoodBench bench && bench.PlacedItem is not null)
                 return 1;
-            if (i is Item)
+            if (i is Item item && item != holdingItem)
                 return 2;
-            if (i is FoodBench)
+            if (i is Bench)
                 return 3;
             return 4;
         }).ToList();
