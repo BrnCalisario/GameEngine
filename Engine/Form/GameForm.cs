@@ -101,7 +101,7 @@ public partial class GameForm : Form
         FoodBench fb8 = new(new Rectangle(0, 0, 96, 48).AlignOver(corner3.CollisionMask.Box), Direction.Left);
         this.engine.AddBody(fb8);
 
-        FoodBench fb9 = new(new Rectangle(0, 0, 96, 48).AlignOver(fb8.CollisionMask.Box), Direction.Left);
+        CuttingBoard fb9 = new(new Rectangle(0, 0, 96, 48).AlignOver(fb8.CollisionMask.Box), Direction.Left);
         this.engine.AddBody(fb9);
 
         FoodBench fb10 = new(new Rectangle(0, 0, 96, 48).AlignOver(fb9.CollisionMask.Box), Direction.Left);

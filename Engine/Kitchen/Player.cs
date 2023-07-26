@@ -63,7 +63,6 @@ public class Player : CollidableBody
         var c = SpriteController.CurrentAnimation.Next();
 
         GraphicsContainer container = null;
-        Image image = ChefSprite; //AQUI
 
         if (Invert)
         {
@@ -72,22 +71,37 @@ public class Player : CollidableBody
             this.Box = new Rectangle(newPos, this.Box.Size);
         }
 
-        if(Cutting) //AQUI
+        if (Cutting) //AQUI
         {
-            image = ChefCuttingSprite;
             this.SpriteController.StartAnimation(GetChefAnimationByDir(this.CurrentDirection));
+            c = SpriteController.CurrentAnimation.Next();
         }
 
-
-        g.DrawImage(
-            image, //AQUI
-            this.Box,
-            c.X,
-            c.Y,
-            c.Width,
-            c.Height,
-            GraphicsUnit.Pixel
+        if (Cutting)
+        {
+            g.DrawImage(
+                ChefCuttingSprite, //AQUI
+                this.Box,
+                c.X,
+                c.Y,
+                c.Width,
+                c.Height,
+                GraphicsUnit.Pixel
             );
+        }
+        else
+        {
+            g.DrawImage(
+                ChefSprite, //AQUI
+                this.Box,
+                c.X,
+                c.Y,
+                c.Width,
+                c.Height,
+                GraphicsUnit.Pixel
+            );
+        }
+
 
 
         if (container is not null)
@@ -139,7 +153,7 @@ public class Player : CollidableBody
 
     private void SetInteractionMask()
     {
-        if(this.IsHolding)
+        if (this.IsHolding)
         {
             var size = this.holdingItem.Box.Size.Scale(1.25f);
             var scaledRect = new Rectangle(new Point(), size).AlignCenter(holdingItem.Box);
@@ -150,7 +164,7 @@ public class Player : CollidableBody
         var distX = CurrentDirection == Direction.Right ? Width / 2 : 0;
         var distY = CurrentDirection == Direction.Bottom ? Height / 2 : 0;
 
-        if(CurrentDirection.IsHorizontal())
+        if (CurrentDirection.IsHorizontal())
         {
             distY = Height / 2;
         }
@@ -158,7 +172,7 @@ public class Player : CollidableBody
         float sizeX = CurrentDirection.IsHorizontal() ? 2 : 1;
         var sizeY = CurrentDirection.IsVertical() ? 2 : 2;
 
-        if(CurrentDirection.IsVertical())
+        if (CurrentDirection.IsVertical())
         {
             sizeX = 2.1f;
             distY += CurrentDirection == Direction.Top ? -16 : 16;
@@ -166,7 +180,7 @@ public class Player : CollidableBody
 
         var rect = new Rectangle(X + distX, Y + distY, (int)(Width / sizeX), (int)(Height / sizeY));
 
-        if(CurrentDirection.IsVertical())
+        if (CurrentDirection.IsVertical())
         {
             rect.X = CollisionMask.X;
         }
@@ -220,7 +234,7 @@ public class Player : CollidableBody
 
     private void Move()
     {
-        if(Cutting) return;
+        if (Cutting) return;
 
         var keyMap = BasicEngine.Current.KeyMap;
 
@@ -277,7 +291,7 @@ public class Player : CollidableBody
 
         return new Point(this.Box.X + (int)velX + newVelX, this.Box.Y + (int)velY + newVelY);
     }
-    
+
     public void AssignItem(Item i)
     {
         if (this.holdingItem is not null) return;

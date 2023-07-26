@@ -77,17 +77,17 @@ public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
 
 
 
+        double time = 0.1;
 
         //AQUI
-
-
         LoadAnimationArgs cutFrontArgs = new()
         {
             AnimationType = ChefAnimationType.CuttingFront,
             StartingPoint = new Point(0, 0),
             Quantity = 4,
+            Size = scaled,
             Gap = 1,
-            AnimationTime = TimeSpan.FromSeconds(0.5)
+            AnimationTime = TimeSpan.FromSeconds(time)
         };
         this.AddAnimation(cutFrontArgs);
 
@@ -96,8 +96,9 @@ public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
             AnimationType = ChefAnimationType.CuttingSide,
             StartingPoint = new Point(0, scaled.Height),
             Quantity = 4,
+            Size = scaled,
             Gap = 1,
-            AnimationTime = TimeSpan.FromSeconds(0.5)
+            AnimationTime = TimeSpan.FromSeconds(time)
         };
         this.AddAnimation(cutSideArgs);
 
@@ -106,8 +107,9 @@ public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
             AnimationType = ChefAnimationType.CuttingUp,
             StartingPoint = new Point(0, scaled.Height * 2 + 1),
             Quantity = 4,
+            Size = scaled,
             Gap = 1,
-            AnimationTime = TimeSpan.FromSeconds(0.5)
+            AnimationTime = TimeSpan.FromSeconds(time)
         };
         this.AddAnimation(cutUpArgs);
 
