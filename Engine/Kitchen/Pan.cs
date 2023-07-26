@@ -29,8 +29,8 @@ public abstract class CookingTool : Item
         if (p.holdingItem is not Food holding)
             return;
 
-        if (!holding.Cutted)
-            return;
+        //if (!holding.Cutted)
+        //    return;
 
         holding.Interact(p);
         holding.Dispose();

@@ -106,6 +106,25 @@ public abstract class Item : Interactable, IDisposable
         this.Box = new Rectangle(relativePos, Box.Size);
     }
 
+    public Rectangle SetRectRelativePosition(Rectangle rect, Direction direction, int offset = 30, int offsetY = 30)
+    {
+        Direction = direction;
+
+        //if (Player is null) return;
+
+        Point relativePos = direction switch
+        {
+            Direction.Top => new Point(X, Y - offset),
+            Direction.Bottom => new Point(X, Y + offset),
+            Direction.Left => new Point(X - offset, Y + offset / 2),
+            Direction.Right => new Point(X + offset, Y + offset / 2),
+            _ => new Point(X, Y)
+        };
+
+        rect = new Rectangle(relativePos, rect.Size);
+        return rect;
+    }
+
     public override void Interact(Player p)
     {
         if(Player is null)

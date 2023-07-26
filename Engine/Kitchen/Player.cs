@@ -13,6 +13,7 @@ using Extensions;
 
 using Resource;
 using System.Drawing.Drawing2D;
+using System.Data;
 
 public class Player : CollidableBody
 {
@@ -26,7 +27,7 @@ public class Player : CollidableBody
 
     public bool Cutting = false; //AQUI
 
-    private bool invert = false;
+    public bool Invert { get; private set; } = false;
 
     public bool canWalk = true;
 
@@ -64,7 +65,7 @@ public class Player : CollidableBody
         GraphicsContainer container = null;
         Image image = ChefSprite; //AQUI
 
-        if (invert)
+        if (Invert)
         {
             container = this.InvertHorizontal(g);
             var newPos = new Point(BasicEngine.Current.Width - Box.X - Box.Width, Box.Y);
@@ -120,10 +121,14 @@ public class Player : CollidableBody
         items = items.OrderBy(i =>
         {
             if (i is Plate && this.holdingItem is Pan)
-                return 0;
-            if (i is Bench)
+                return 0;            
+            if (i is FoodBench fb && fb.PlacedItem is not null)
                 return 1;
-            return 2;
+            if (i is Item)
+                return 2;
+            if (i is FoodBench)
+                return 3;
+            return 4;
         }).ToList();
 
         var selected = items.FirstOrDefault();
@@ -200,7 +205,7 @@ public class Player : CollidableBody
         var keyMap = BasicEngine.Current.KeyMap;
 
         if (keyMap[Keys.D] || keyMap[Keys.A])
-            this.invert = !keyMap[Keys.D] || keyMap[Keys.A];
+            this.Invert = !keyMap[Keys.D] || keyMap[Keys.A];
 
         ChefAnimationType animation = CurrentDirection switch
         {

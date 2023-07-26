@@ -36,9 +36,7 @@ public class FoodBox<T> : Bench
 
         
         tempRect.X += Direction == Direction.Right ? Width / 5 : Direction == Direction.Left ? 28 : 0;
-        tempRect.Y += Direction.IsHorizontal() ? Height / 2 : Direction == Direction.Top ? 6 : -3;
-        
-
+        tempRect.Y += Direction.IsHorizontal() ? Height / 2 : Direction == Direction.Top ? 6 : -3;       
         FoodRectangle = tempRect;
     }
 
