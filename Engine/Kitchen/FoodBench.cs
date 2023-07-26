@@ -140,8 +140,10 @@ public class FoodBench : Bench
     {
         if (PlacedItem is null) return;
 
+        var temp = PlacedItem;
+        
         this.PlacedItem = null;
-        PlacedItem.UnassignBench();
+        temp.UnassignBench();
     }
 
     public void AssignItem(Item i)

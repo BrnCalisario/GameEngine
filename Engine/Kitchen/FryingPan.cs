@@ -23,7 +23,7 @@ public class FryingPan : CookingTool
     readonly Image foodImage = Resources.FoodImage;
 
     private Sprite FoodSprite { get; set; }
-    private Rectangle FoodRectangle { get; set; } 
+    private Rectangle FoodRectangle { get; set; }
 
     public FryingPanSpriteController SpriteController { get; set; }
     public FoodSpriteLoader FoodSpriteLoader { get; set; }
@@ -34,7 +34,7 @@ public class FryingPan : CookingTool
 
     public override void Interact(Player p)
     {
-        if(p.IsHolding)
+        if (p.IsHolding)
         {
             if (p.holdingItem is not Meat && p.holdingItem is not Fish && p.holdingItem is not CookingTool)
                 return;
@@ -47,7 +47,7 @@ public class FryingPan : CookingTool
 
         if (hasFood)
         {
-            
+
             FoodSprite = food switch
             {
                 Meat => FoodSpriteLoader.GetAnimation(FoodTypes.Meat).Sprites.Last(),
@@ -76,7 +76,7 @@ public class FryingPan : CookingTool
     public override void Draw(Graphics g)
     {
         this.IsCooking = HasFood;
-       
+
         var c = SpriteController.GetCurrentSprite(this.IsCooking);
 
         GraphicsContainer container = null;
@@ -99,7 +99,7 @@ public class FryingPan : CookingTool
             GraphicsUnit.Pixel
             );
 
-        if(hasFood)
+        if (hasFood)
         {
             g.DrawImage(
               foodImage,
@@ -112,7 +112,7 @@ public class FryingPan : CookingTool
             );
         }
 
-        if(PlayerParent?.Invert ?? false)
+        if (PlayerParent?.Invert ?? false)
         {
             this.Box = this.CorrectHorizontal(this.Box);
             this.FoodRectangle = this.CorrectHorizontal(this.FoodRectangle);
@@ -122,18 +122,25 @@ public class FryingPan : CookingTool
         if (container is not null)
             g.EndContainer(container);
 
-        
+
     }
 
     public override void Update()
     {
         base.Update();
-        
-        if(BeingHold && hasFood)
+
+        if ((BeingHold || InBench) && hasFood)
         {
-            var temp = this.SetRectRelativePosition(this.FoodRectangle, PlayerParent.CurrentDirection);
-            temp.X += PlayerParent?.Invert ?? false ? 30 : -15;
-            this.FoodRectangle = temp;
+            if (BeingHold)
+            {
+                var tempRec = this.SetRectRelativePosition(this.FoodRectangle, PlayerParent.CurrentDirection);
+                tempRec.X += PlayerParent?.Invert ?? false ? 30 : -15;
+                this.FoodRectangle = tempRec;
+                return;
+            }
+
+            var temp = FoodRectangle.AlignCenter(this.Box);
+            this.FoodRectangle = temp;            
         }
     }
 

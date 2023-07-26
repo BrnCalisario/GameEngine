@@ -27,8 +27,7 @@ public class Oven : Bench
         var temp = PlacedItem.Box.AlignCenter(this.Box);
 
         PlacedItem.IsCooking = true;
-       
-
+      
 
         var relativePoint = GetRelativeItemPoint(PlacedItem);
         PlacedItem.Box = new Rectangle(relativePoint, temp.Size);

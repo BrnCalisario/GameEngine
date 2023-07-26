@@ -12,10 +12,10 @@ using static ProjectPaths;
 
 public class Plate : Item
 {
-    public Plate(Rectangle r, PlateTypes type) : base(new Rectangle(r.Location, new(45, 33)))
+    public Plate(Rectangle r) : base(new Rectangle(r.Location, new(45, 33)))
     {
         SpriteController = new PlateSpriteController();
-        SpriteController.StartAnimation(type);
+        SpriteController.StartAnimation(PlateTypes.VoidPlate);
     }
 
     Image plateImage = Resources.PlateImage;

@@ -51,6 +51,8 @@ public partial class GameForm : Form
         Player player = new(new Rectangle().AlignCenter(tileSet.Box));
         engine.AddBody(player);
 
+        
+
         engine.Start();
     }
 
@@ -109,6 +111,11 @@ public partial class GameForm : Form
 
         FoodBench fb11 = new(new Rectangle(0, 0, 96, 48).AlignOver(fb10.CollisionMask.Box), Direction.Left);
         this.engine.AddBody(fb11);
+
+        Plate p = new Plate(new Rectangle());
+        this.engine.AddBody(p);
+        fb11.AssignItem(p);
+
 
         FoodBench fb12 = new(new Rectangle(0, 0, 96, 48).AlignBesideRight(fb11.CollisionMask.Box), Direction.Right);
         this.engine.AddBody(fb12);

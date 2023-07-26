@@ -44,17 +44,15 @@ public abstract class Item : Interactable, IDisposable
 
     public Direction Direction { get; set; } = Direction.Bottom;
 
-    public override void Draw(Graphics g)
-    {
-        g.FillEllipse(Pen.Brush, Box);
-
-        if (CollisionMask is not null)
-            g.DrawEllipse(new Pen(Color.Black), this.CollisionMask.Box);
-    }
+    //public override void Draw(Graphics g)
+    //{
+    //    if (CollisionMask is not null)
+    //        g.DrawEllipse(new Pen(Color.Black), this.CollisionMask.Box);
+    //}
 
     public override void Update()
     {
-        if (BeingHold)
+        if (BeingHold )
         {
             this.Box = this.Box.AlignCenter(PlayerParent.Box);
             SetRelativePosition(PlayerParent.CurrentDirection);
@@ -151,23 +149,23 @@ public abstract class Item : Interactable, IDisposable
     {
         if (this.PlayerParent is null) return;
 
-        this.PlayerParent = null;
         this.PlayerParent.holdingItem = null;
+        this.PlayerParent = null;
     }
 
     public void UnassignBench()
     {
         if (this.BenchParent is null) return;
 
-        this.BenchParent = null;
         this.BenchParent.UnassignItem();
+        this.BenchParent = null;
     }
 
     public void AssignPlayer(Player p)
     {
         if (this.PlayerParent is not null) return;
 
-        p.holdingItem = this;
+        this.PlayerParent = p;
         this.PlayerParent.AssignItem(this);
     }
 
