@@ -15,6 +15,7 @@ public abstract class CookingTool : Item
     {
 
     }
+
     public bool IsCooking { get; set; } = false;
     public List<Food> Ingredients { get; set; } = new List<Food>();
     public abstract bool HasCookedFood { get; }
@@ -57,6 +58,7 @@ public class Pan : CookingTool
     public PanSpriteController SpriteController { get; set; }
 
     public override bool HasCookedFood => Ingredients.Count >= 3;
+
 
     bool hasTomato = false;
     bool hasOnion = false;

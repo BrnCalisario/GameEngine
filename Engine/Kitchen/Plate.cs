@@ -20,12 +20,14 @@ public class Plate : Item
     Image plateImage = Resources.PlateImage;
     Image foodImage = Resources.FoodImage;
 
-    public List<Food> Ingredients { get; set; } = new List<Food>();
-    public PlateSpriteController SpriteController { get; set; }
-
+    private Sprite FoodSprite { get; set; }
+    private Rectangle FoodRectangle { get; set; }
     public FoodSpriteLoader FoodSpriteLoader { get; set; }
-    Sprite FoodSprite { get; set; }
-    Rectangle FoodRectangle { get; set; }
+
+
+    public List<Food> Ingredients { get; set; } = new List<Food>();
+
+    public PlateSpriteController SpriteController { get; set; }
 
     bool hasMeat { get; set; } = false;
 
@@ -100,6 +102,9 @@ public class Plate : Item
 
     public void ClearPlate()
     {
+        hasMeat = false;
+        hasOnion = false;
+        hasTomato = false;
         Ingredients.Clear();
         SpriteController.StartAnimation(PlateTypes.VoidPlate);
     }

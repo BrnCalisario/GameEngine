@@ -77,7 +77,7 @@ public class FryingPan : CookingTool
 
     public override void Draw(Graphics g)
     {
-        this.IsCooking = HasFood;
+        this.IsCooking = HasCookedFood;
 
         var c = SpriteController.GetCurrentSprite(this.IsCooking);
 
