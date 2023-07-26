@@ -94,8 +94,8 @@ public partial class GameForm : Form
         engine.AddBody(fp);
 
 
-        Pan pan1 = new(new Rectangle());
-        engine.AddBody(pan1);
+        //Pan pan1 = new(new Rectangle());
+        //engine.AddBody(pan1);
         fb2.SetItem(fp);
 
         

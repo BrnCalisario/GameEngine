@@ -35,16 +35,16 @@ public class FoodBox<T> : Interactable, IUnwalkable
         switch (Activator.CreateInstance(typeof(T)))
         {
             case Tomato:
-                ItemSprite = FoodSpriteLoader.GetAnimation(FoodTypes.Tomato).Sprites.Last();
+                ItemSprite = FoodSpriteLoader.GetAnimation(FoodTypes.Tomato).Sprites.First();
                 break;
             case Onion:
-                ItemSprite = FoodSpriteLoader.GetAnimation(FoodTypes.Onion).Sprites.Last();
+                ItemSprite = FoodSpriteLoader.GetAnimation(FoodTypes.Onion).Sprites.First();
                 break;
             case Meat:
-                ItemSprite = FoodSpriteLoader.GetAnimation(FoodTypes.Meat).Sprites.Last();
+                ItemSprite = FoodSpriteLoader.GetAnimation(FoodTypes.Meat).Sprites.First();
                 break;
             case Fish:
-                ItemSprite = FoodSpriteLoader.GetAnimation(FoodTypes.Fish).Sprites.Last();
+                ItemSprite = FoodSpriteLoader.GetAnimation(FoodTypes.Fish).Sprites.First();
                 break;
         }
 
