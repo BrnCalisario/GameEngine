@@ -26,6 +26,8 @@ public class FryingPan : CookingTool
     bool hasMeat = false;
     bool hasFish = false;
 
+    public bool HasFood => Ingredients.Count >= 1;
+
     public override void Interact(Player p)
     {
         base.Interact(p);
@@ -50,6 +52,9 @@ public class FryingPan : CookingTool
 
     public override void Draw(Graphics g)
     {
+        this.IsCooking = HasFood;
+       
+
         var c = SpriteController.GetCurrentSprite(this.IsCooking);
 
         g.DrawImage(

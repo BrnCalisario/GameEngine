@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Engine.Kitchen;
 
@@ -24,8 +25,11 @@ public class Oven : Bench
     {
         this.PlacedItem = pan;
         var temp = PlacedItem.Box.AlignCenter(this.Box);
+
         PlacedItem.IsCooking = true;
-        
+       
+
+
         var relativePoint = GetRelativeItemPoint(PlacedItem);
         PlacedItem.Box = new Rectangle(relativePoint, temp.Size);
     }

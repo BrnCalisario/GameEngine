@@ -58,7 +58,6 @@ public class Pan : CookingTool
 
     public bool HasCookedFood => Ingredients.Count >= 3;
 
-
     bool hasTomato = false;
     bool hasOnion = false;
 
