@@ -18,9 +18,9 @@ public class Oven : Bench
         BenchSprite = benchSpriteLoader.GetAnimation(BenchTypes.Oven).Next();
     }
 
-    public Pan PlacedItem { get; set; }
+    public CookingTool PlacedItem { get; set; }
 
-    public void SetItem(Pan pan)
+    public void SetItem(CookingTool pan)
     {
         this.PlacedItem = pan;
         var temp = PlacedItem.Box.AlignCenter(this.Box);
@@ -34,9 +34,9 @@ public class Oven : Bench
     {
         var holding = p.holdingItem;
 
-        if(holding as Pan is not null)
+        if(holding as CookingTool is not null)
         {
-            PlacedItem = holding as Pan;
+            PlacedItem = holding as CookingTool;
             PlacedItem.Interact(p);
 
             var temp = PlacedItem.Box.AlignCenter(this.Box);

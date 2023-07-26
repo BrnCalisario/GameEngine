@@ -90,9 +90,14 @@ public partial class GameForm : Form
         fb4.SetItem(pan2);
         engine.AddBody(pan2);
 
+        FryingPan fp = new(new Rectangle());
+        engine.AddBody(fp);
+
 
         Pan pan1 = new(new Rectangle());
         engine.AddBody(pan1);
-        fb2.SetItem(pan1);
+        fb2.SetItem(fp);
+
+        
     }
 }
