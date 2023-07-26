@@ -39,7 +39,7 @@ public class SpriteStream
         if(actualSprite >= sprites.Count)
         {
             StartStream = DateTime.Now;
-            actualSprite = sprites.Count - 1;
+            actualSprite = 0;
             OnEndStream?.Invoke(this, EventArgs.Empty);
         }
 

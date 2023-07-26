@@ -98,6 +98,7 @@ public class CuttingBoard : Bench
         this.inAction = true;
         this.LastInteraction = DateTime.Now;
         CbSprite = CbSpriteLoader.GetAnimation(BoardTypes.WithoutKnife).Next();
+        
         Interactor = p;
         Interactor.Cutting = true;
     }
