@@ -10,28 +10,17 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using static ProjectPaths;
 
-public class Pan : Item
+public abstract class CookingTool : Item
 {
-    public Pan(Rectangle r) : base(new Rectangle(r.Location, new(48, 48)))
+    public CookingTool(Rectangle r) : base(new Rectangle(r.Location, new(48, 48)))
     {
-        SpriteController = new PanSpriteController();
-        SpriteController.StartAnimation(PanTypes.Void);
+
     }
-
-    readonly Image panImage = Resources.PanImage;
-    public PanSpriteController SpriteController { get; set; }
-    public List<Food> Ingredients { get; set; } = new List<Food>();
-
-    public bool HasCookedFood => Ingredients.Count() >= 3;
-
     public bool IsCooking { get; set; } = false;
-
-    bool hasTomato = false;
-    bool hasOnion = false;
-
+    public List<Food> Ingredients { get; set; } = new List<Food>();
     public override void Interact(Player p)
     {
-        if(!p.IsHolding || p.holdingItem == this)
+        if (!p.IsHolding || p.holdingItem == this)
         {
             base.Interact(p);
             this.IsCooking = false;
@@ -46,6 +35,36 @@ public class Pan : Item
         holding.Interact(p);
         holding.Dispose();
         Ingredients.Add(holding);
+    }
+
+    public virtual void ClearPan()
+    {
+        Ingredients.Clear();
+        //SpriteController.StartAnimation(PanTypes.Void);
+    }
+}
+
+
+public class Pan : CookingTool
+{
+    public Pan(Rectangle r) : base(new Rectangle(r.Location, new(48, 48)))
+    {
+        SpriteController = new PanSpriteController();
+        SpriteController.StartAnimation(PanTypes.Void);
+    }
+
+    readonly Image panImage = Resources.PanImage;
+    public PanSpriteController SpriteController { get; set; }
+
+    public bool HasCookedFood => Ingredients.Count >= 3;
+
+
+    bool hasTomato = false;
+    bool hasOnion = false;
+
+    public override void Interact(Player p)
+    {
+        base.Interact(p);
 
         foreach (var ingredient in Ingredients)
         {
@@ -66,13 +85,6 @@ public class Pan : Item
             SpriteController.StartAnimation(PanTypes.TomOnionPan);
         
     }
-
-    public void ClearPan()
-    {
-        Ingredients.Clear();
-        SpriteController.StartAnimation(PanTypes.Void);
-    }
-      
 
     public override void Draw(Graphics g)
     {

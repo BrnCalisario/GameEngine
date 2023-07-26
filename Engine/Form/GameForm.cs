@@ -96,8 +96,12 @@ public partial class GameForm : Form
         ov2.SetItem(pan2);
         engine.AddBody(pan2);
 
+
+
         Pan pan1 = new(new Rectangle());
         engine.AddBody(pan1);
-        ov1.SetItem(pan1);
+        fb2.SetItem(fp);
+
+        
     }
 }
