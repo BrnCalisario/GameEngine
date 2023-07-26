@@ -86,6 +86,13 @@ public class Pan : CookingTool
         
     }
 
+
+    public override void ClearPan()
+    {
+        base.ClearPan();
+        SpriteController.StartAnimation(PanTypes.Void);
+    }
+
     public override void Draw(Graphics g)
     {
         var c = SpriteController.GetCurrentSprite(this.IsCooking);

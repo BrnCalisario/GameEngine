@@ -10,7 +10,7 @@ public class Food : Item
 {
     public Food(Rectangle r, FoodTypes type) : base(new Rectangle(r.Location, new(30, 30)))
     {
-        Loader = new WrappedFoodSpriteLoader();
+        Loader = new FoodSpriteLoader();
         SpriteStream = Loader.GetAnimation(type);
     }
 

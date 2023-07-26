@@ -17,23 +17,15 @@ public class FryingPanSpriteLoader : SpriteLoader<FryingPanTypes>
 
         int startX = 0;
 
-        var voidFryingPan = new SpriteStream();
-        var cookingFryingPan = new SpriteStream();
+        var FryingPan = new SpriteStream();
 
-
-        var rectVoid = new Rectangle(startX, 0, scaled.Width, scaled.Height);
-        var spriteVoid = new Sprite(rectVoid.Location, rectVoid.Size);
-        voidFryingPan.Add(spriteVoid);
-        this.Animations.Add(FryingPanTypes.Void, voidFryingPan);
-
-        for(int i = scaled.Width; i< scaled.Width * 4; i+= scaled.Width)
+        for (int i = 0; i <= scaled.Width * 5; i += scaled.Width)
         {
             var rect = new Rectangle(i, 0, scaled.Width, scaled.Height);
             var sprite = new Sprite(rect.Location, rect.Size);
-            cookingFryingPan.Add(sprite);
+            FryingPan.Add(sprite);
         }
-        this.Animations.Add(FryingPanTypes.Frying,cookingFryingPan);
-
+        this.Animations.Add(FryingPanTypes.Void, FryingPan);
     }
 }
 
