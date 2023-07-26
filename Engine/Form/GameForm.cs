@@ -8,7 +8,6 @@ namespace Engine;
 
 using Engine.Kitchen;
 using Engine.Resource;
-using Engine.Sprites;
 using Extensions;
 
 public partial class GameForm : Form

@@ -88,6 +88,8 @@ public abstract class Body : IBody
         return container;
     }
 
+
+
     protected void RotateAngle(Graphics g, float angle)
     {
         
@@ -140,6 +142,19 @@ public abstract class CollidableBody : Body, ICollidableBody
 
         //this.CollisionMask?.Draw(g);
 
+    }
+
+    protected virtual void CorrectHorizontal()
+    {
+        //this.Box = this.CollisionMask.Box;
+        var newPos = new Point(BasicEngine.Current.Width - Box.X - Box.Width, Box.Y);
+        this.Box = new Rectangle(newPos, this.Box.Size);
+    }
+
+    protected Rectangle CorrectVertical(Rectangle box)
+    {
+        var newPos = new Point(box.X, BasicEngine.Current.Height - box.Y - box.Height);
+        return new Rectangle(newPos, box.Size);
     }
 
 

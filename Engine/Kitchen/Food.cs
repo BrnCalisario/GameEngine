@@ -36,7 +36,7 @@ public class Food : Item
     public override void Draw(Graphics g)
     {
         var c = Cutted ?
-            SpriteStream.Sprites.Last()
+            SpriteStream.Sprites.Skip(1).First()
             : SpriteStream.Sprites.First();
 
 
