@@ -43,9 +43,12 @@ public class FryingPan : CookingTool
         }
         base.Interact(p);
 
+
+        var food = this.Ingredients[0];
+
         if (hasFood)
         {
-            var food = this.Ingredients[0];
+            
             FoodSprite = food switch
             {
                 Meat => FoodSpriteLoader.GetAnimation(FoodTypes.Meat).Sprites.Last(),
@@ -62,14 +65,13 @@ public class FryingPan : CookingTool
             FoodRectangle = tempRect;
         }
 
-        foreach (var ingredient in Ingredients)
-        {
-            if (ingredient is Meat)
-                hasMeat = true;
+        
+        if (food is Meat)
+            hasMeat = true;
 
-            if (ingredient is Fish)
-                hasFish = true;
-        }
+        if (food is Fish)
+            hasFish = true;
+        
     }
 
     public override void ClearPan()
@@ -84,7 +86,6 @@ public class FryingPan : CookingTool
     {
         this.IsCooking = HasFood;
        
-
         var c = SpriteController.GetCurrentSprite(this.IsCooking);
 
         GraphicsContainer container = null;

@@ -22,9 +22,7 @@ public class CuttingBoard : Bench
         if(dir != Direction.Right)
         {
             tempRect.Y -= 5;
-
         }
-
         this.CbRectangle = tempRect;
     }
 
