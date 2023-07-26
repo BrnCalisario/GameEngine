@@ -23,7 +23,7 @@ public abstract class Bench : Interactable, IUnwalkable
     protected Sprite BenchSprite { get; set; }
     public Direction Direction { get; set; }
 
-    protected void SetDirection(Direction dir)
+    protected virtual void SetDirection(Direction dir)
     {
         this.Direction = dir;
 
@@ -34,7 +34,6 @@ public abstract class Bench : Interactable, IUnwalkable
 
             var tempSize = new Size(CollisionMask.Height, CollisionMask.Width);
             this.CollisionMask.Box = new(CollisionMask.Box.Location, tempSize);
-
         }
     }
 
@@ -68,6 +67,13 @@ public abstract class Bench : Interactable, IUnwalkable
     protected virtual void CorrectVertical()
     {
         this.Box = CorrectPosition(Box);
+    }
+
+    protected virtual void CorrectHorizontal() 
+    {
+        this.Box = this.CollisionMask.Box;
+        var newPos = new Point(BasicEngine.Current.Width - Box.X - Box.Width, Box.Y);
+        this.Box = new Rectangle(newPos, this.Box.Size);
     }
 
     protected Rectangle CorrectPosition(Rectangle box)
@@ -163,6 +169,58 @@ public class CornerBench : Bench
         : base(new Rectangle(box.Location, new(48, 48)), 1, null, dir)
     {
         BenchSprite = this.benchSpriteLoader.GetAnimation(BenchTypes.Corner).Next();
+    }
+
+    protected override void SetDirection(Direction dir)
+    {
+        this.Direction = dir;
+        
+        if (Direction == Direction.Left || Direction == Direction.Right)
+        {
+            var tempLoc = new Point(X - Width / 4, Y + Height / 4);
+            this.Box = new(tempLoc, Box.Size);
+
+            var tempSize = new Size(CollisionMask.Height, CollisionMask.Width);
+            this.CollisionMask.Box = new(CollisionMask.Box.Location, tempSize);
+        }
+
+    }
+
+    public override void Draw(Graphics g)
+    {
+
+        GraphicsContainer container = null;
+
+        if (Direction == Direction.Left || Direction == Direction.Right)
+        {
+            container = InvertHorizontal(g, container);
+            CorrectHorizontal();
+        }
+
+        if (Direction == Direction.Right || Direction == Direction.Top)
+        {
+            //container = RotateLeft(g);
+            container = InvertVertical(g, container);
+            CorrectVertical();
+        }
+
+        this.DrawBench(g);
+
+        if (container is not null)
+        {
+            g.EndContainer(container);
+
+            if (Direction == Direction.Top || Direction == Direction.Right)
+            {
+                CorrectVertical();
+            }
+
+            if (Direction == Direction.Left || Direction == Direction.Right)
+            {
+                CorrectHorizontal();
+            }
+        }
+        //CollisionMask?.Draw(g);
     }
 
     public override void Interact(Player p)
