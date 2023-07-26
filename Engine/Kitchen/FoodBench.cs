@@ -107,10 +107,7 @@ public abstract class Bench : Interactable, IUnwalkable
             {
                 CorrectVertical();
             }
-        }
-
-
-        //CollisionMask?.Draw(g);
+        }       
     }
 
     protected virtual Point GetRelativeItemPoint(Item item)
@@ -137,27 +134,45 @@ public class FoodBench : Bench
 
     public Item PlacedItem { get; private set; } = null;
 
+    public bool HasItem => PlacedItem is not null;
+
+    public void UnassignItem()
+    {
+        if (PlacedItem is null) return;
+
+        this.PlacedItem = null;
+        PlacedItem.UnassignBench();
+    }
+
+    public void AssignItem(Item i)
+    {
+        if (PlacedItem is not null) return;
+
+        this.PlacedItem = i;
+        PlacedItem.AssignBench(this);        
+    }
+
+
     public override void Interact(Player p)
     {
-        if (p.IsHolding && PlacedItem is not null)
+        if (p.IsHolding && this.HasItem)
             return;
 
-        if (PlacedItem is null && p.IsHolding)
+        if (!HasItem && p.IsHolding)
         {
-            PlacedItem = p.holdingItem;
+            this.AssignItem(p.holdingItem);            
             PlacedItem.Interact(p);
 
             var relativePoint = GetRelativeItemPoint(PlacedItem);
-
             PlacedItem.Box = new Rectangle(relativePoint, PlacedItem.Box.Size);
 
             return;
         }
 
-        if (PlacedItem is not null)
+        if (HasItem)
         {
             PlacedItem.Interact(p);
-            PlacedItem = null;
+            this.UnassignItem();
         }
     }
 
@@ -183,12 +198,10 @@ public class CornerBench : Bench
             var tempSize = new Size(CollisionMask.Height, CollisionMask.Width);
             this.CollisionMask.Box = new(CollisionMask.Box.Location, tempSize);
         }
-
     }
 
     public override void Draw(Graphics g)
     {
-
         GraphicsContainer container = null;
 
         if (Direction == Direction.Left || Direction == Direction.Right)
@@ -220,7 +233,6 @@ public class CornerBench : Bench
                 CorrectHorizontal();
             }
         }
-        //CollisionMask?.Draw(g);
     }
 
     public override void Interact(Player p)

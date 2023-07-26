@@ -8,6 +8,7 @@ using Engine.Extensions;
 using Engine.Resource;
 using Sprites;
 using System.Drawing.Drawing2D;
+using System.Net.Mail;
 
 public class FryingPan : CookingTool
 {
@@ -29,19 +30,18 @@ public class FryingPan : CookingTool
 
     bool hasFood => this.Ingredients.Count > 0;
 
-    bool hasMeat = false;
-    bool hasFish = false;
-
     public bool HasFood => Ingredients.Count >= 1;
 
     public override void Interact(Player p)
     {
         if(p.IsHolding)
         {
-            if (p.holdingItem is not Meat && p.holdingItem is not Fish)
+            if (p.holdingItem is not Meat && p.holdingItem is not Fish && p.holdingItem is not CookingTool)
                 return;
         }
+
         base.Interact(p);
+        
 
         if (hasFood)
         {
@@ -60,15 +60,6 @@ public class FryingPan : CookingTool
             tempRect.X += 5;
             tempRect.Y += 3;
             FoodRectangle = tempRect;
-        }
-
-        foreach (var ingredient in Ingredients)
-        {
-            if (ingredient is Meat)
-                hasMeat = true;
-
-            if (ingredient is Fish)
-                hasFish = true;
         }
     }
 
@@ -89,10 +80,12 @@ public class FryingPan : CookingTool
 
         GraphicsContainer container = null;
 
-        if (Player?.Invert ?? false)
+        if (PlayerParent?.Invert ?? false)
         {
             container = this.InvertHorizontal(g);
-            this.CorrectHorizontal();
+            this.Box = this.CorrectHorizontal(this.Box);
+            this.FoodRectangle = this.CorrectHorizontal(this.FoodRectangle);
+
         }
 
         g.DrawImage(
@@ -118,9 +111,10 @@ public class FryingPan : CookingTool
             );
         }
 
-        if(Player?.Invert ?? false)
-        {            
-            this.CorrectHorizontal();
+        if(PlayerParent?.Invert ?? false)
+        {
+            this.Box = this.CorrectHorizontal(this.Box);
+            this.FoodRectangle = this.CorrectHorizontal(this.FoodRectangle);
         };
 
 
@@ -134,9 +128,11 @@ public class FryingPan : CookingTool
     {
         base.Update();
         
-        if(this.BeingHold && hasFood)
+        if(BeingHold && hasFood)
         {
-            this.FoodRectangle = this.SetRectRelativePosition(this.FoodRectangle, Player.CurrentDirection);
+            var temp = this.SetRectRelativePosition(this.FoodRectangle, PlayerParent.CurrentDirection);
+            temp.X += PlayerParent?.Invert ?? false ? 30 : -15;
+            this.FoodRectangle = temp;
         }
     }
 
