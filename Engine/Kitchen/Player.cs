@@ -19,7 +19,7 @@ public class Player : CollidableBody
     public Player(Rectangle box, Pen pen = null) : base(box, pen)
     {
         this.Box = new Rectangle(box.X, box.Y, 60, 90);
-        this.SetColllisionMask(new Rectangle(this.Box.Width / 2 - 18, this.Height / 2 + 16, 36, this.Height / 3));
+        this.SetColllisionMask(new Rectangle(this.Box.Width / 2 - 12, this.Height / 2 + 16, 26, (int)(this.Height / 3.5)));
     }
 
     private readonly int speed = 10;
@@ -96,7 +96,7 @@ public class Player : CollidableBody
             this.Box = new Rectangle(newPos, this.Box.Size);
         }
 
-        g.DrawRectangle(Pen, this.Box);
+        //g.DrawRectangle(Pen, this.Box);
         g.DrawString($"{CurrentDirection}", SystemFonts.DefaultFont, Pen.Brush, new Point(1, 30));
         g.DrawString($"X:{X}, Y:{Y}", SystemFonts.DefaultFont, Pen.Brush, new Point(1, 90));
 
