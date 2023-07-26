@@ -1,14 +1,12 @@
 ﻿
-using System.Runtime.Versioning;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace Engine;
 
-using static ProjectPaths;
 using Extensions;
 using Sprites;
 using Engine.Resource;
-using System.Drawing.Drawing2D;
 
 public abstract class Bench : Interactable, IUnwalkable
 {
