@@ -34,6 +34,7 @@ public abstract class Item : Interactable, IDisposable
 
     public bool Interactable => CanInteract();
 
+    public FoodBench FoodBench { get; set; } = null;
     public Player Player { get; private set; } = null;
     public bool BeingHold => Player != null;
 
