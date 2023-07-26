@@ -112,7 +112,7 @@ public abstract class GameEngine : IGameEngine
     public virtual void Start()
     {
         if (!IsParentSet())
-            throw new Exception("Parente form not set");
+            throw new Exception("Parent form not set");
 
         if (!loaded)
             this.Load();
@@ -127,7 +127,7 @@ public abstract class GameEngine : IGameEngine
         tm.Stop();
     }
 
-    public void Load()
+    public virtual void Load()
     {
         bmp = new Bitmap(pb.Width, pb.Height);
         graphics = Graphics.FromImage(bmp);

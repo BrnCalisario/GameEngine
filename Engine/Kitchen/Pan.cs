@@ -8,7 +8,6 @@ using Engine.Resource;
 using Sprites;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using static ProjectPaths;
 
 public abstract class CookingTool : Item
 {
@@ -18,6 +17,7 @@ public abstract class CookingTool : Item
     }
     public bool IsCooking { get; set; } = false;
     public List<Food> Ingredients { get; set; } = new List<Food>();
+    public abstract bool HasCookedFood { get; }
     public override void Interact(Player p)
     {
         if (!p.IsHolding || p.holdingItem == this)
@@ -56,7 +56,7 @@ public class Pan : CookingTool
     readonly Image panImage = Resources.PanImage;
     public PanSpriteController SpriteController { get; set; }
 
-    public bool HasCookedFood => Ingredients.Count >= 3;
+    public override bool HasCookedFood => Ingredients.Count >= 3;
 
     bool hasTomato = false;
     bool hasOnion = false;

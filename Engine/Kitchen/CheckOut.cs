@@ -8,10 +8,10 @@ using Sprites;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-public class CheckOut : Interactable, IUnwalkable
+public class CheckOut : Bench
 {
 
-    public CheckOut(Rectangle box) : base(new Rectangle(box.Location, new(96, 48)), 1.25f)
+    public CheckOut(Rectangle box, Direction dir = Direction.Bottom) : base(new Rectangle(box.Location, new(96, 48)), 1, null, dir)
     {
         Loader = new CheckOutSpriteLoader();
         CheckOutSprite = Loader.GetAnimation(CheckOutTypes.TransportingBelt).Next();
@@ -25,10 +25,7 @@ public class CheckOut : Interactable, IUnwalkable
     Sprite CheckOutSprite;
     SpriteStream SpriteStream { get; set; }
 
-
-
-
-    public override void Draw(Graphics g)
+    protected override void DrawBench(Graphics g)
     {
         var c = SpriteStream.Next();
 

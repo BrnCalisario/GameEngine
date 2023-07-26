@@ -4,6 +4,7 @@ using System.Windows.Forms;
 
 namespace Engine;
 
+using System.Linq;
 using Tiles;
 
 public class BasicEngine : GameEngine
@@ -26,7 +27,7 @@ public class BasicEngine : GameEngine
     public static void New()
         => current = new BasicEngine();
 
-    public readonly List<IBody> RenderStack = new();
+    public List<IBody> RenderStack = new();
 
     public readonly List<CollidableBody> Walls = new();
     public readonly List<Interactable> Interactables = new();
@@ -35,6 +36,22 @@ public class BasicEngine : GameEngine
     public Player Player = null;
 
     public TileSet tileSet { get; set; }
+
+    public override void Load()
+    {
+        base.Load();
+
+        this.RenderStack = RenderStack.OrderBy(r =>
+        {
+            if (r is Bench)
+                return 0;
+            if (r is CookingTool)
+                return 1;
+            if (r is Player)
+                return 2;
+            return 3;
+        }).ToList();
+    }
 
     public override void AddBody(IBody body)
     {

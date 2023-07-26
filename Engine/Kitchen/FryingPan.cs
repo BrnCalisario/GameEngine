@@ -22,15 +22,15 @@ public class FryingPan : CookingTool
     readonly Image fryingPanImage = Resources.FryingPanImage;
     readonly Image foodImage = Resources.FoodImage;
 
-    private Sprite FoodSprite { get; set; }
-    private Rectangle FoodRectangle { get; set; }
+    public Sprite FoodSprite { get; private set; }
+    public Rectangle FoodRectangle { get; private set; }
 
     public FryingPanSpriteController SpriteController { get; set; }
     public FoodSpriteLoader FoodSpriteLoader { get; set; }
 
-    bool hasFood => this.Ingredients.Count > 0;
-
     public bool HasFood => Ingredients.Count >= 1;
+
+    public override bool HasCookedFood => Ingredients.Count == 1;
 
     public override void Interact(Player p)
     {
@@ -42,10 +42,12 @@ public class FryingPan : CookingTool
 
         base.Interact(p);
 
+        if (Ingredients.Count == 0)
+            return;
 
         var food = this.Ingredients[0];
 
-        if (hasFood)
+        if (HasFood)
         {
 
             FoodSprite = food switch
@@ -99,7 +101,7 @@ public class FryingPan : CookingTool
             GraphicsUnit.Pixel
             );
 
-        if (hasFood)
+        if (HasFood)
         {
             g.DrawImage(
               foodImage,
@@ -129,17 +131,11 @@ public class FryingPan : CookingTool
     {
         base.Update();
 
-        if ((BeingHold || InBench) && hasFood)
+        if ((BeingHold || InBench) && HasFood)
         {
-            if (BeingHold)
-            {
-                var tempRec = this.SetRectRelativePosition(this.FoodRectangle, PlayerParent.CurrentDirection);
-                tempRec.X += PlayerParent?.Invert ?? false ? 30 : -15;
-                this.FoodRectangle = tempRec;
-                return;
-            }
-
             var temp = FoodRectangle.AlignCenter(this.Box);
+            
+                temp.X += this.PlayerParent?.CurrentDirection == Direction.Left ? -12 : 6;
             this.FoodRectangle = temp;            
         }
     }

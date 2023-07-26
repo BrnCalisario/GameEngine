@@ -136,6 +136,15 @@ public class FoodBench : Bench
 
     public bool HasItem => PlacedItem is not null;
 
+    public void SetItem(Item item)
+    {
+        this.PlacedItem = item;
+        var temp = PlacedItem.Box.AlignCenter(this.Box);
+
+        var relativePoint = GetRelativeItemPoint(PlacedItem);
+        PlacedItem.Box = new Rectangle(relativePoint, temp.Size);
+    }
+
     public void UnassignItem()
     {
         if (PlacedItem is null) return;

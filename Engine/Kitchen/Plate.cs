@@ -1,14 +1,12 @@
-﻿using System.Drawing;
-using Engine.Sprites;
-using System.Linq;
+﻿using System.Linq;
+using System.Drawing;
+using System.Collections.Generic;
 
 namespace Engine;
 
-using Engine.Resource;
+using Engine.Extensions;
+using Resource;
 using Sprites;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using static ProjectPaths;
 
 public class Plate : Item
 {
@@ -16,12 +14,20 @@ public class Plate : Item
     {
         SpriteController = new PlateSpriteController();
         SpriteController.StartAnimation(PlateTypes.VoidPlate);
+        FoodSpriteLoader = new FoodSpriteLoader();
     }
 
     Image plateImage = Resources.PlateImage;
+    Image foodImage = Resources.FoodImage;
 
     public List<Food> Ingredients { get; set; } = new List<Food>();
     public PlateSpriteController SpriteController { get; set; }
+
+    public FoodSpriteLoader FoodSpriteLoader { get; set; }
+    Sprite FoodSprite { get; set; }
+    Rectangle FoodRectangle { get; set; }
+
+    bool hasMeat { get; set; } = false;
 
     bool hasTomato = false;
     bool hasOnion = false;
@@ -35,38 +41,62 @@ public class Plate : Item
         }
 
 
-        if (p.holdingItem is not Pan holding)
+        if (p.holdingItem is not CookingTool holding)
             return;
 
+        if (!holding.HasCookedFood)
+            return;
 
-        if (holding.HasCookedFood)
+        if(holding is Pan pan)
         {
-            foreach (var ingredient in holding.Ingredients)
-            {
-                Ingredients.Add(ingredient);
+            HandlePan(pan);
+            return;
+        }
 
-                if (ingredient is Tomato)
-                    hasTomato = true;
-
-                if (ingredient is Onion)
-                    hasOnion = true;
-            }
-
-            holding.ClearPan();
-
-            if (hasTomato)
-                SpriteController.StartAnimation(PlateTypes.TomatoPlate);
-
-            if (hasOnion)
-                SpriteController.StartAnimation(PlateTypes.OnionPlate);
-
-            if (hasTomato && hasOnion)
-                SpriteController.StartAnimation(PlateTypes.Tom_OnionPlate);
-
-            if(!hasTomato && !hasOnion)
-                SpriteController.StartAnimation(PlateTypes.VoidPlate);
+        if(holding is FryingPan fryingPan)
+        {
+            HandleFryingPan(fryingPan);
+            return;
         }
     }
+
+    private void HandleFryingPan(FryingPan pan)
+    {
+        Ingredients.Add(pan.Ingredients.First());
+
+        this.FoodSprite = pan.FoodSprite;
+        this.FoodRectangle = pan.FoodRectangle;
+
+        hasMeat = true;
+
+        pan.ClearPan();
+    }
+
+    private void HandlePan(Pan pan)
+    {
+        foreach (var ingredient in pan.Ingredients)
+        {
+            Ingredients.Add(ingredient);
+
+            if (ingredient is Tomato)
+                hasTomato = true;
+
+            if (ingredient is Onion)
+                hasOnion = true;
+        }
+
+        pan.ClearPan();
+
+        if (hasTomato)
+            SpriteController.StartAnimation(PlateTypes.TomatoPlate);
+
+        if (hasOnion)
+            SpriteController.StartAnimation(PlateTypes.OnionPlate);
+
+        if (hasTomato && hasOnion)
+            SpriteController.StartAnimation(PlateTypes.Tom_OnionPlate);
+    }
+
 
     public void ClearPlate()
     {
@@ -87,6 +117,29 @@ public class Plate : Item
             c.Height,
             GraphicsUnit.Pixel
             );
+
+        if (!hasMeat) return;
+
+        g.DrawImage(
+            foodImage,
+            FoodRectangle,
+            FoodSprite.X,
+            FoodSprite.Y,
+            FoodSprite.Width,
+            FoodSprite.Height,
+            GraphicsUnit.Pixel
+            );            
+    }
+
+    public override void Update()
+    {
+        base.Update();
+
+        if(hasMeat)
+        {
+            var temp = FoodRectangle.AlignCenter(this.Box);
+            this.FoodRectangle = temp;
+        }
     }
 
 }
