@@ -54,9 +54,6 @@ public class Plate : Item
 
             holding.ClearPan();
 
-            //MessageBox.Show("Onion: " + hasOnion + "\nTomato: " + hasTomato);
-
-
             if (hasTomato)
                 SpriteController.StartAnimation(PlateTypes.TomatoPlate);
 

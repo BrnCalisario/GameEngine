@@ -6,6 +6,7 @@ namespace Engine;
 using Engine.Resource;
 using Sprites;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 public class CheckOut : Interactable, IUnwalkable
 {
@@ -18,7 +19,8 @@ public class CheckOut : Interactable, IUnwalkable
     }
 
     SpriteLoader<CheckOutTypes> Loader { get; set; }
-    public List<Food> Ingredients { get; set; } = new List<Food>();
+    public Plate plate { get; set; }
+    
     Image checkOutImage = Resources.CheckOutImage;
     Sprite CheckOutSprite;
     SpriteStream SpriteStream { get; set; }
@@ -28,7 +30,6 @@ public class CheckOut : Interactable, IUnwalkable
 
     public override void Draw(Graphics g)
     {
-
         var c = SpriteStream.Next();
 
         g.DrawImage(
@@ -48,6 +49,19 @@ public class CheckOut : Interactable, IUnwalkable
 
     public override void Interact(Player p)
     {
-        throw new System.NotImplementedException();
+        MessageBox.Show("Interagiu!");
+        if (p.holdingItem is not Plate holding)
+            return;
+
+        this.plate = holding;
+
+        MessageBox.Show(holding.Ingredients.Count.ToString());
+
+        holding.ClearPlate();
+    }
+
+    public override void Update()
+    {
+        base.Update();
     }
 }

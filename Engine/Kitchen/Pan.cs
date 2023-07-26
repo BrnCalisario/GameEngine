@@ -88,6 +88,8 @@ public class Pan : CookingTool
 
     public override void ClearPan()
     {
+        hasTomato = false;
+        hasOnion = false;
         base.ClearPan();
         SpriteController.StartAnimation(PanTypes.Void);
     }
