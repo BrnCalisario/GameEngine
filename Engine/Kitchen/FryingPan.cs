@@ -30,10 +30,12 @@ public class FryingPan : CookingTool
 
     bool hasFood => this.Ingredients.Count > 0;
 
-    public bool HasFood => Ingredients.Count >= 1;
+    public bool teste => Ingredients.Count >= 3;
 
     public override void Interact(Player p)
     {
+        HasCookedFood = teste;
+
         if (p.IsHolding)
         {
             if (p.holdingItem is not Meat && p.holdingItem is not Fish && p.holdingItem is not CookingTool)
@@ -75,7 +77,7 @@ public class FryingPan : CookingTool
 
     public override void Draw(Graphics g)
     {
-        this.IsCooking = HasFood;
+        this.IsCooking = HasCookedFood;
 
         var c = SpriteController.GetCurrentSprite(this.IsCooking);
 

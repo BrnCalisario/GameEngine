@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace Engine;
 
+using Engine.Extensions;
 using Engine.Resource;
 using Sprites;
 using System.Collections.Generic;
@@ -18,13 +19,25 @@ public class Plate : Item
         SpriteController.StartAnimation(PlateTypes.VoidPlate);
     }
 
-    Image plateImage = Resources.PlateImage;
+    readonly Image plateImage = Resources.PlateImage;
+    readonly Image foodImage = Resources.FoodImage;
+
+    private Sprite FoodSprite { get; set; }
+    private Rectangle FoodRectangle { get; set; }
+    public FoodSpriteLoader FoodSpriteLoader { get; set; }
+
 
     public List<Food> Ingredients { get; set; } = new List<Food>();
+
     public PlateSpriteController SpriteController { get; set; }
 
     bool hasTomato = false;
     bool hasOnion = false;
+
+    bool hasMeat = false;
+    bool hasFish = false;
+
+    bool hasProtein = false;
 
     public override void Interact(Player p)
     {
@@ -35,7 +48,7 @@ public class Plate : Item
         }
 
 
-        if (p.holdingItem is not Pan holding)
+        if (p.holdingItem is not CookingTool holding)
             return;
 
 
@@ -50,6 +63,12 @@ public class Plate : Item
 
                 if (ingredient is Onion)
                     hasOnion = true;
+
+                if (ingredient is Meat)
+                    hasMeat = true;
+
+                if (ingredient is Fish)
+                    hasFish = true;                         
             }
 
             holding.ClearPan();
@@ -65,11 +84,25 @@ public class Plate : Item
 
             if(!hasTomato && !hasOnion)
                 SpriteController.StartAnimation(PlateTypes.VoidPlate);
+
+            if (hasMeat)
+                FoodSpriteLoader.GetAnimation(FoodTypes.Meat).Sprites.Last();
+
+            if (hasFish)
+                FoodSpriteLoader.GetAnimation(FoodTypes.Fish).Sprites.Last();
+
+            var tempRect = new Rectangle(0, 0, 25, 25).AlignCenter(Box);
+            FoodRectangle = tempRect;
+
         }
     }
 
     public void ClearPlate()
     {
+        hasFish = false;
+        hasMeat = false;
+        hasOnion = false;
+        hasTomato = false;
         Ingredients.Clear();
         SpriteController.StartAnimation(PlateTypes.VoidPlate);
     }
@@ -87,6 +120,19 @@ public class Plate : Item
             c.Height,
             GraphicsUnit.Pixel
             );
+
+        if(hasProtein)
+        {
+            g.DrawImage(
+             foodImage,
+             FoodRectangle,
+             FoodSprite.X,
+             FoodSprite.Y,
+             FoodSprite.Width,
+             FoodSprite.Height,
+             GraphicsUnit.Pixel
+           );
+        }
     }
 
 }

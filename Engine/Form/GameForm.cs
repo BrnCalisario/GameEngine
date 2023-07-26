@@ -275,7 +275,7 @@ public partial class GameForm : Form
         engine.AddBody(pan4);
         ov4.SetItem(pan4);
 
-        Plate plate = new Plate(new Rectangle().AlignBelow(fb27.CollisionMask.Box), Sprites.PlateTypes.VoidPlate);
+        Plate plate = new Plate(new Rectangle().AlignBelow(fb38.CollisionMask.Box));
         engine.AddBody(plate);
 
         //Trash trash = new Trash(new Rectangle().AlignBelow(fb28.CollisionMask.Box));

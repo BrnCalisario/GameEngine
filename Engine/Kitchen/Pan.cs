@@ -16,6 +16,8 @@ public abstract class CookingTool : Item
     {
 
     }
+
+    public bool HasCookedFood { get; set; } = false;
     public bool IsCooking { get; set; } = false;
     public List<Food> Ingredients { get; set; } = new List<Food>();
     public override void Interact(Player p)
@@ -56,13 +58,17 @@ public class Pan : CookingTool
     readonly Image panImage = Resources.PanImage;
     public PanSpriteController SpriteController { get; set; }
 
-    public bool HasCookedFood => Ingredients.Count >= 3;
+    public bool teste => Ingredients.Count >= 3;
+    
+
 
     bool hasTomato = false;
     bool hasOnion = false;
 
     public override void Interact(Player p)
     {
+        this.HasCookedFood = teste;
+
         base.Interact(p);
 
         foreach (var ingredient in Ingredients)

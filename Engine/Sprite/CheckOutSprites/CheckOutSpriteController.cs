@@ -16,11 +16,11 @@ public class CheckOutSpriteLoader : SpriteLoader<CheckOutTypes>
         var scaled = SpriteSize.Scale(this.Scale);
         var belt = new SpriteStream();
 
-        int startX = 0;
+        int startX = 3;
 
-        for(int i = startX; i <= scaled.Width * 5; i += scaled.Width + 6)
+        for(int i = startX; i < scaled.Width * 5; i += scaled.Width + 6)
         {
-            var rect = new Rectangle(i, 0, scaled.Width, scaled.Height);
+            var rect = new Rectangle(i, 3, scaled.Width, scaled.Height);
             Sprite sprite = new Sprite(rect.Location, rect.Size);
             belt.Add(sprite);
         }
