@@ -82,8 +82,7 @@ public enum PanTypes
     Void,
     TomatoPan,
     OnionPan,
-    TomOnionPan,
-    FryingPan
+    TomOnionPan
 }
 
 

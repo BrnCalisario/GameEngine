@@ -29,7 +29,6 @@ public class CheckOutSpriteLoader : SpriteLoader<CheckOutTypes>
 }
 
 
-
 public class CheckOutSpriteController
     : SpriteController<CheckOutSpriteLoader, CheckOutTypes>
 {
@@ -38,7 +37,6 @@ public class CheckOutSpriteController
         this.SpriteLoader = new CheckOutSpriteLoader();
     }
 }
-
 
 
 public enum CheckOutTypes

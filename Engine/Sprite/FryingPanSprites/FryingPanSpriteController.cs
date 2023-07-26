@@ -51,6 +51,5 @@ public class FryingPanSpriteController
 
 public enum FryingPanTypes
 {
-    Void,
-    Frying
+    Void
 }

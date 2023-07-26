@@ -88,15 +88,9 @@ public class FoodSpriteController
 public enum FoodTypes
 {
     Tomato,
-    SlicedTomato,
     Onion,
-    SlicedOnion,
     Meat,
-    SlicedMeat,
-    CookedMeat,
-    Fish,
-    SlicedFish,
-    CookedFish
+    Fish
 }
 
 
