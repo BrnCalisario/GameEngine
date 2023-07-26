@@ -18,7 +18,7 @@ public class CheckOutSpriteLoader : SpriteLoader<CheckOutTypes>
 
         int startX = 0;
 
-        for(int i = startX; i <= scaled.Width * 5; i += scaled.Width)
+        for(int i = startX; i <= scaled.Width * 5; i += scaled.Width + 6)
         {
             var rect = new Rectangle(i, 0, scaled.Width, scaled.Height);
             Sprite sprite = new Sprite(rect.Location, rect.Size);

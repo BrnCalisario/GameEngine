@@ -19,7 +19,7 @@ public class FryingPanSpriteLoader : SpriteLoader<FryingPanTypes>
 
         var FryingPan = new SpriteStream();
 
-        for (int i = 0; i <= scaled.Width * 5; i += scaled.Width)
+        for (int i = startX ; i < scaled.Width * 5 ; i += scaled.Width)
         {
             var rect = new Rectangle(i, 0, scaled.Width, scaled.Height);
             var sprite = new Sprite(rect.Location, rect.Size);

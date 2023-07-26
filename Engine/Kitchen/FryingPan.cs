@@ -43,7 +43,8 @@ public class FryingPan : CookingTool
     public override void ClearPan()
     {
         base.ClearPan();
-        SpriteController.StartAnimation(FryingPanTypes.Void);
+        SpriteController.CurrentAnimation.Sprites.First();
+        //SpriteController.StartAnimation(FryingPanTypes.Void);
     }
 
 

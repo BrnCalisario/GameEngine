@@ -89,19 +89,9 @@ public partial class GameForm : Form
 
         FoodBench fb6 = new(new Rectangle().AlignBesideRight(obt.CollisionMask.Box), Direction.Top);
         this.engine.AddBody(fb6);
-        
-
 
         Pan pan2 = new(new Rectangle());
         ov2.SetItem(pan2);
         engine.AddBody(pan2);
-
-
-
-        //Pan pan1 = new(new Rectangle());
-        //engine.AddBody(pan1);
-        fb2.SetItem(fp);
-
-        
     }
 }

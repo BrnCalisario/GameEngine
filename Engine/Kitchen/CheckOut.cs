@@ -24,8 +24,11 @@ public class CheckOut : Interactable, IUnwalkable
     SpriteStream SpriteStream { get; set; }
 
 
+
+
     public override void Draw(Graphics g)
     {
+
         var c = SpriteStream.Next();
 
         g.DrawImage(

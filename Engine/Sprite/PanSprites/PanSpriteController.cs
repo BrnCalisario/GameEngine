@@ -26,7 +26,8 @@ public class PanSpriteLoader : SpriteLoader<PanTypes>
         
         this.Animations.Add(PanTypes.Void, voidPan);
 
-        startY += scaled.Height + 6;        
+        startY += scaled.Height + 6;  
+        
         for (int i = 0; i< scaled.Width * 5; i += scaled.Width + 9)
         {
             var rect = new Rectangle(i, startY, scaled.Width, scaled.Height);
