@@ -4,6 +4,7 @@ using System.Windows.Forms;
 
 namespace Engine;
 
+using Engine.Extensions;
 using System.Linq;
 using Tiles;
 
@@ -36,6 +37,8 @@ public class BasicEngine : GameEngine
     public Player Player = null;
 
     public TileSet tileSet { get; set; }
+
+    public int Points { get; set; } = 0;
 
     public override void Load()
     {
@@ -79,7 +82,13 @@ public class BasicEngine : GameEngine
             body.Draw(this.graphics);
         }
 
-        this.graphics.DrawString($"FPS:{this.Fps}", SystemFonts.MenuFont, Brushes.Black, new Point(0, 0));
+        //this.graphics.DrawString($"FPS:{this.Fps}", SystemFonts.MenuFont, Brushes.Black, new Point(0, 0));
+
+        var rect = new Rectangle(0, 0, 600, 40).AlignBottomLeft(this.Box);
+
+        var font = new Font("JetBrains Mono", 32, FontStyle.Bold, GraphicsUnit.Pixel); 
+
+        this.graphics.DrawString($"Points:{this.Points}", font, Brushes.Black, rect);
     }
 
     public override void Update()

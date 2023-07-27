@@ -10,10 +10,23 @@ using System.Threading.Tasks;
 namespace Engine;
 
 public class Order
-{ 
+{
+    public Order()
+    {
+    }
+
     public string Name { get; set; }
     public string Description { get; set; }
     public OrderType Type { get; set; }
+    public DateTime StartTime { get; set; } = DateTime.Now;
+    public TimeSpan TimeLimit { get; set; } = TimeSpan.FromSeconds(45);
+
+    public bool PassedOver => GetRemaingTime() <= 0;
+
+    public int GetRemaingTime()
+    {
+        return (int)(TimeLimit - (DateTime.Now - StartTime)).TotalSeconds;
+    }
 }
 
 public class OrderTab : Body
@@ -115,6 +128,11 @@ public class OrderTab : Body
 
         for(int i = 0; i < orders.Count; i++)
         {
+            if (orders[i].PassedOver)
+            {
+                CompleteOrder(orders[i]);
+                return;
+            }
             var orderPos = new Point(pos.X + 15 + (130 * i + 15 * i), pos.Y + 15);
             DrawOrder(g, orderPos, this.orders[i]);
         }
@@ -139,6 +157,7 @@ public class OrderTab : Body
         var randV = Random.Shared.Next(this.Possibilities.Count - 1);
         
         var randOrder = this.Possibilities[randV];
+        randOrder.StartTime = DateTime.Now;
 
         this.orders.Add(randOrder);
     }
@@ -148,6 +167,7 @@ public class OrderTab : Body
         var orderRect = new Rectangle(pos, new(130, 130));
         g.DrawRectangle(Pens.Blue, orderRect);
         g.DrawString($"{order.Name}", SystemFonts.MenuFont, Pen.Brush, pos.X, pos.Y + 130 / 2 - 8);
+        g.DrawString($"{order.GetRemaingTime()}", SystemFonts.MenuFont, Pen.Brush, pos.X, pos.Y + 130 - 16);
     }
 
 
