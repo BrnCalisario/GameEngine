@@ -12,14 +12,15 @@ public class Order
 
     public string Name { get; set; }
     public string Description { get; set; }
-    public Rectangle Box { get; set; }
+    public Rectangle Box { get; set; } 
+    
     public OrderType Type { get; set; }
     public DateTime StartTime { get; set; } = DateTime.Now;
-    public TimeSpan TimeLimit { get; set; } = TimeSpan.FromSeconds(45);
+    public TimeSpan TimeLimit { get; set; } = TimeSpan.FromSeconds(12);
     
     public TimeBar TimeProgress { get; set; }
 
-    public bool PassedOver => GetRemaingTime() <= 0;
+    public bool PassedOver => GetRemaingTime() < 0;
 
     public int GetRemaingTime()
     {
@@ -30,6 +31,12 @@ public class Order
     {
         var rect = new Rectangle(Box.X, Box.Y + Box.Height,this.Box.Width, 10);
         TimeProgress = new TimeBar(rect, TimeLimit, true);
+    }
+
+    public void UpdateProgressPos()
+    {
+        var pos = new Point(Box.X, Box.Y + Box.Height);
+        TimeProgress.UpdateLocation(pos);
     }
 }
 
@@ -123,6 +130,15 @@ public class OrderTab : Body
         int points = success ? 15 : -15;
 
         BasicEngine.Current.Points += points;
+        var boxPos = Box.Location;
+
+        for(int i = 0; i < orders.Count; i++)
+        {
+            var pos = new Point(boxPos.X + 15 + (130 * i + 15 * i), boxPos.Y + 15);
+
+            orders[i].Box = new Rectangle(pos, new(130, 130));
+            orders[i].UpdateProgressPos();
+        }
     }
 
     public override void Draw(Graphics g)

@@ -14,14 +14,14 @@ public abstract class ProgressBar : Body
 
     protected Rectangle ProgressRectangle { get; set; }
 
-    protected Pen ProgressPen { get; set; }
+    protected Pen ProgressPen { get; set; } = Pens.Green;
 
     public int MaxValue { get; set; } = 100;
     public int MinValue { get; set; } = 0;
 
     public override void Draw(Graphics g)
     {
-        g.FillRectangle(Brushes.Green, ProgressRectangle);
+        g.FillRectangle(ProgressPen.Brush, ProgressRectangle);
         g.DrawRectangle(Pen, Box);
     }
 
@@ -60,6 +60,13 @@ public class TimeBar : ProgressBar
         CalculateWidth();
     }
 
+    public void UpdateLocation(Point point)
+    {
+        this.Box = new Rectangle(point, Box.Size);
+        this.ProgressRectangle = new Rectangle(this.Box.Location, ProgressRectangle.Size);
+    }
+
+
     private void CalculateWidth()
     {
         var diff = DateTime.Now - StartProgress;
@@ -77,7 +84,18 @@ public class TimeBar : ProgressBar
 
         var percentange = diff / Interval;
 
+        if (percentange > 0.5)
+            this.ProgressPen = Pens.Orange;
+
+        if (percentange > 0.75)
+            this.ProgressPen = Pens.Red;        
+
+        if (percentange < 0.5)
+            this.ProgressPen = Pens.Green;
+        
         int wid = (int)(Box.Width * percentange);
+
+        
 
         wid = Descending ? Box.Width - wid : wid;
 
