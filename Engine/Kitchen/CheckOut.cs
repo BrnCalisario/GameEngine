@@ -4,6 +4,7 @@ namespace Engine;
 
 using Resource;
 using Sprites;
+using System.Linq;
 
 public class CheckOut : Bench
 {
@@ -48,6 +49,12 @@ public class CheckOut : Bench
 
         if (plate.Order == OrderType.InvalidOrder)
             return;
+
+        var orderMatch = OrderTab.Current.Orders.FirstOrDefault(o => o.Type == plate.Order);
+
+        if (orderMatch is null) return;
+
+        OrderTab.Current.CompleteOrder(orderMatch);
 
         plate.Interact(p);
         plate.Deliver();

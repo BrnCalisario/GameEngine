@@ -34,7 +34,6 @@ public abstract class Item : Interactable, IDisposable
 
     public bool Interactable => CanInteract();
 
-
     public Player PlayerParent = null;
 
     public FoodBench BenchParent = null;
@@ -43,12 +42,6 @@ public abstract class Item : Interactable, IDisposable
     public bool InBench => BenchParent != null;
 
     public Direction Direction { get; set; } = Direction.Bottom;
-
-    //public override void Draw(Graphics g)
-    //{
-    //    if (CollisionMask is not null)
-    //        g.DrawEllipse(new Pen(Color.Black), this.CollisionMask.Box);
-    //}
 
     public override void Update()
     {

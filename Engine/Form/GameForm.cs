@@ -51,6 +51,11 @@ public partial class GameForm : Form
         Player player = new(new Rectangle().AlignCenter(tileSet.Box));
         engine.AddBody(player);
 
+        OrderTab.New();
+        OrderTab tab = OrderTab.Current;
+
+        engine.AddBody(tab);
+
         engine.Start();
     }
 
