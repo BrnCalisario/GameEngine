@@ -29,7 +29,12 @@ public class Plate : Item
     public OrderType Order { get; private set; } = OrderType.InvalidOrder;
 
     private bool hasProtein { get; set; } = false;
-  
+
+    private int lastPositionX { get; set; }
+    private int lastPositionY { get; set; }
+
+
+
     public override void Interact(Player p)
     {
         if (!p.IsHolding || p.holdingItem == this)        
@@ -94,6 +99,8 @@ public class Plate : Item
 
     public void Deliver()
     {
+        
+            
         Rectangle rect = new(700, 350, this.Box.Width, this.Box.Height);
         this.Box = rect;
 

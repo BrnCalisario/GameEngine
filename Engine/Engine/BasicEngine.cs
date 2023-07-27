@@ -63,6 +63,8 @@ public class BasicEngine : GameEngine
                 return 2;
             return 3;
         }).ToList();
+
+        OrderTab.Current.GetRandomOrder();
     }
 
     public override void AddBody(IBody body)

@@ -6,7 +6,7 @@ using Extensions;
 using static System.Windows.Forms.AxHost;
 
 
-public class OrderSpriteLoader : SpriteLoader<OrderTypes>
+public class OrderSpriteLoader : SpriteLoader<OrderType>
 {
     public OrderSpriteLoader() : base(scale: 3) { }
 
@@ -26,55 +26,45 @@ public class OrderSpriteLoader : SpriteLoader<OrderTypes>
         var rect = new Rectangle(startX, 0, scaled.Width, scaled.Height);
         var sprite = new Sprite(rect.Location, rect.Size);
         tomatoSoup.Add(sprite);
-        this.Animations.Add(OrderTypes.TomatoSoup, tomatoSoup);
+        this.Animations.Add(OrderType.TomatoSoup, tomatoSoup);
 
         startX += scaled.Width;
 
         rect = new Rectangle(startX, 0, scaled.Width, scaled.Height);
         sprite = new Sprite(rect.Location, rect.Size);
         mixedSoup.Add(sprite);
-        this.Animations.Add(OrderTypes.MixedSoup, mixedSoup);
+        this.Animations.Add(OrderType.MixedSoup, mixedSoup);
 
         startX += scaled.Width;
 
         rect = new Rectangle(startX, 0, scaled.Width, scaled.Height);
         sprite = new Sprite(rect.Location, rect.Size);
         onionSoup.Add(sprite);
-        this.Animations.Add(OrderTypes.OnionSoup, onionSoup);
+        this.Animations.Add(OrderType.OnionSoup, onionSoup);
 
         startX += scaled.Width;
 
         rect = new Rectangle(startX, 0, scaled.Width, scaled.Height);
         sprite = new Sprite(rect.Location, rect.Size);
         steak.Add(sprite);
-        this.Animations.Add(OrderTypes.Steak, steak);
+        this.Animations.Add(OrderType.Steak, steak);
 
         startX += scaled.Width;
 
         rect = new Rectangle(startX, 0, scaled.Width, scaled.Height);
         sprite = new Sprite(rect.Location, rect.Size);
         fish.Add(sprite);
-        this.Animations.Add(OrderTypes.Fish, fish);
+        this.Animations.Add(OrderType.Fish, fish);
 
     }
 }
 
 
 public class OrderSpriteController
-    : SpriteController<OrderSpriteLoader, OrderTypes>
+    : SpriteController<OrderSpriteLoader, OrderType>
 {
     public OrderSpriteController()
     {
         this.SpriteLoader = new OrderSpriteLoader();
     }
-}
-
-
-public enum OrderTypes
-{ 
-    TomatoSoup,
-    OnionSoup,
-    MixedSoup,
-    Steak,
-    Fish
 }
