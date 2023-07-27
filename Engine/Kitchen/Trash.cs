@@ -6,22 +6,27 @@ namespace Engine;
 
 using Engine.Resource;
 using Sprites;
-using System.Net.Mail;
-using static ProjectPaths;
+using Extensions;
 
 public class Trash : Interactable, IUnwalkable
 {
-    public Trash(Rectangle box) : base(new Rectangle(box.Location, new(48, 48)), 1.25f)
+    public Trash(Rectangle box) : base(new Rectangle(box.Location, new(48, 48)), 1)
     {
         Loader = new TrashSpriteLoader();
         SpriteStream = Loader.GetAnimation(TrashTypes.Closed);
+
+        var rect = new Rectangle(0, 0, Width * 2, Height * 2).AlignCenter(this.Box);
+
+        NearMask = new CollisionMask(null,  rect);
     }
 
     Image trashImage = Resources.TrashImage;
     SpriteStream SpriteStream { get; set; }
     SpriteLoader<TrashTypes> Loader { get; set; }
 
-    public bool IsNear { get; set; } = false;
+    private CollisionMask NearMask { get; set; }
+
+
 
     public override void Draw(Graphics g)
     {
@@ -37,7 +42,7 @@ public class Trash : Interactable, IUnwalkable
            GraphicsUnit.Pixel
            );
         
-        g.DrawRectangle(Pens.DarkRed, this.CollisionMask.Box);
+        g.DrawRectangle(Pens.DarkRed, this.NearMask.Box);
     }
 
     public void Open()
@@ -52,7 +57,7 @@ public class Trash : Interactable, IUnwalkable
 
     public override void Update()
     {
-        if (this.CollisionMask.IsColling(BasicEngine.Current.Player.Box))
+        if (this.NearMask.IsColling(BasicEngine.Current.Player.Box))
         {
             this.Open();
         }

@@ -18,6 +18,7 @@ public abstract class CookingTool : Item
 
     public bool IsCooking { get; set; } = false;
     public List<Food> Ingredients { get; set; } = new List<Food>();
+
     public abstract bool HasCookedFood { get; }
     public override void Interact(Player p)
     {

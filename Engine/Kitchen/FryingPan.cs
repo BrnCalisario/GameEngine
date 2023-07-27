@@ -27,19 +27,20 @@ public class FryingPan : CookingTool
 
     public FryingPanSpriteController SpriteController { get; set; }
     public FoodSpriteLoader FoodSpriteLoader { get; set; }
+    public bool HasFood => Ingredients.Count == 1;
+    public override bool HasCookedFood => Ingredients.Count == 1;  
 
-    public bool HasFood => Ingredients.Count >= 1;
-
-    public override bool HasCookedFood => Ingredients.Count == 1;
 
     public override void Interact(Player p)
     {
+       
         if (p.IsHolding)
         {
             if (p.holdingItem is not Meat && p.holdingItem is not Fish && p.holdingItem is not CookingTool)
                 return;
         }
 
+    
         base.Interact(p);
 
         if (Ingredients.Count == 0)
@@ -47,9 +48,8 @@ public class FryingPan : CookingTool
 
         var food = this.Ingredients[0];
 
-        if (HasFood)
+        if (HasCookedFood)
         {
-
             FoodSprite = food switch
             {
                 Meat => FoodSpriteLoader.GetAnimation(FoodTypes.Meat).Sprites.Last(),
@@ -64,6 +64,7 @@ public class FryingPan : CookingTool
             tempRect.X += 5;
             tempRect.Y += 3;
             FoodRectangle = tempRect;
+            
         }
     }
 
@@ -77,12 +78,11 @@ public class FryingPan : CookingTool
 
     public override void Draw(Graphics g)
     {
-        this.IsCooking = HasCookedFood;
-
-        var c = SpriteController.GetCurrentSprite(this.IsCooking);
+        bool changeSprite = this.IsCooking && this.HasCookedFood;
+        var c = SpriteController.GetCurrentSprite(changeSprite);
 
         GraphicsContainer container = null;
-
+        
         if (PlayerParent?.Invert ?? false)
         {
             container = this.InvertHorizontal(g);

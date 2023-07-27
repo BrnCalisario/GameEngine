@@ -112,7 +112,7 @@ public partial class GameForm : Form
 
         Plate p = new Plate(new Rectangle());
         this.engine.AddBody(p);
-        fb11.SetItem(p);
+        fb10.SetItem(p);
 
 
         FoodBench fb12 = new(new Rectangle(0, 0, 96, 48).AlignBesideRight(fb11.CollisionMask.Box), Direction.Right);
@@ -129,6 +129,10 @@ public partial class GameForm : Form
 
         CornerBench corner4 = new(new Rectangle(0, 0, 48, 48).AlignBesideRight(corner3.CollisionMask.Box), Direction.Top);
         this.engine.AddBody(corner4);
+
+        Plate p2 = new Plate(new Rectangle());
+        this.engine.AddBody(p2);
+        fb13.SetItem(p2);
 
         // MEIO ///////////////////////
 
@@ -162,9 +166,14 @@ public partial class GameForm : Form
         FoodBench fb41 = new(new Rectangle(0, 0, 96, 48).AlignOver(fb40.CollisionMask.Box), Direction.Left);
         this.engine.AddBody(fb41);
 
+        Plate p3 = new Plate(new Rectangle());
+        this.engine.AddBody(p3);
+        fb40.SetItem(p3);
+
 
         FoodBench fb42 = new(new Rectangle().AlignBesideRight(fb41.CollisionMask.Box), Direction.Right);
         this.engine.AddBody(fb42);
+
 
         FoodBench fb43 = new(new Rectangle().AlignBesideRight(fb40.CollisionMask.Box), Direction.Right);
         this.engine.AddBody(fb43);
@@ -174,6 +183,10 @@ public partial class GameForm : Form
 
         FoodBench fb45 = new(new Rectangle().AlignBesideRight(fb38.CollisionMask.Box), Direction.Right);
         this.engine.AddBody(fb45);
+
+        Plate p4 = new Plate(new Rectangle());
+        this.engine.AddBody(p4);
+        fb43 .SetItem(p4);
 
         // DIRETA
 
@@ -224,10 +237,13 @@ public partial class GameForm : Form
         FoodBench fb27 = new(new Rectangle().AlignBesideRight(fb26.CollisionMask.Box));
         this.engine.AddBody(fb27);
 
-        FoodBench fb28 = new(new Rectangle().AlignBesideRight(fb27.CollisionMask.Box));
-        this.engine.AddBody(fb28);
+        SmallBench sm1 = new(new Rectangle().AlignBesideRight(fb27.CollisionMask.Box), Direction.Bottom);
+        this.engine.AddBody(sm1);
 
-        FoodBench fb29 = new(new Rectangle().AlignBesideRight(fb28.CollisionMask.Box));
+        Trash trash = new(new Rectangle().AlignBesideRight(sm1.CollisionMask.Box));
+        this.engine.AddBody(trash);
+
+        FoodBench fb29 = new(new Rectangle().AlignBesideRight(trash.CollisionMask.Box));
         this.engine.AddBody(fb29);
 
         FoodBench fb30 = new(new Rectangle().AlignBesideRight(fb29.CollisionMask.Box));
@@ -242,10 +258,15 @@ public partial class GameForm : Form
         FoodBench fb33 = new(new Rectangle().AlignBesideRight(fb32.CollisionMask.Box));
         this.engine.AddBody(fb33);
 
-        FoodBench fb34 = new(new Rectangle().AlignBesideRight(fb33.CollisionMask.Box));
-        this.engine.AddBody(fb34);
+        Trash trash2 = new(new Rectangle().AlignBesideRight(fb33.CollisionMask.Box));
+        this.engine.AddBody(trash2);
 
-        FoodBench fb35 = new(new Rectangle().AlignBesideRight(fb34.CollisionMask.Box));
+        SmallBench sm2 = new(new Rectangle().AlignBesideRight(trash2.CollisionMask.Box), Direction.Bottom);
+        this.engine.AddBody(sm2);
+
+
+
+        FoodBench fb35 = new(new Rectangle().AlignBesideRight(sm2.CollisionMask.Box));
         this.engine.AddBody(fb35);
 
         FoodBench fb36 = new(new Rectangle().AlignBesideRight(fb35.CollisionMask.Box));

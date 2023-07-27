@@ -41,11 +41,11 @@ public class Oven : Bench
         {
             PlacedItem = holding as CookingTool;
             PlacedItem.Interact(p);
+            
 
             var temp = PlacedItem.Box.AlignCenter(this.Box);
-            PlacedItem.IsCooking = true;
-
             var relativePoint = GetRelativeItemPoint(PlacedItem);
+            PlacedItem.IsCooking = true;
 
             PlacedItem.Box = new Rectangle(relativePoint, temp.Size);
             return;
@@ -58,9 +58,10 @@ public class Oven : Bench
         }
 
         if(PlacedItem is not null)
-        {
+        {         
+            PlacedItem.IsCooking = false;
             PlacedItem.Interact(p);
-            PlacedItem = null;
+            PlacedItem = null;            
         }
     }
 }
