@@ -1,12 +1,9 @@
 ﻿using System.Drawing;
-using Engine.Sprites;
 
 namespace Engine;
 
-using Engine.Resource;
+using Resource;
 using Sprites;
-using System.Collections.Generic;
-using System.Windows.Forms;
 
 public class CheckOut : Bench
 {
@@ -18,12 +15,12 @@ public class CheckOut : Bench
         SpriteStream = Loader.GetAnimation(CheckOutTypes.TransportingBelt);
     }
 
+    readonly Image checkOutImage = Resources.CheckOutImage;
     SpriteLoader<CheckOutTypes> Loader { get; set; }
-    public Plate plate { get; set; }
-    
-    Image checkOutImage = Resources.CheckOutImage;
     Sprite CheckOutSprite;
     SpriteStream SpriteStream { get; set; }
+
+
 
     protected override void DrawBench(Graphics g)
     {
@@ -44,18 +41,16 @@ public class CheckOut : Bench
 
 
 
-    public override void Interact(Player p)
+   public override void Interact(Player p)
     {
-        if (p.holdingItem is not Plate holding)
+        if (p.holdingItem is not Plate plate)
             return;
 
-        this.plate = holding;
-        holding.ClearPlate();
+        if (plate.Order == OrderType.InvalidOrder)
+            return;
 
         plate.Interact(p);
-
-        holding.Deliver();
-
+        plate.Deliver();
     }
 
     public override void Update()

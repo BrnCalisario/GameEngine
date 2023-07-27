@@ -7,6 +7,7 @@ namespace Engine;
 using Engine.Extensions;
 using Resource;
 using Sprites;
+using System.Windows.Forms;
 
 public class Plate : Item
 {
@@ -17,104 +18,88 @@ public class Plate : Item
         FoodSpriteLoader = new FoodSpriteLoader();
     }
 
-    Image plateImage = Resources.PlateImage;
-    Image foodImage = Resources.FoodImage;
+    readonly Image plateImage = Resources.PlateImage;
+    readonly Image foodImage = Resources.FoodImage;
 
     private Sprite FoodSprite { get; set; }
     private Rectangle FoodRectangle { get; set; }
     public FoodSpriteLoader FoodSpriteLoader { get; set; }
-
-
-    public List<Food> Ingredients { get; set; } = new List<Food>();
-
     public PlateSpriteController SpriteController { get; set; }
 
-    bool hasMeat { get; set; } = false;
+    public OrderType Order { get; private set; } = OrderType.InvalidOrder;
 
-    bool hasTomato = false;
-    bool hasOnion = false;
-
+    private bool hasProtein { get; set; } = false;
+  
     public override void Interact(Player p)
     {
-        if (!p.IsHolding || p.holdingItem == this)
-        {
-
+        if (!p.IsHolding || p.holdingItem == this)        
             base.Interact(p);
-        }
-
-
+        
         if (p.holdingItem is not CookingTool holding)
             return;
 
         if (!holding.HasCookedFood)
             return;
 
-        if(holding is Pan pan)
-        {
-            HandlePan(pan);
+        if (Order != OrderType.InvalidOrder)
             return;
-        }
 
-        if(holding is FryingPan fryingPan)
-        {
-            HandleFryingPan(fryingPan);
-            return;
-        }
+        if(holding is Pan pan)
+            HandlePan(pan);
+
+        if(holding is FryingPan fryingPan)     
+            HandleFryingPan(fryingPan);        
     }
 
     private void HandleFryingPan(FryingPan pan)
-    {
-        Ingredients.Add(pan.Ingredients.First());
-
+    {       
         this.FoodSprite = pan.FoodSprite;
         this.FoodRectangle = pan.FoodRectangle;
-
-        hasMeat = true;
+        this.Order = pan.OrderType;
+        this.hasProtein = true;
 
         pan.ClearPan();
     }
 
     private void HandlePan(Pan pan)
     {
-        foreach (var ingredient in pan.Ingredients)
-        {
-            Ingredients.Add(ingredient);
-
-            if (ingredient is Tomato)
-                hasTomato = true;
-
-            if (ingredient is Onion)
-                hasOnion = true;
-        }
+        this.Order = pan.OrderType;        
 
         pan.ClearPan();
 
-        if (hasTomato)
-            SpriteController.StartAnimation(PlateTypes.TomatoPlate);
+        SetPlateSprite(this.Order);
+    }
 
-        if (hasOnion)
-            SpriteController.StartAnimation(PlateTypes.OnionPlate);
+    private void SetPlateSprite(OrderType order)
+    {
+        PlateTypes type = order switch
+        {
+            OrderType.TomatoSoup => PlateTypes.TomatoPlate,
+            OrderType.OnionSoup => PlateTypes.OnionPlate,
+            OrderType.MixedSoup => PlateTypes.Tom_OnionPlate,
+            _ => PlateTypes.VoidPlate
+        };      
 
-        if (hasTomato && hasOnion)
-            SpriteController.StartAnimation(PlateTypes.Tom_OnionPlate);
+        SpriteController.StartAnimation(type);
     }
 
 
     public void ClearPlate()
-    {
-        hasMeat = false;
-        hasOnion = false;
-        hasTomato = false;
-        Ingredients.Clear();
+    { 
+        Order = OrderType.InvalidOrder;
         SpriteController.StartAnimation(PlateTypes.VoidPlate);
+        this.hasProtein = false;
+
     }
 
     public void Deliver()
     {
-        Rectangle rect = new Rectangle(700, 350, this.Box.Width, this.Box.Height);
+        Rectangle rect = new(700, 350, this.Box.Width, this.Box.Height);
         this.Box = rect;
-        //this.BenchParent.SetItem(this);
-        //fb11.setItem(this);
+
+        this.ClearPlate();
+
+        // TODO: Colocar o prato numa bancada;
     }
 
     public override void Draw(Graphics g)
@@ -131,7 +116,7 @@ public class Plate : Item
             GraphicsUnit.Pixel
             );
 
-        if (!hasMeat) return;
+        if (!hasProtein) return;
 
         g.DrawImage(
             foodImage,
@@ -148,7 +133,7 @@ public class Plate : Item
     {
         base.Update();
 
-        if(hasMeat)
+        if(hasProtein)
         {
             var temp = FoodRectangle.AlignCenter(this.Box);
             this.FoodRectangle = temp;

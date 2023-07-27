@@ -1,14 +1,12 @@
-﻿using System.Drawing;
-using Engine.Sprites;
-using System.Linq;
+﻿using System.Linq;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace Engine;
 
-using Engine.Extensions;
-using Engine.Resource;
+using Extensions;
+using Resource;
 using Sprites;
-using System.Drawing.Drawing2D;
-using System.Net.Mail;
 
 public class FryingPan : CookingTool
 {
@@ -42,36 +40,44 @@ public class FryingPan : CookingTool
 
     
         base.Interact(p);
+    }
 
-        if (Ingredients.Count == 0)
-            return;
-
+    private void AnchorFood()
+    {
         var food = this.Ingredients[0];
 
-        if (HasCookedFood)
+        if (HasFood)
         {
+
             FoodSprite = food switch
             {
                 Meat => FoodSpriteLoader.GetAnimation(FoodTypes.Meat).Sprites.Last(),
                 Fish => FoodSpriteLoader.GetAnimation(FoodTypes.Fish).Sprites.Last(),
                 _ => throw new System.Exception()
             };
+            };
 
-            var tempRect = new Rectangle(0, 0, 25, 25).AlignCenter(Box);
-            //tempRect.X += Direction == Direction.Right ? Width / 5 : Direction == Direction.Left ? 28 : 0;
-            //tempRect.Y += Direction.IsHorizontal() ? Height / 2 : Direction == Direction.Top ? 6 : -3;
+        var tempRect = new Rectangle(0, 0, 25, 25).AlignCenter(Box);
 
-            tempRect.X += 5;
-            tempRect.Y += 3;
-            FoodRectangle = tempRect;
-            
-        }
+        tempRect.X += 5;
+        tempRect.Y += 3;
+        FoodRectangle = tempRect;        
+    }
+
+    protected override void SetOrder()
+    {
+        if (!HasFood) return;
+
+        AnchorFood();
+
+        var isMeat = Ingredients.First() is Meat;
+
+        this.OrderType = isMeat ? OrderType.Steak : OrderType.Fish;
     }
 
     public override void ClearPan()
     {
-        base.ClearPan();
-        //SpriteController.CurrentAnimation.Sprites.First();
+        base.ClearPan();       
         SpriteController.StartAnimation(FryingPanTypes.Void);
     }
 

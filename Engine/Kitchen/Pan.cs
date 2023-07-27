@@ -4,10 +4,9 @@ using System.Linq;
 
 namespace Engine;
 
-using Engine.Resource;
+using Resource;
 using Sprites;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 public abstract class CookingTool : Item
 {
@@ -20,6 +19,11 @@ public abstract class CookingTool : Item
     public List<Food> Ingredients { get; set; } = new List<Food>();
 
     public abstract bool HasCookedFood { get; }
+
+    public OrderType OrderType { get; set; }
+
+    protected abstract void SetOrder();
+
     public override void Interact(Player p)
     {
         if (!p.IsHolding || p.holdingItem == this)
@@ -31,12 +35,11 @@ public abstract class CookingTool : Item
         if (p.holdingItem is not Food holding)
             return;
 
-        //if (!holding.Cutted)
-        //    return;
-
         holding.Interact(p);
         holding.Dispose();
         Ingredients.Add(holding);
+
+        this.SetOrder();
     }
 
     public virtual void ClearPan()
@@ -60,39 +63,47 @@ public class Pan : CookingTool
 
     public override bool HasCookedFood => Ingredients.Count >= 3;
 
-
-    bool hasTomato = false;
-    bool hasOnion = false;
-
     public override void Interact(Player p)
     {
         base.Interact(p);
-
-        foreach (var ingredient in Ingredients)
-        {
-            if (ingredient is Tomato)
-                hasTomato = true;
-
-            if (ingredient is Onion)
-                hasOnion = true;
-        }
-
-        if(hasTomato && !hasOnion)
-            SpriteController.StartAnimation(PanTypes.TomatoPan);
-
-        if(!hasTomato && hasOnion)
-            SpriteController.StartAnimation(PanTypes.OnionPan);
-
-        if (hasTomato && hasOnion)
-            SpriteController.StartAnimation(PanTypes.TomOnionPan);
-        
     }
 
 
+    protected override void SetOrder()
+    {
+        bool hasTomato = Ingredients.Any(i => i is Tomato);
+        bool hasOnion = Ingredients.Any(i => i is Onion);
+
+        (bool, bool) ingredients = (hasTomato, hasOnion);
+
+        SetAnimation(ingredients);
+
+        if (Ingredients.Count < 3) return;
+
+        this.OrderType = ingredients switch
+        { 
+            (true, false) => OrderType.TomatoSoup,
+            (false, true) => OrderType.OnionSoup,
+            (true, true) => OrderType.MixedSoup,
+            _ => OrderType.InvalidOrder
+        };;
+    }
+
+    private void SetAnimation((bool tomato, bool onion) ingredients)
+    {
+        PanTypes type =   
+            ingredients switch
+            {
+                (true, false) => PanTypes.TomatoPan,
+                (false, true) => PanTypes.OnionPan,
+                (true, true) => PanTypes.TomOnionPan,
+                _ => PanTypes.Void            
+            };
+        SpriteController.StartAnimation(type);
+    }
+
     public override void ClearPan()
     {
-        hasTomato = false;
-        hasOnion = false;
         base.ClearPan();
         SpriteController.StartAnimation(PanTypes.Void);
     }
