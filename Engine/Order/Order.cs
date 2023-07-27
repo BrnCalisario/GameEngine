@@ -1,14 +1,28 @@
-﻿using System;
+﻿using Engine.Resource;
+using Engine.Sprites;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
-
+using System.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 namespace Engine;
 
 public class Order
 {
-    public Order()
+
+    public Order(OrderType type) 
     {
+        OrderSpriteLoader = new OrderSpriteLoader();
+
+        Type = type;
+
+        Sprite = OrderSpriteLoader.GetAnimation(Type).Sprites.First();
     }
+
+    public Sprite Sprite { get; set; }
+    public Image orderImage = Resources.OrderImage;
+    public OrderSpriteLoader OrderSpriteLoader { get; set; }
+    public OrderSpriteController SpriteController { get; set; }
 
     public string Name { get; set; }
     public string Description { get; set; }
@@ -16,7 +30,7 @@ public class Order
     
     public OrderType Type { get; set; }
     public DateTime StartTime { get; set; } = DateTime.Now;
-    public TimeSpan TimeLimit { get; set; } = TimeSpan.FromSeconds(12);
+    public TimeSpan TimeLimit { get; set; } = TimeSpan.FromSeconds(75); // time to make the order
     
     public TimeBar TimeProgress { get; set; }
 
@@ -66,35 +80,34 @@ public class OrderTab : Body
     {
         Possibilities = new List<Order>();
 
-        Order o1 = new()
+        Order o1 = new(OrderType.TomatoSoup)
         { 
-            Name = "Sopa de Tomate",
-            Type = OrderType.TomatoSoup,    
+            Type = OrderType.TomatoSoup
         };
         Possibilities.Add(o1);
 
-        Order o2 = new()
+        Order o2 = new(OrderType.OnionSoup)
         {
             Name = "Sopa de Cebola",
             Type = OrderType.OnionSoup,
         };
         Possibilities.Add(o2);
 
-        Order o3 = new()
+        Order o3 = new(OrderType.MixedSoup)
         {
             Name = "Sopa Mista",
             Type = OrderType.MixedSoup,
         };
         Possibilities.Add(o3);
 
-        Order o4 = new()
+        Order o4 = new(OrderType.Steak)
         {
             Name = "Bife Assado",
             Type = OrderType.Steak,
         };
         Possibilities.Add(o4);
 
-        Order o5 = new()
+        Order o5 = new(OrderType.Fish)
         {
             Name = "Peixinho",
             Type = OrderType.Fish,
@@ -121,7 +134,8 @@ public class OrderTab : Body
 
     public List<Order> Possibilities;
 
-    public TimeSpan OrderCoolDown { get; set; } = TimeSpan.FromSeconds(5);
+    public TimeSpan OrderCoolDown { get; set; } = TimeSpan.FromSeconds(30); // time to generate new order
+
     public DateTime LastOrderTime { get; set; } = DateTime.Now;
 
     public void CompleteOrder(Order order, bool success)
@@ -143,12 +157,19 @@ public class OrderTab : Body
 
     public override void Draw(Graphics g)
     {
+
         var pos = this.Box.Location;
 
-        g.DrawString("Order Tab", SystemFonts.MenuFont, Pen.Brush, pos.X, pos.Y);
-        g.DrawRectangle(Pen, this.Box);
+        //g.DrawString("Order Tab", SystemFonts.MenuFont, Pen.Brush, pos.X, pos.Y);
+        var ball1 = new Rectangle(pos.X - 12, pos.Y + 3, 25, 25);
+        var ball2 = new Rectangle(pos.X + Width - 12, pos.Y + 3, 25, 25);
 
-        for(int i = 0; i < orders.Count; i++)
+        Rectangle rect = new Rectangle(pos.X, pos.Y + 15, this.Box.Width, 8);
+        g.FillRectangle(Pen.Brush, rect);
+        g.FillEllipse(Brushes.LightGray, ball1);
+        g.FillEllipse(Brushes.LightGray, ball2);
+
+        for (int i = 0; i < orders.Count; i++)
         {
             if (orders[i].PassedOver)
             {
@@ -176,7 +197,7 @@ public class OrderTab : Body
             o.TimeProgress.Update();
     }
 
-    private void GetRandomOrder()
+    public void GetRandomOrder()
     {
         var randV = Random.Shared.Next(this.Possibilities.Count - 1);
         
@@ -187,7 +208,7 @@ public class OrderTab : Body
 
         var pos = new Point(boxPos.X + 15 + (130 * orderCount + 15 * orderCount), boxPos.Y + 15);
 
-        var order = new Order()
+        var order = new Order(pick.Type) 
         { 
             Name = pick.Name,
             StartTime = DateTime.Now,
@@ -204,8 +225,22 @@ public class OrderTab : Body
     {
         var pos = order.Box.Location;
 
-        g.DrawRectangle(Pens.Blue, order.Box);
-        g.DrawString($"{order.Name}", SystemFonts.MenuFont, Pen.Brush, pos.X, pos.Y + 130 / 2 - 8);
+        var c = order.Sprite;
+
+        g.DrawImage(
+            order.orderImage,
+            order.Box,
+            c.X,
+            c.Y,
+            c.Width,
+            c.Height,
+            GraphicsUnit.Pixel
+            );
+
+
+        //g.DrawRectangle(Pens.Blue, order.Box);
+        //g.DrawString($"{order.Name}", SystemFonts.MenuFont, Pen.Brush, pos.X, pos.Y + 130 / 2 - 8);
+
         //g.DrawString($"{order.GetRemaingTime()}", SystemFonts.MenuFont, Pen.Brush, pos.X, pos.Y + 130 - 16);
 
         order.TimeProgress.Draw(g);
