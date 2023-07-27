@@ -54,6 +54,15 @@ public partial class GameForm : Form
         OrderTab.New();
         OrderTab tab = OrderTab.Current;
 
+        //TimeBar pb = new TimeBar(new(50, 0, 400, 30), TimeSpan.FromSeconds(1), true);
+        //engine.AddBody(pb);
+
+        //pb.OnFinish += delegate
+        //{
+        //    pb.Restart();
+        //    pb.Descending = !pb.Descending;
+        //};
+
         engine.AddBody(tab);
 
         engine.Start();

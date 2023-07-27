@@ -133,23 +133,14 @@ public abstract class GameEngine : IGameEngine
         graphics = Graphics.FromImage(bmp);
         pb.Image = bmp;
 
-        tm.Tick += delegate
+        Application.Idle += delegate
         {
-            var now = DateTime.Now;
-            queue.Enqueue(now);
-
-            if (queue.Count > 19)
+            while (true)
             {
-                DateTime old = queue.Dequeue();
-                var time = now - old;
-                this.Fps = (int)(19 / time.TotalSeconds);
+                this.update();
+                Application.DoEvents();
             }
-
-            
-            this.update();           
         };
-
-
         this.loaded = true;
     }
 

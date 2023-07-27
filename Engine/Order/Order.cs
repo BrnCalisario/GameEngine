@@ -1,11 +1,6 @@
-﻿using Engine.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Net.WebSockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Engine;
 
@@ -17,15 +12,31 @@ public class Order
 
     public string Name { get; set; }
     public string Description { get; set; }
+    public Rectangle Box { get; set; } 
+    
     public OrderType Type { get; set; }
     public DateTime StartTime { get; set; } = DateTime.Now;
-    public TimeSpan TimeLimit { get; set; } = TimeSpan.FromSeconds(45);
+    public TimeSpan TimeLimit { get; set; } = TimeSpan.FromSeconds(12);
+    
+    public TimeBar TimeProgress { get; set; }
 
-    public bool PassedOver => GetRemaingTime() <= 0;
+    public bool PassedOver => GetRemaingTime() < 0;
 
     public int GetRemaingTime()
     {
         return (int)(TimeLimit - (DateTime.Now - StartTime)).TotalSeconds;
+    }
+
+    public void SetTimeBar()
+    {
+        var rect = new Rectangle(Box.X, Box.Y + Box.Height,this.Box.Width, 10);
+        TimeProgress = new TimeBar(rect, TimeLimit, true);
+    }
+
+    public void UpdateProgressPos()
+    {
+        var pos = new Point(Box.X, Box.Y + Box.Height);
+        TimeProgress.UpdateLocation(pos);
     }
 }
 
@@ -110,12 +121,24 @@ public class OrderTab : Body
 
     public List<Order> Possibilities;
 
-    public TimeSpan OrderCoolDown { get; set; } = TimeSpan.FromSeconds(15);
+    public TimeSpan OrderCoolDown { get; set; } = TimeSpan.FromSeconds(5);
     public DateTime LastOrderTime { get; set; } = DateTime.Now;
 
-    public void CompleteOrder(Order order)
+    public void CompleteOrder(Order order, bool success)
     {
         this.orders.Remove(order);
+        int points = success ? 15 : -15;
+
+        BasicEngine.Current.Points += points;
+        var boxPos = Box.Location;
+
+        for(int i = 0; i < orders.Count; i++)
+        {
+            var pos = new Point(boxPos.X + 15 + (130 * i + 15 * i), boxPos.Y + 15);
+
+            orders[i].Box = new Rectangle(pos, new(130, 130));
+            orders[i].UpdateProgressPos();
+        }
     }
 
     public override void Draw(Graphics g)
@@ -123,18 +146,17 @@ public class OrderTab : Body
         var pos = this.Box.Location;
 
         g.DrawString("Order Tab", SystemFonts.MenuFont, Pen.Brush, pos.X, pos.Y);
-
         g.DrawRectangle(Pen, this.Box);
 
         for(int i = 0; i < orders.Count; i++)
         {
             if (orders[i].PassedOver)
             {
-                CompleteOrder(orders[i]);
+                CompleteOrder(orders[i], false);
                 return;
             }
-            var orderPos = new Point(pos.X + 15 + (130 * i + 15 * i), pos.Y + 15);
-            DrawOrder(g, orderPos, this.orders[i]);
+            
+            DrawOrder(g, this.orders[i]);
         }
     }
 
@@ -149,25 +171,44 @@ public class OrderTab : Body
             GetRandomOrder();
             this.LastOrderTime = DateTime.Now;
         }
+
+        foreach (Order o in orders)
+            o.TimeProgress.Update();
     }
 
     private void GetRandomOrder()
     {
-
         var randV = Random.Shared.Next(this.Possibilities.Count - 1);
         
-        var randOrder = this.Possibilities[randV];
-        randOrder.StartTime = DateTime.Now;
+        var pick = this.Possibilities[randV];
 
-        this.orders.Add(randOrder);
+        var boxPos = this.Box.Location;
+        var orderCount = this.orders.Count;
+
+        var pos = new Point(boxPos.X + 15 + (130 * orderCount + 15 * orderCount), boxPos.Y + 15);
+
+        var order = new Order()
+        { 
+            Name = pick.Name,
+            StartTime = DateTime.Now,
+            Type = pick.Type,
+            Box = new Rectangle(pos, new(130, 130))
+        };
+
+        order.SetTimeBar();
+
+        this.orders.Add(order);
     }
 
-    private void DrawOrder(Graphics g, Point pos, Order order)
+    private void DrawOrder(Graphics g, Order order)
     {
-        var orderRect = new Rectangle(pos, new(130, 130));
-        g.DrawRectangle(Pens.Blue, orderRect);
+        var pos = order.Box.Location;
+
+        g.DrawRectangle(Pens.Blue, order.Box);
         g.DrawString($"{order.Name}", SystemFonts.MenuFont, Pen.Brush, pos.X, pos.Y + 130 / 2 - 8);
-        g.DrawString($"{order.GetRemaingTime()}", SystemFonts.MenuFont, Pen.Brush, pos.X, pos.Y + 130 - 16);
+        //g.DrawString($"{order.GetRemaingTime()}", SystemFonts.MenuFont, Pen.Brush, pos.X, pos.Y + 130 - 16);
+
+        order.TimeProgress.Draw(g);
     }
 
 
