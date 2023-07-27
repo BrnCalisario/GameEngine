@@ -91,7 +91,7 @@ public static class RectangleExtension
 
     public static Rectangle AlignOver(this Rectangle rec, Rectangle target, int gapX = 0, int gapY = 0)
     {
-        var pos = new Point(target.Left, target.Top - rec.Width);
+        var pos = new Point(target.Left + gapX, target.Top - rec.Width + gapY);
         return new Rectangle(pos, rec.Size);
     }
 }
