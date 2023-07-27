@@ -34,7 +34,7 @@ public static class Resources
         TileImage = Image.FromFile(AssetsPath + "\\tiles\\tileShadows.png");
         BenchImage = Image.FromFile(AssetsPath + "\\benchs\\bench3x.png");
         TrashImage = Image.FromFile(AssetsPath + "\\trash\\trash3x.png");
-        FoodImage = Image.FromFile(AssetsPath + "\\teste3x.png");
+        FoodImage = Image.FromFile(AssetsPath + "\\foods\\allFoods3x.png");
         PlateImage = Image.FromFile(AssetsPath + "\\plates\\plate3x.png");
         CuttingBoardImage = Image.FromFile(AssetsPath + "\\tabua3x.png");
         CheckOutImage = Image.FromFile(AssetsPath + "\\esteiras\\esteira3x.png");

@@ -251,3 +251,54 @@ public class CornerBench : Bench
 
     }
 }
+
+
+
+public class SmallBench : Bench
+{
+    public SmallBench(Rectangle box, Direction dir = Direction.Bottom)
+        : base(new Rectangle(box.Location, new(48, 48)), 1, null, dir)
+    {
+        BenchSprite = this.benchSpriteLoader.GetAnimation(BenchTypes.Small).Next();
+    }
+
+    public override void Draw(Graphics g)
+    {
+        GraphicsContainer container = null;
+
+        if (Direction == Direction.Left || Direction == Direction.Right)
+        {
+            container = InvertHorizontal(g, container);
+            CorrectHorizontal();
+        }
+
+        if (Direction == Direction.Right || Direction == Direction.Top)
+        {
+            //container = RotateLeft(g);
+            container = InvertVertical(g, container);
+            CorrectVertical();
+        }
+
+        this.DrawBench(g);
+
+        if (container is not null)
+        {
+            g.EndContainer(container);
+
+            if (Direction == Direction.Top || Direction == Direction.Right)
+            {
+                CorrectVertical();
+            }
+
+            if (Direction == Direction.Left || Direction == Direction.Right)
+            {
+                CorrectHorizontal();
+            }
+        }
+    }
+
+    public override void Interact(Player p)
+    {
+
+    }
+}

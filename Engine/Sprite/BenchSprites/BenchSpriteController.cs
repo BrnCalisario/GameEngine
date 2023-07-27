@@ -20,9 +20,17 @@ public class BenchSpriteLoader : SpriteLoader<BenchTypes>
         int startY = 3;
 
         var corner = new SpriteStream();
+        var smallBench = new SpriteStream();
         var bench = new SpriteStream();
         var itemBox = new SpriteStream();
         var oven = new SpriteStream();
+
+        var rectSmall = new Rectangle(3, startY, scaledCorner.Width, scaledCorner.Height);
+        Sprite spriteSmall = new Sprite(rectSmall.Location, rectSmall.Size);
+        smallBench.Add(spriteSmall);
+        this.Animations.Add(BenchTypes.Small, smallBench);
+
+        startY += scaled.Height + 9;
 
         var rectCorner = new Rectangle(3, startY, scaledCorner.Width, scaledCorner.Height);
         Sprite spriteCorner = new Sprite(rectCorner.Location, rectCorner.Size);
@@ -69,7 +77,8 @@ public enum BenchTypes
     Bench,
     ItemBox,
     Oven,
-    Corner
+    Corner,
+    Small
 }
 
 
