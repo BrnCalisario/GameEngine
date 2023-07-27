@@ -10,7 +10,7 @@ using Extensions;
 
 public class Trash : Interactable, IUnwalkable
 {
-    public Trash(Rectangle box) : base(new Rectangle(box.Location, new(48, 48)), 1)
+    public Trash(Rectangle box) : base(new Rectangle(box.Location, new(48, 48)), 1.25f)
     {
         Loader = new TrashSpriteLoader();
         SpriteStream = Loader.GetAnimation(TrashTypes.Closed);
@@ -42,7 +42,7 @@ public class Trash : Interactable, IUnwalkable
            GraphicsUnit.Pixel
            );
         
-        g.DrawRectangle(Pens.DarkRed, this.NearMask.Box);
+        //g.DrawRectangle(Pens.DarkRed, this.NearMask.Box);
     }
 
     public void Open()

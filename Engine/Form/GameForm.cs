@@ -257,7 +257,7 @@ public partial class GameForm : Form
         Trash trash = new(new Rectangle().AlignBesideRight(sm1.CollisionMask.Box));
         this.engine.AddBody(trash);
 
-        FoodBench fb29 = new(new Rectangle().AlignBesideRight(trash.CollisionMask.Box));
+        FoodBench fb29 = new(new Rectangle().AlignBesideRight(trash.Box));
         this.engine.AddBody(fb29);
 
         FoodBench fb30 = new(new Rectangle().AlignBesideRight(fb29.CollisionMask.Box));
@@ -275,7 +275,7 @@ public partial class GameForm : Form
         Trash trash2 = new(new Rectangle().AlignBesideRight(fb33.CollisionMask.Box));
         this.engine.AddBody(trash2);
 
-        SmallBench sm2 = new(new Rectangle().AlignBesideRight(trash2.CollisionMask.Box), Direction.Bottom);
+        SmallBench sm2 = new(new Rectangle().AlignBesideRight(trash2.Box), Direction.Bottom);
         this.engine.AddBody(sm2);
 
 
