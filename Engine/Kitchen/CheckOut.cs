@@ -54,7 +54,7 @@ public class CheckOut : Bench
 
         if (orderMatch is null) return;
 
-        OrderTab.Current.CompleteOrder(orderMatch);
+        OrderTab.Current.CompleteOrder(orderMatch, true);
 
         plate.Interact(p);
         plate.Deliver();

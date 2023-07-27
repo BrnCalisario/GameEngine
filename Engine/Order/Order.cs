@@ -113,9 +113,12 @@ public class OrderTab : Body
     public TimeSpan OrderCoolDown { get; set; } = TimeSpan.FromSeconds(15);
     public DateTime LastOrderTime { get; set; } = DateTime.Now;
 
-    public void CompleteOrder(Order order)
+    public void CompleteOrder(Order order, bool success)
     {
         this.orders.Remove(order);
+        int points = success ? 15 : -15;
+
+        BasicEngine.Current.Points += points;
     }
 
     public override void Draw(Graphics g)
@@ -130,7 +133,7 @@ public class OrderTab : Body
         {
             if (orders[i].PassedOver)
             {
-                CompleteOrder(orders[i]);
+                CompleteOrder(orders[i], false);
                 return;
             }
             var orderPos = new Point(pos.X + 15 + (130 * i + 15 * i), pos.Y + 15);
@@ -156,10 +159,16 @@ public class OrderTab : Body
 
         var randV = Random.Shared.Next(this.Possibilities.Count - 1);
         
-        var randOrder = this.Possibilities[randV];
-        randOrder.StartTime = DateTime.Now;
+        var pick = this.Possibilities[randV];
 
-        this.orders.Add(randOrder);
+        var order = new Order()
+        { 
+            Name = pick.Name,
+            StartTime = DateTime.Now,
+            Type = pick.Type
+        };
+
+        this.orders.Add(order);
     }
 
     private void DrawOrder(Graphics g, Point pos, Order order)

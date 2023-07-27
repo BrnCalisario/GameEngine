@@ -16,10 +16,13 @@ public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
 
     Size SpriteSize = new(30, 40);
 
+
     protected override void Load()
     {
         var scaled = SpriteSize.Scale(this.Scale);
         int startRunning = scaled.Width;
+
+        double time = 0.2;
 
         LoadAnimationArgs idleFrontArgs = new()
         {
@@ -35,7 +38,8 @@ public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
             StartingPoint = new Point(startRunning, 1),
             Quantity = 3,
             Gap = 1,
-            Size = scaled
+            Size = scaled,
+            AnimationTime = TimeSpan.FromSeconds(time),
         };
         this.AddAnimation(walkFrontArgs);
 
@@ -43,7 +47,7 @@ public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
         {
             AnimationType = ChefAnimationType.IdleSide,
             StartingPoint = new Point(0, scaled.Height + 1),
-            Size = scaled
+            Size = scaled,
         };
         this.AddAnimation(idleSideArgs);
 
@@ -53,7 +57,8 @@ public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
             StartingPoint = new Point(startRunning, scaled.Height + 1),
             Quantity = 3,
             Gap = 1,
-            Size = scaled
+            Size = scaled,
+            AnimationTime = TimeSpan.FromSeconds(time)
         };
         this.AddAnimation(walkSideArgs);
 
@@ -61,7 +66,8 @@ public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
         {
             AnimationType = ChefAnimationType.IdleUp,
             StartingPoint = new Point(0, scaled.Height * 2 + 1),
-            Size = scaled
+            Size = scaled,
+            AnimationTime = TimeSpan.FromSeconds(time)
         };
         this.AddAnimation(idleUpArgs);
 
@@ -71,13 +77,14 @@ public class ChefSpriteLoader : SpriteLoader<ChefAnimationType>
             StartingPoint = new Point(startRunning, scaled.Height * 2 + 1),
             Size = scaled,
             Quantity = 3,
-            Gap = 1
+            Gap = 1,
+            AnimationTime = TimeSpan.FromSeconds(time)
         };
         this.AddAnimation(walkUpArgs);
 
 
 
-        double time = 0.1;
+        time = 0.1;
 
         //AQUI
         LoadAnimationArgs cutFrontArgs = new()
