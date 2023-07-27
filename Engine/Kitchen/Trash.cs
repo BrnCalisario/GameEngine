@@ -42,7 +42,7 @@ public class Trash : Interactable, IUnwalkable
            GraphicsUnit.Pixel
            );
         
-        //g.DrawRectangle(Pens.DarkRed, this.NearMask.Box);
+        
     }
 
     public void Open()

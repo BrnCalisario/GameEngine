@@ -32,12 +32,18 @@ public abstract class CookingTool : Item
             this.IsCooking = false;
         }
 
-        if (p.holdingItem is not Food holding)
+        if (p.holdingItem is not Food food)
             return;
 
-        holding.Interact(p);
-        holding.Dispose();
-        Ingredients.Add(holding);
+        if (!food.Cutted)
+            return;
+
+        if (Ingredients.Count >= 3)
+            return;
+
+        food.Interact(p);
+        food.Dispose();
+        Ingredients.Add(food);
 
         this.SetOrder();
     }

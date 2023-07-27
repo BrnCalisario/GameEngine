@@ -34,6 +34,12 @@ public partial class GameForm : Form
         engine.HandleKey(e, true);
     }
 
+    public void Reload()
+    {
+        GameForm_Load(this, EventArgs.Empty);
+    }
+
+
     private void GameForm_Load(object sender, EventArgs e)
     {
         BasicEngine.New(this);

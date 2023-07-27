@@ -16,7 +16,7 @@ public interface IGameEngine
 
 public abstract class GameEngine : IGameEngine
 {
-    protected Form ParentForm { get; set; } = null;
+    protected GameForm ParentForm { get; set; } = null;
     protected Graphics graphics { get; set; }
     protected PictureBox pb { get; set; }
     protected Bitmap bmp { get; set; }
@@ -56,7 +56,7 @@ public abstract class GameEngine : IGameEngine
     private bool running = false;
 
     public GameEngine() { }
-    public GameEngine(Form form)
+    public GameEngine(GameForm form)
     {
         this.ParentForm = form;
         pb = new PictureBox
@@ -71,7 +71,7 @@ public abstract class GameEngine : IGameEngine
         this.Interval = 20;
     }
 
-    public void SetParentForm(Form form)
+    public void SetParentForm(GameForm form)
     {
         this.ParentForm = form;
         pb = new PictureBox
@@ -124,7 +124,7 @@ public abstract class GameEngine : IGameEngine
     public virtual void Stop()
     {
         running = false;
-        tm.Stop();
+        loaded = false;
     }
 
     public virtual void Load()
@@ -135,11 +135,13 @@ public abstract class GameEngine : IGameEngine
 
         Application.Idle += delegate
         {
-            while (true)
+            while (running)
             {
                 this.update();
                 Application.DoEvents();
             }
+            this.OnEnd();
+            
         };
         this.loaded = true;
     }
@@ -151,4 +153,6 @@ public abstract class GameEngine : IGameEngine
     }
 
     public abstract void AddBody(IBody body);
+
+    public abstract void OnEnd();
 }

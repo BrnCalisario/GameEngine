@@ -111,16 +111,15 @@ public class Player : CollidableBody
             this.Box = new Rectangle(newPos, this.Box.Size);
         }
 
-        //g.DrawRectangle(Pen, this.Box);
-        g.DrawString($"{CurrentDirection}", SystemFonts.DefaultFont, Pen.Brush, new Point(1, 30));
-        g.DrawString($"X:{X}, Y:{Y}", SystemFonts.DefaultFont, Pen.Brush, new Point(1, 90));
+        //g.DrawString($"{CurrentDirection}", SystemFonts.DefaultFont, Pen.Brush, new Point(1, 30));
+        //g.DrawString($"X:{X}, Y:{Y}", SystemFonts.DefaultFont, Pen.Brush, new Point(1, 90));
 
 
-        if (InteractionHitBox is not null)
-            g.DrawRectangle(new Pen(Color.Red), InteractionHitBox.Box);
+        //if (InteractionHitBox is not null)
+        //    g.DrawRectangle(new Pen(Color.Red), InteractionHitBox.Box);
 
-        if (CollisionMask is not null)
-            g.DrawRectangle(Pen, this.CollisionMask.Box);
+        //if (CollisionMask is not null)
+        //    g.DrawRectangle(Pen, this.CollisionMask.Box);
     }
 
     private void FindInteraction()
