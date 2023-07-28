@@ -35,7 +35,7 @@ public class BasicEngine : GameEngine
     public readonly List<Interactable> Interactables = new();
     public readonly List<Trash> Trashes = new();
 
-    public TimeSpan GameTime { get; set; } = TimeSpan.FromMinutes(0.1);
+    public TimeSpan GameTime { get; set; } = TimeSpan.FromMinutes(3);
 
     public DateTime GameStart { get; set; } 
 
@@ -113,7 +113,6 @@ public class BasicEngine : GameEngine
 
         if(TimeDisplay > GameTime)
         {
-            this.Stop();
             return;
         }    
 
@@ -124,26 +123,26 @@ public class BasicEngine : GameEngine
         }
     }
 
-    public override void OnEnd()
-    {
-        var result =
-                MessageBox.Show(
-                    $"Pontos: {this.Points}\nDeseja jogar novamente ?", 
-                    "Fim de Jogo", 
-                    MessageBoxButtons.YesNo, 
-                    MessageBoxIcon.Information);
+    //public override void OnEnd()
+    //{
+        //var result =
+        //        MessageBox.Show(
+        //            $"Pontos: {this.Points}\nDeseja jogar novamente ?", 
+        //            "Fim de Jogo", 
+        //            MessageBoxButtons.YesNo, 
+        //            MessageBoxIcon.Information);
 
-        if(result == DialogResult.Yes)
-        {
-            this.ParentForm.Reload();
-            this.Stop();
-            this.Load();
-            this.Start();
-        }
+        //if(result == DialogResult.Yes)
+        //{
+        //    this.ParentForm.Reload();
+        //    this.Stop();
+        //    this.Load();
+        //    this.Start();
+        //}
 
-        if(result == DialogResult.No)
-        {
-            Application.Exit();
-        }
-    }
+        //if(result == DialogResult.No)
+        //{
+        //    Application.Exit();
+        //}
+    //}
 }

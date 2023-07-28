@@ -140,7 +140,7 @@ public abstract class GameEngine : IGameEngine
                 this.update();
                 Application.DoEvents();
             }
-            this.OnEnd();
+            //this.OnEnd();
             
         };
         this.loaded = true;
@@ -154,5 +154,5 @@ public abstract class GameEngine : IGameEngine
 
     public abstract void AddBody(IBody body);
 
-    public abstract void OnEnd();
+    //public abstract void OnEnd();
 }
