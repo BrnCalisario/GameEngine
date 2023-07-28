@@ -44,7 +44,7 @@ public class Order
     public void SetTimeBar()
     {
         var rect = new Rectangle(Box.X, Box.Y + Box.Height,this.Box.Width, 10);
-        TimeProgress = new TimeBar(rect, TimeLimit, true);
+        TimeProgress = new TimeBar(rect, TimeLimit, true, true);
     }
 
     public void UpdateProgressPos()
@@ -217,6 +217,7 @@ public class OrderTab : Body
         };
 
         order.SetTimeBar();
+        
 
         this.orders.Add(order);
     }

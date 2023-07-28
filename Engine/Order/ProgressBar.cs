@@ -33,12 +33,14 @@ public abstract class ProgressBar : Body
 
 public class TimeBar : ProgressBar
 {
-    public TimeBar(Rectangle box, TimeSpan time, bool descending = false) 
+    public TimeBar(Rectangle box, TimeSpan time, bool descending = false, bool start = false) 
         : base(box)
     {
 
         Interval = time;
         this.Descending = descending;
+
+        if (start) this.Start();
     }
 
     private DateTime StartProgress { get; set; } = default;
@@ -47,8 +49,25 @@ public class TimeBar : ProgressBar
 
     public bool Descending { get; set; }
 
-    public bool Complete { get; set; }
+    public bool Complete { get; set; } = true;
 
+    public bool Stopped { get; set; } = false;  
+
+    public bool ChangeColor { get; set; } = true;
+
+    public void Start()
+    {
+        if (!Complete || Stopped) return;
+
+        StartProgress = DateTime.Now;
+        Complete = false;
+    }
+
+    public void Stop()
+    {
+        Complete = true;
+        Stopped = true;
+    }
 
     public override void Update()
     {
@@ -84,19 +103,20 @@ public class TimeBar : ProgressBar
 
         var percentange = diff / Interval;
 
-        if (percentange > 0.5)
-            this.ProgressPen = Pens.Orange;
+        if(ChangeColor)
+        {
+            if (percentange > 0.5)
+                this.ProgressPen = Pens.Orange;
 
-        if (percentange > 0.75)
-            this.ProgressPen = Pens.Red;        
+            if (percentange > 0.75)
+                this.ProgressPen = Pens.Red;
 
-        if (percentange < 0.5)
-            this.ProgressPen = Pens.Green;
+            if (percentange < 0.5)
+                this.ProgressPen = Pens.Green;
+
+        }      
         
         int wid = (int)(Box.Width * percentange);
-
-        
-
         wid = Descending ? Box.Width - wid : wid;
 
         this.ProgressRectangle = new Rectangle(ProgressRectangle.Location, new(wid, ProgressRectangle.Height));

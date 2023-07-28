@@ -7,6 +7,7 @@ namespace Engine;
 using Extensions;
 using Resource;
 using Sprites;
+using System;
 
 public class FryingPan : CookingTool
 {
@@ -15,6 +16,20 @@ public class FryingPan : CookingTool
         SpriteController = new FryingPanSpriteController();
         FoodSpriteLoader = new FoodSpriteLoader();
         SpriteController.StartAnimation(FryingPanTypes.Void);
+
+
+        var timeRect = new Rectangle(X, Y + Height, Width, 5);
+        TimeBar = new(timeRect, TimeSpan.FromSeconds(5))
+        {
+            ChangeColor = false
+        };
+
+        TimeBar.OnFinish += delegate
+        {
+            this.Cooked = true;
+            SetCookedFood(Ingredients[0]);
+            TimeBar.Stop();
+        };
     }
 
     readonly Image fryingPanImage = Resources.FryingPanImage;
@@ -26,7 +41,10 @@ public class FryingPan : CookingTool
     public FryingPanSpriteController SpriteController { get; set; }
     public FoodSpriteLoader FoodSpriteLoader { get; set; }
     public bool HasFood => Ingredients.Count == 1;
-    public override bool HasCookedFood => Ingredients.Count == 1;  
+    public override bool HasCookedFood => Cooked;  
+    private bool Cooked { get; set; }
+
+    TimeBar TimeBar { get; set; }
 
 
     public override void Interact(Player p)
@@ -51,17 +69,30 @@ public class FryingPan : CookingTool
 
             FoodSprite = food switch
             {
-                Meat => FoodSpriteLoader.GetAnimation(FoodTypes.Meat).Sprites.Last(),
-                Fish => FoodSpriteLoader.GetAnimation(FoodTypes.Fish).Sprites.Last(),
-                _ => throw new System.Exception()
+                Meat => FoodSpriteLoader.GetAnimation(FoodTypes.Meat).Sprites.Skip(1).First(),
+                Fish => FoodSpriteLoader.GetAnimation(FoodTypes.Fish).Sprites.Skip(1).First(),
+            _ => throw new System.Exception()
             };
-            };
+        };
+
+        if(HasCookedFood)
+            SetCookedFood(food);
 
         var tempRect = new Rectangle(0, 0, 25, 25).AlignCenter(Box);
 
         tempRect.X += 5;
         tempRect.Y += 3;
         FoodRectangle = tempRect;        
+    }
+
+    private void SetCookedFood(Food food)
+    {
+        FoodSprite = food switch
+        {
+            Meat => FoodSpriteLoader.GetAnimation(FoodTypes.Meat).Sprites.Last(),
+            Fish => FoodSpriteLoader.GetAnimation(FoodTypes.Fish).Sprites.Last(),
+            _ => throw new System.Exception()
+        };
     }
 
     protected override void SetOrder()
@@ -84,7 +115,7 @@ public class FryingPan : CookingTool
 
     public override void Draw(Graphics g)
     {
-        bool changeSprite = this.IsCooking && this.HasCookedFood;
+        bool changeSprite = this.IsCooking;
         var c = SpriteController.GetCurrentSprite(changeSprite);
 
         GraphicsContainer container = null;
@@ -130,6 +161,11 @@ public class FryingPan : CookingTool
         if (container is not null)
             g.EndContainer(container);
 
+        if(HasFood && !BeingHold)
+        {
+            TimeBar.Draw(g);
+            TimeBar.Start();
+        }
 
     }
 
@@ -144,6 +180,15 @@ public class FryingPan : CookingTool
                 temp.X += this.PlayerParent?.CurrentDirection == Direction.Left ? -12 : 6;
             this.FoodRectangle = temp;            
         }
+
+        var pos = Box.Location;
+        pos.Y += Height;
+
+        
+        TimeBar.UpdateLocation(pos);
+        
+        if(!BeingHold)
+            TimeBar.Update();
     }
 
 }
