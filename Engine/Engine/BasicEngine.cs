@@ -59,9 +59,11 @@ public class BasicEngine : GameEngine
                 return 0;
             if (r is CookingTool)
                 return 1;
+            if (r is Trash)
+                return 3;
             if (r is Player)
                 return 2;
-            return 3;
+            return 4;
         }).ToList();
 
         OrderTab.Current.GetRandomOrder();

@@ -63,6 +63,13 @@ public class TimeBar : ProgressBar
         Complete = false;
     }
 
+    public void Reset()
+    {
+        StartProgress = default;
+        Complete = false;
+        Stopped = false;
+    }
+
     public void Stop()
     {
         Complete = true;
