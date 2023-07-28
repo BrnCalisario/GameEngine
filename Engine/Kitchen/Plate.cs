@@ -98,11 +98,12 @@ public class Plate : Item
     }
 
     public void Deliver()
-    {
-        
-            
+    {   
+       
+
         Rectangle rect = new(700, 350, this.Box.Width, this.Box.Height);
         this.Box = rect;
+        
 
         this.ClearPlate();
 
