@@ -115,6 +115,7 @@ public class BasicEngine : GameEngine
 
         if(TimeDisplay > GameTime)
         {
+            OnEnd();
             return;
         }    
 
@@ -125,26 +126,16 @@ public class BasicEngine : GameEngine
         }
     }
 
-    //public override void OnEnd()
-    //{
-        //var result =
-        //        MessageBox.Show(
-        //            $"Pontos: {this.Points}\nDeseja jogar novamente ?", 
-        //            "Fim de Jogo", 
-        //            MessageBoxButtons.YesNo, 
-        //            MessageBoxIcon.Information);
+    public override void OnEnd()
+    {
 
-        //if(result == DialogResult.Yes)
-        //{
-        //    this.ParentForm.Reload();
-        //    this.Stop();
-        //    this.Load();
-        //    this.Start();
-        //}
+        MessageBox.Show(
+            $"Pontos: {this.Points}\nObrigado por jogar",
+            "Fim de Jogo",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Information);
 
-        //if(result == DialogResult.No)
-        //{
-        //    Application.Exit();
-        //}
-    //}
+        Application.Exit();
+           
+    }
 }

@@ -154,5 +154,5 @@ public abstract class GameEngine : IGameEngine
 
     public abstract void AddBody(IBody body);
 
-    //public abstract void OnEnd();
+    public abstract void OnEnd();
 }
