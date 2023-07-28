@@ -32,6 +32,7 @@ public class FryingPan : CookingTool
         };
     }
 
+
     readonly Image fryingPanImage = Resources.FryingPanImage;
     readonly Image foodImage = Resources.FoodImage;
 
@@ -44,8 +45,24 @@ public class FryingPan : CookingTool
     public override bool HasCookedFood => Cooked;  
     private bool Cooked { get; set; }
 
-    TimeBar TimeBar { get; set; }
+    TimeBar? TimeBar { get; set; } = null;
 
+
+    private void SetTimeBar()
+    {
+        var timeRect = new Rectangle(X, Y + Height, Width, 5);
+        TimeBar = new(timeRect, TimeSpan.FromSeconds(5))
+        {
+            ChangeColor = false
+        };
+
+        TimeBar.OnFinish += delegate
+        {
+            this.Cooked = true;
+            SetCookedFood(Ingredients[0]);
+            TimeBar?.Stop();
+        };
+    }
 
     public override void Interact(Player p)
     {
@@ -58,6 +75,8 @@ public class FryingPan : CookingTool
 
     
         base.Interact(p);
+
+        SetTimeBar();
     }
 
     private void AnchorFood()
@@ -108,8 +127,10 @@ public class FryingPan : CookingTool
 
     public override void ClearPan()
     {
-        base.ClearPan();       
+        base.ClearPan();        
         SpriteController.StartAnimation(FryingPanTypes.Void);
+        TimeBar = null;
+        Cooked = false;
     }
 
 
@@ -161,10 +182,10 @@ public class FryingPan : CookingTool
         if (container is not null)
             g.EndContainer(container);
 
-        if(HasFood && !BeingHold)
+        TimeBar?.Draw(g);
+        if (HasFood && !BeingHold )
         {
-            TimeBar.Draw(g);
-            TimeBar.Start();
+            TimeBar?.Start();
         }
 
     }
@@ -185,10 +206,10 @@ public class FryingPan : CookingTool
         pos.Y += Height;
 
         
-        TimeBar.UpdateLocation(pos);
+        TimeBar?.UpdateLocation(pos);
         
         if(!BeingHold)
-            TimeBar.Update();
+            TimeBar?.Update();
     }
 
 }
