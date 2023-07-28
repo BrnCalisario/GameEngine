@@ -61,7 +61,10 @@ public class Oven : Bench
         {         
             PlacedItem.IsCooking = false;
             PlacedItem.Interact(p);
-            PlacedItem = null;            
+            PlacedItem.AssignBench(null);
+            PlacedItem.Remove();
+            this.PlacedItem = null;
+                 
         }
     }
 }

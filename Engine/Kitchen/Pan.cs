@@ -24,6 +24,12 @@ public abstract class CookingTool : Item
 
     protected abstract void SetOrder();
 
+    public void Remove()
+    {
+        if (this.BenchParent is not null)
+            this.BenchParent = null;
+    }
+
     public override void Interact(Player p)
     {
         if (!p.IsHolding || p.holdingItem == this)
@@ -73,6 +79,7 @@ public class Pan : CookingTool
     {
         base.Interact(p);
     }
+
 
 
     protected override void SetOrder()
