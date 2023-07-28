@@ -47,7 +47,7 @@ public partial class GameForm : Form
 
         this.engine = BasicEngine.Current;
 
-        var tileSet = new TileSet(14, 4, new Point(0, 0));
+        var tileSet = new TileSet(10, 4, new Point(0, 0));
         tileSet.Box = tileSet.Box.AlignCenter(engine.Box);
 
         BasicEngine.Current.tileSet = tileSet;
@@ -96,10 +96,8 @@ public partial class GameForm : Form
         CornerBench corner2 = new(new Rectangle(0, 0, 48,48).AlignBottomLeft(BasicEngine.Current.tileSet.Box), Direction.Top);
         this.engine.AddBody(corner2);
 
-        FoodBench fb7 = new(new Rectangle().AlignBesideRight(corner2.CollisionMask.Box), Direction.Top);
-        engine.AddBody(fb7);
 
-        FoodBox<Tomato> fbt = new(new Rectangle().AlignBesideRight(fb7.CollisionMask.Box), Direction.Top);
+        FoodBox<Tomato> fbt = new(new Rectangle().AlignBesideRight(corner2.CollisionMask.Box), Direction.Top);
         this.engine.AddBody(fbt);
 
         FoodBox<Onion> obt = new(new Rectangle().AlignBesideRight(fbt.CollisionMask.Box), Direction.Top);
@@ -140,20 +138,15 @@ public partial class GameForm : Form
 
         // MEIO ///////////////////////
 
-        CuttingBoard cb1 = new(new Rectangle().AlignBesideRight(corner4.CollisionMask.Box), Direction.Top);
-        this.engine.AddBody(cb1);
 
 
-        CuttingBoard cb2 = new(new Rectangle().AlignBesideRight(cb1.CollisionMask.Box), Direction.Top);
+        CuttingBoard cb2 = new(new Rectangle().AlignBesideRight(corner4.CollisionMask.Box), Direction.Top);
         this.engine.AddBody(cb2);
-
-        CuttingBoard cb3 = new(new Rectangle().AlignBesideRight(cb2.CollisionMask.Box), Direction.Top);
-        this.engine.AddBody(cb3);
 
 
         // COLUNA DA DIREITA /////////////////////
 
-        CornerBench corner5 = new(new Rectangle(0, 0, 48, 48).AlignBesideRight(cb3.CollisionMask.Box), Direction.Right);
+        CornerBench corner5 = new(new Rectangle(0, 0, 48, 48).AlignBesideRight(cb2.CollisionMask.Box), Direction.Right);
         this.engine.AddBody(corner5);
 
         CornerBench corner6 = new(new Rectangle(0, 0, 48, 48).AlignBesideRight(corner5.CollisionMask.Box), Direction.Top);
@@ -186,11 +179,7 @@ public partial class GameForm : Form
 
         // DIRETA
 
-
-        FoodBench fb18 = new(new Rectangle(0, 0, 96, 48).AlignBesideRight(corner6.CollisionMask.Box), Direction.Top);
-        this.engine.AddBody(fb18);
-
-        FoodBox<Meat> mbx = new(new Rectangle().AlignBesideRight(fb18.CollisionMask.Box), Direction.Top);
+        FoodBox<Meat> mbx = new(new Rectangle().AlignBesideRight(corner6.CollisionMask.Box), Direction.Top);
         this.engine.AddBody(mbx);
 
         FoodBox<Fish> fbx = new(new Rectangle().AlignBesideRight(mbx.CollisionMask.Box), Direction.Top);
@@ -219,13 +208,8 @@ public partial class GameForm : Form
 
         // PAREDE TOPO //////////////////
 
-        FoodBench fb25 = new(new Rectangle().AlignBesideRight(corner1.CollisionMask.Box));
-        this.engine.AddBody(fb25);
 
-        FoodBench fb26 = new(new Rectangle().AlignBesideRight(fb25.CollisionMask.Box));
-        this.engine.AddBody(fb26);
-
-        FoodBench fb27 = new(new Rectangle().AlignBesideRight(fb26.CollisionMask.Box));
+        FoodBench fb27 = new(new Rectangle().AlignBesideRight(corner1.CollisionMask.Box));
         this.engine.AddBody(fb27);
 
         SmallBench sm1 = new(new Rectangle().AlignBesideRight(fb27.CollisionMask.Box), Direction.Bottom);
@@ -255,16 +239,14 @@ public partial class GameForm : Form
         SmallBench sm2 = new(new Rectangle().AlignBesideRight(trash2.Box), Direction.Bottom);
         this.engine.AddBody(sm2);
 
-
-
         FoodBench fb35 = new(new Rectangle().AlignBesideRight(sm2.CollisionMask.Box));
         this.engine.AddBody(fb35);
 
-        FoodBench fb36 = new(new Rectangle().AlignBesideRight(fb35.CollisionMask.Box));
-        this.engine.AddBody(fb36);
+        //FoodBench fb36 = new(new Rectangle().AlignBesideRight(fb35.CollisionMask.Box));
+        //this.engine.AddBody(fb36);
 
-        FoodBench fb37 = new(new Rectangle().AlignBesideRight(fb36.CollisionMask.Box));
-        this.engine.AddBody(fb37);
+        //FoodBench fb37 = new(new Rectangle().AlignBesideRight(fb36.CollisionMask.Box));
+        //this.engine.AddBody(fb37);
 
 
 

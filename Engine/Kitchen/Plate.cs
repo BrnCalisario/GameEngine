@@ -99,9 +99,10 @@ public class Plate : Item
 
     public void Deliver()
     {
-        
-            
-        Rectangle rect = new(700, 350, this.Box.Width, this.Box.Height);
+
+        var box = BasicEngine.Current.tileSet.Box;
+
+        Rectangle rect = new(box.X + 200, box.Y + 100, this.Box.Width, this.Box.Height);
         this.Box = rect;
 
         this.ClearPlate();
