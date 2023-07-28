@@ -13,7 +13,7 @@ using Extensions;
 public partial class GameForm : Form
 {
     
-    GameEngine engine;
+    public GameEngine engine { get; set; }
     public GameForm()
     {
         InitializeComponent();

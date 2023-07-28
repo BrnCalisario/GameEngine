@@ -26,8 +26,7 @@ public class Oven : Bench
         this.PlacedItem = pan;
         var temp = PlacedItem.Box.AlignCenter(this.Box);
 
-        PlacedItem.IsCooking = true;
-      
+        PlacedItem.IsCooking = true;      
 
         var relativePoint = GetRelativeItemPoint(PlacedItem);
         PlacedItem.Box = new Rectangle(relativePoint, temp.Size);
@@ -40,8 +39,7 @@ public class Oven : Bench
         if(holding as CookingTool is not null)
         {
             PlacedItem = holding as CookingTool;
-            PlacedItem.Interact(p);
-            
+            PlacedItem.Interact(p);            
 
             var temp = PlacedItem.Box.AlignCenter(this.Box);
             var relativePoint = GetRelativeItemPoint(PlacedItem);
@@ -61,10 +59,12 @@ public class Oven : Bench
         {         
             PlacedItem.IsCooking = false;
             PlacedItem.Interact(p);
-            PlacedItem.AssignBench(null);
-            PlacedItem.Remove();
-            this.PlacedItem = null;
-                 
+
+            //PlacedItem.BenchParent = null;
+            //PlacedItem.AssignBench(null);
+            //this.SetItem(null);
+
+            this.PlacedItem = null;                 
         }
     }
 }

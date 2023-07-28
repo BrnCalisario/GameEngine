@@ -104,6 +104,7 @@ public class Plate : Item
 
         Rectangle rect = new(box.X + 200, box.Y + 100, this.Box.Width, this.Box.Height);
         this.Box = rect;
+        
 
         this.ClearPlate();
 
