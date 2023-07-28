@@ -84,13 +84,13 @@ public partial class GameForm : Form
         FoodBench fb3 = new(new Rectangle().AlignBesideRight(corner1.Box));
         engine.AddBody(fb3);
 
-        FoodBench fb1 = new(new Rectangle().AlignBelow(corner1.Box), Direction.Right);
-        engine.AddBody(fb1);
-
-        Oven ov1 = new(new Rectangle().AlignBelow(fb1.CollisionMask.Box), Direction.Right);
+        Oven ov1 = new(new Rectangle().AlignBelow(corner1.CollisionMask.Box), Direction.Right);
         engine.AddBody(ov1);
 
-        Oven ov2 = new(new Rectangle().AlignBelow(ov1.CollisionMask.Box), Direction.Right);
+        FoodBench fb1 = new(new Rectangle().AlignBelow(ov1.CollisionMask.Box), Direction.Right);
+        engine.AddBody(fb1);
+
+        Oven ov2 = new(new Rectangle().AlignBelow(fb1.CollisionMask.Box), Direction.Right);
         engine.AddBody(ov2);
 
         CornerBench corner2 = new(new Rectangle(0, 0, 48,48).AlignBottomLeft(BasicEngine.Current.tileSet.Box), Direction.Top);
@@ -179,16 +179,18 @@ public partial class GameForm : Form
 
         // DIRETA
 
-        FoodBox<Meat> mbx = new(new Rectangle().AlignBesideRight(corner6.CollisionMask.Box), Direction.Top);
+
+        FoodBench fb19 = new(new Rectangle().AlignBesideRight(corner6.CollisionMask.Box), Direction.Top);
+        this.engine.AddBody(fb19);
+
+        FoodBox<Meat> mbx = new(new Rectangle().AlignBesideRight(fb19.CollisionMask.Box), Direction.Top);
         this.engine.AddBody(mbx);
 
         FoodBox<Fish> fbx = new(new Rectangle().AlignBesideRight(mbx.CollisionMask.Box), Direction.Top);
         this.engine.AddBody(fbx);
 
-        FoodBench fb19 = new(new Rectangle().AlignBesideRight(fbx.CollisionMask.Box), Direction.Top);
-        this.engine.AddBody(fb19);
 
-        CornerBench corner7 = new(new Rectangle(0, 0, 48, 48).AlignBesideRight(fb19.CollisionMask.Box), Direction.Right);
+        CornerBench corner7 = new(new Rectangle(0, 0, 48, 48).AlignBesideRight(fbx.CollisionMask.Box), Direction.Right);
         this.engine.AddBody(corner7);
 
         // PAREDE DIREITA
