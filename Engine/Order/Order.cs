@@ -164,7 +164,7 @@ public class OrderTab : Body
         var ball1 = new Rectangle(pos.X - 12, pos.Y + 3, 25, 25);
         var ball2 = new Rectangle(pos.X + Width - 12, pos.Y + 3, 25, 25);
 
-        Rectangle rect = new Rectangle(pos.X, pos.Y + 15, this.Box.Width, 8);
+        Rectangle rect = new(pos.X, pos.Y + 15, this.Box.Width, 8);
         g.FillRectangle(Pen.Brush, rect);
         g.FillEllipse(Brushes.LightGray, ball1);
         g.FillEllipse(Brushes.LightGray, ball2);
@@ -199,7 +199,7 @@ public class OrderTab : Body
 
     public void GetRandomOrder()
     {
-        var randV = Random.Shared.Next(this.Possibilities.Count - 1);
+        var randV = Random.Shared.Next(this.Possibilities.Count);
         
         var pick = this.Possibilities[randV];
 
