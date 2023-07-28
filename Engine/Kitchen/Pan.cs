@@ -134,6 +134,35 @@ public class Pan : CookingTool
             c.Height,
             GraphicsUnit.Pixel
             );
+
+
+
+        if (this.Ingredients.Count < 0)
+            return;
+
+        for(int i = 0; i < 3; i++)
+        {
+            var pos = new Point(X + (i * 14 + 3 * i) - 1, Y - 3);
+            var size = new Size(14, 14);
+            var rect = new Rectangle(pos, size);
+
+            if (this.Ingredients.Count - 1 < i)
+            {                
+                g.DrawEllipse(new Pen(Color.Black, 1), rect);
+                continue;
+            }
+
+            var color = this.Ingredients[i] switch
+            {
+                Tomato => Brushes.Red,
+                Onion => Brushes.Cornsilk,
+                _ => Brushes.Black
+            };
+
+            g.DrawEllipse(new Pen(Color.Black, 3), rect);
+            g.FillEllipse(color, rect);
+
+        }
     }
 }
 
